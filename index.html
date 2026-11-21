@@ -331,6 +331,25 @@ input.big{font-size:24px;font-weight:600;padding:12px}
 .hero{font-size:32px}
 .stat b{font-size:22px}.stat{min-height:96px}
 .g4 .stat.t3{order:-1;grid-column:1/-1}.g4 .stat.t3 b{font-size:32px}
+.dg{display:grid;gap:16px;grid-template-areas:"meal" "attn" "today" "perf"}
+.dg.noattn{grid-template-areas:"meal" "today" "perf"}
+.a-meal{grid-area:meal}.a-attn{grid-area:attn}.a-today{grid-area:today}.a-perf{grid-area:perf}
+.dg>div{display:flex;flex-direction:column;min-width:0}.dg>div>.card{flex:1}
+.dg .card{border-radius:20px!important}
+@media (min-width:900px){.dg{grid-template-columns:1fr 1fr;grid-template-areas:"meal today" "attn attn" "perf perf"}.dg.noattn{grid-template-areas:"meal today" "perf perf"}}
+.tdc{padding:20px!important;display:flex;flex-direction:column}.tdg{display:grid;grid-template-columns:repeat(3,1fr);flex:1;align-items:center;margin-top:6px}.tdg .sx b{font-size:22px}
+.attn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.attn .rw{margin:0}
+.fl .rgb{margin:0}
+.lgw{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px}
+.lgbr{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:600}
+.lgbr .logo{width:40px;height:40px;border-radius:50%;background:var(--pr);color:var(--pt);display:flex;align-items:center;justify-content:center;font-weight:700}
+.lgc{box-shadow:none;border:1px solid var(--bd);border-radius:14px}
+.lgc h1{text-align:left;margin:0 0 6px}
+.lgs{color:var(--mu);margin:0 0 14px;font-size:14px}
+button.lgbtn{width:100%;min-height:44px;justify-content:center}
+button.lgfp{display:flex;margin:12px auto 0}
+.lgh{margin-top:12px;border:1px solid var(--bd);border-radius:10px;padding:12px;font-size:13px;background:var(--bg)}
+.lgh[hidden]{display:none}
 </style></head><body>
 <header class="tb"><div class="bc" id="bc"></div><div class="tbr"><div class="sw tbs"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><input id="gs" aria-label="Search customers" placeholder="Search customers by name, phone or ID" onkeydown="if(event.key==='Enter')gsearch(this.value)"></div><span class="mu" id="syt"></span><span class="av t4">N</span></div></header>
 <main id="app"></main>
@@ -1666,6 +1685,63 @@ function settingsV(){return `<div style="margin-bottom:14px"><h1 style="margin-b
  <div class="card"><b>Data backup</b><div class="mu" style="margin:4px 0 8px">Your data is saved only in this browser. Clearing browser data erases it, so keep a backup.</div><textarea id="bk" rows="5" aria-label="Backup data" placeholder="Backup text appears here. To restore, paste it here."></textarea><p class="err" id="err"></p><div class="row"><button onclick="mkBk()">Create backup</button><button class="s" style="border:1px solid var(--bd)" onclick="rsBk()">Restore from text</button></div></div>${acctC()}${skinC()}`}
 function acctC(){const a=getAdm();return `<div class="card"><b>Admin account</b><div class="mu" style="margin:4px 0 8px">${a?esc(a.email):'Not set up'}</div><label for="np">New password</label><input id="np" type="password" autocomplete="new-password"><label for="nq">Confirm new password</label><input id="nq" type="password" autocomplete="new-password"><p class="err" id="aerr"></p><div class="row"><button onclick="chPw()">Change password</button><button class="s" onclick="logout()">Log out</button></div><div class="mu" style="margin-top:8px">This login only locks the screen on this device. Real security needs the online version with a server.</div></div>`}
 async function chPw(){const a=getAdm(),p=$('#np').value,e=$('#aerr');if(!a){e.textContent='No admin account yet.';return}if(p.length<6){e.textContent='Use at least 6 characters.';return}if(p!==$('#nq').value){e.textContent='Passwords do not match.';return}const salt=uid()+uid();try{localStorage.setItem(AK,JSON.stringify({email:a.email,salt,hash:await hsh(p,salt)}));e.textContent='';toast('Password changed')}catch(x){e.textContent='Could not save the password.'}}
+function home(){
+ const T=today(),sumT=(ty,f)=>S.t.filter(x=>x.type===ty&&f(x.date)).reduce((a,x)=>a+x.amt,0);
+ const tod=S.o.filter(o=>o.date===T),un=tod.filter(o=>open(o)&&!o.sid).length,out=S.c.reduce((a,c)=>a+cst(c).due,0),hol=S.c.filter(c=>c.st!=='Archived'&&onHol(c.id,T)).length;
+ const L=S.t.filter(x=>inR('dash',x.date)),I=sumT('Income',d=>inR('dash',d)),E=sumT('Expense',d=>inR('dash',d)),net=I-E;
+ const al=[un?[un+(un===1?' delivery':' deliveries')+' not assigned','goD()','var(--wn)']:0,out?[inr(out)+' outstanding','goF()','var(--wn)']:0,hol?[hol+' on holiday today','goC()','var(--mu)']:0].filter(Boolean);
+ const dt=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+ const hero=S.c.length?mealM():`<div class="card" style="background:var(--p3);padding:20px"><div style="font-size:22px;margin-bottom:14px">Add your first customer</div><button onclick="cv.v='add';go('customers')">${ic('plus',18)}Add customer</button></div>`;
+ return `<div class="stack"><div><div class="mu">Nutryzo · Admin dashboard</div><h1 class="pgt">${dt}</h1></div>
+ <div class="dg ${al.length?'':'noattn'}"><div class="a-meal">${hero}</div>
+ ${S.c.length?`<div class="a-today"><div class="card tdc"><div class="mu">Today</div><div class="tdg"><button class="sx" onclick="goT(0)"><b>${tod.length}</b><span>Orders</span></button><button class="sx" onclick="goD()"><b>${tod.filter(open).length}</b><span>To deliver</span></button><button class="sx" onclick="goF()"><b>${inr(sumT('Income',d=>d===T))}</b><span>Collected</span></button></div></div></div>`:''}
+ ${al.length?`<div class="a-attn"><h2 style="margin:0 0 8px">Needs attention</h2><div class="attn">${al.map(r=>`<button class="rw" onclick="${r[1]}"><span><i class="dot" style="background:${r[2]}"></i>${r[0]}</span>${ic('chev',16)}</button>`).join('')}</div></div>`:''}
+ <div class="a-perf"><div class="card" style="padding:20px"><div class="fl" style="margin-bottom:14px"><b>Performance</b>${rgUI('dash')}</div><div class="kvs pm" style="border:0;margin:0;padding:0"><div><span>Income</span><b style="color:var(--gt)">${inr(I)}</b></div><div><span>Expenses</span><b>${inr(E)}</b></div><div><span>${net<0?'Loss':'Profit'}</span><b style="color:${net<0?'var(--wn)':'var(--tx)'}">${inr(net)}</b></div></div><div class="mu" style="margin:14px 0 0"><i class="sw2" style="background:var(--pr);margin-left:0"></i>Income<i class="sw2" style="background:var(--wn);opacity:.75"></i>Expenses</div>${trend('dash',L)}<div class="row" style="justify-content:flex-end;margin:6px 0 0"><button class="s" onclick="go('reports')">Open full reports ${ic('chev',16)}</button></div></div></div></div></div>`;
+}
+P.eyeoff='<path d="M3 3l18 18M10.6 5.1A9.7 9.7 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.3 4M6.5 6.6A16.5 16.5 0 0 0 2 12s4 7 10 7a9.6 9.6 0 0 0 4.1-.9"/>';
+const LK='hflk';
+const lkGet=()=>{try{return JSON.parse(localStorage.getItem(LK)||'{}')||{}}catch(e){return{}}};
+const lkSet=o=>{try{localStorage.setItem(LK,JSON.stringify(o))}catch(e){}};
+const lkLeft=()=>Math.max(0,Math.ceil(((lkGet().until||0)-Date.now())/1000));
+let lkT=0,lgBusy=false;
+function lkTick(){
+ clearInterval(lkT);const b=$('#lgb'),er=$('#lerr');if(!b)return;
+ const run=()=>{const l=lkLeft();if(l>0){b.disabled=true;er.textContent='Too many attempts. Try again in '+l+' seconds.'}else{clearInterval(lkT);if(!lgBusy)b.disabled=false;if(er.textContent.startsWith('Too many'))er.textContent=''}};
+ if(lkLeft()>0){run();lkT=setInterval(run,1000)}
+}
+function tgPw(){const i=$('#lp'),b=$('#lpe'),s=i.type==='password';i.type=s?'text':'password';b.innerHTML=ic(s?'eyeoff':'eye',18);b.setAttribute('aria-label',s?'Hide password':'Show password')}
+function showLg(){
+ const a=getAdm(),el=$('#lg'),setup=!a;el.hidden=false;
+ el.innerHTML=`<div class="lgw"><div class="lgbr"><span class="logo">N</span><span>Nutryzo</span></div>
+ <form class="lgc" onsubmit="return doLg(event)" novalidate><h1>${setup?'Set up your admin account':'Sign in'}</h1><p class="lgs">${setup?'One-time step. Choose the email and password you will use to sign in on this device.':'Enter your details to manage meals, orders and deliveries.'}</p>
+ <label for="le">Email</label><input id="le" type="email" autocomplete="username" placeholder="you@example.com">
+ <label for="lp">Password</label><div class="pw"><input id="lp" type="password" autocomplete="${setup?'new-password':'current-password'}"><button type="button" id="lpe" aria-label="Show password" onclick="tgPw()">${ic('eye',18)}</button></div>
+ ${setup?`<div class="mu" style="margin-top:4px">At least 6 characters. Letters and numbers together are best.</div><label for="lq">Confirm password</label><input id="lq" type="password" autocomplete="new-password">`:''}
+ <div class="lgf"><label class="ck" style="padding:0"><input type="checkbox" id="lr">Keep me signed in for 7 days</label></div>
+ <p class="err" id="lerr" role="alert" aria-live="assertive"></p><button type="submit" id="lgb" class="lgbtn">${setup?'Create account':'Sign in'}</button>
+ ${setup?'':'<button type="button" class="lnk lgfp" onclick="lgHelp()">Forgot password?</button>'}<div id="lgh" class="lgh" hidden></div></form><div class="mu" style="font-size:12px">© 2026 Nutryzo</div></div>`;
+ setTimeout(()=>{const f=$('#le');if(f)f.focus()},50);lkTick();
+}
+async function doLg(e){
+ e.preventDefault();if(lgBusy)return false;
+ const a=getAdm(),em=val('le').toLowerCase(),pw=$('#lp').value,er=$('#lerr'),btn=$('#lgb'),fail=m=>{er.textContent=m;return false};
+ if(!em||!pw)return fail('Enter your email and password.');
+ if(!a){if(!/^\S+@\S+\.\S+$/.test(em))return fail('Enter a valid email address.');if(pw.length<6)return fail('Use at least 6 characters.');if($('#lq').value!==pw)return fail('Passwords do not match.')}
+ else{const l=lkLeft();if(l>0)return fail('Too many attempts. Try again in '+l+' seconds.')}
+ lgBusy=true;btn.disabled=true;btn.textContent=a?'Signing in…':'Creating account…';er.textContent='';
+ try{
+  if(!a){const salt=uid()+uid();localStorage.setItem(AK,JSON.stringify({email:em,salt,hash:await hsh(pw,salt)}))}
+  else if(!(em===a.email&&await hsh(pw,a.salt)===a.hash)){
+   const k=lkGet(),n=(k.n||0)+1;lgBusy=false;btn.textContent='Sign in';
+   if(n>=5){lkSet({n:0,until:Date.now()+30000});lkTick()}else{lkSet({n,until:0});btn.disabled=false;er.textContent='Incorrect email or password.'+(5-n<=2?' '+(5-n)+(5-n===1?' try left.':' tries left.'):'')}
+   return false;
+  }
+ }catch(x){lgBusy=false;btn.disabled=false;btn.textContent=a?'Sign in':'Create account';er.textContent='Could not save the account on this device.';return false}
+ lkSet({n:0,until:0});setAuth($('#lr').checked);lgBusy=false;hideLg();return false;
+}
+function lgHelp(){const h=$('#lgh');if(!h.hidden){h.hidden=true;return}h.hidden=false;h.innerHTML=`<b>Forgot your password?</b><p style="margin:6px 0">Your login is saved on this device only, so a reset link can't be emailed. You can reset the login here. Your customers, orders and payments are kept.</p><button type="button" class="d" onclick="lgReset1()">Reset login on this device</button>`}
+function lgReset1(){$('#lgh').innerHTML=`<b>Reset the login?</b><p style="margin:6px 0">Anyone using this device will then be able to set a new password. Your data is not deleted.</p><div class="row" style="margin-top:8px"><button type="button" class="s" onclick="lgHelp()">Cancel</button><button type="button" class="d2" onclick="lgReset2()">Yes, reset login</button></div>`}
+function lgReset2(){try{localStorage.removeItem(AK);localStorage.removeItem('hfr');sessionStorage.removeItem('hfs');localStorage.removeItem(LK)}catch(e){}showLg()}
 function go(t){if(t==='logout'){logout();return}if(t==='more'){const m=$('#ms');m.hidden=!m.hidden;return}tab=t;render();window.scrollTo(0,0)}
 function render(){
  $('#app').innerHTML=bcHtml()+{home,customers,orders,delivery,money,plan:planV,reports,settings:settingsV}[tab]();
