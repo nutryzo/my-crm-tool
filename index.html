@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nutryzo CRM</title>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
 <style>
 :root{--bg:#f2f7f3;--cd:#fff;--tx:#14261c;--mu:#5f7266;--bd:#d9e5dc;--pr:#1f6b45;--pt:#fff;--ac:#e3f1e7;--wn:#b4561b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
@@ -1037,7 +1038,7 @@ function reports(){
 const AK='hfadm';
 const getAdm=()=>{try{return JSON.parse(localStorage.getItem(AK)||'null')}catch(e){return null}};
 async function hsh(p,salt){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+':'+p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return 'x'+btoa(unescape(encodeURIComponent(salt+':'+p)))}}
-const authed=()=>{try{if(sessionStorage.getItem('hfs')==='1')return true;const t=+localStorage.getItem('hfr');return !!t&&Date.now()<t}catch(e){return false}};
+let sbUser=null;const authed=()=>!!sbUser;
 function setAuth(r){try{sessionStorage.setItem('hfs','1');if(r)localStorage.setItem('hfr',String(Date.now()+7*864e5));else localStorage.removeItem('hfr')}catch(e){}}
 function logout(){try{sessionStorage.removeItem('hfs');localStorage.removeItem('hfr')}catch(e){}showLg()}
 function hideLg(){$('#lg').hidden=true;render()}
@@ -1752,6 +1753,79 @@ function render(){
  document.querySelectorAll('#app .card .top').forEach((t,i)=>{t.parentElement.dataset.c=i%4});
 }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.t));
-render();
-if(!authed())showLg();else setTimeout(qsync,1200);
+/* ===== Supabase connection (Phase 1: admin sign-in) ===== */
+P.alert='<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/>';
+const SB_URL='https://rhzxfkxqgqzmczuqcskh.supabase.co',SB_KEY='sb_publishable_Vy-ow2w0RPmSdutT-4mzKQ_Vt8b8YDT';
+const sb=window.supabase&&window.supabase.createClient?window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}}):null;
+let sbProf=null;
+const SB_TABLES=['profiles','customers','customer_addresses','customer_pricing','customer_holidays','customer_activity_logs','delivery_staff','menu_items','daily_plans','daily_plan_customers','orders','transactions','order_items'];
+async function sbVerify(user){
+ const r=await sb.rpc('is_active_admin');
+ if(r.error)return{ok:false,msg:'Could not check admin access: '+r.error.message};
+ if(r.data!==true)return{ok:false,msg:'This account signed in, but it is not an active admin. Check its row in the profiles table (role = admin, is_active = true).'};
+ let p=null;try{const q=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();p=q.data||null}catch(e){}
+ return{ok:true,p};
+}
+function showLg(msg){
+ const el=$('#lg');el.hidden=false;
+ el.innerHTML=`<div class="lgw"><div class="lgbr"><span class="logo">N</span><span>Nutryzo</span></div>
+ <form class="lgc" onsubmit="return doLg(event)" novalidate><h1>Sign in</h1><p class="lgs">Enter your admin email and password to manage meals, orders and deliveries.</p>
+ <label for="le">Email</label><input id="le" type="email" autocomplete="username" placeholder="you@example.com">
+ <label for="lp">Password</label><div class="pw"><input id="lp" type="password" autocomplete="current-password"><button type="button" id="lpe" aria-label="Show password" onclick="tgPw()">${ic('eye',18)}</button></div>
+ <p class="err" id="lerr" role="alert" aria-live="assertive">${esc(msg||'')}</p><button type="submit" id="lgb" class="lgbtn">Sign in</button>
+ <button type="button" class="lnk lgfp" onclick="lgHelp()">Forgot password?</button><div id="lgh" class="lgh" hidden></div></form><div class="mu" style="font-size:12px">© 2026 Nutryzo · Secured by Supabase</div></div>`;
+ setTimeout(()=>{const f=$('#le');if(f)f.focus()},50);
+}
+function lgHelp(){const h=$('#lgh');if(!h.hidden){h.hidden=true;return}h.hidden=false;h.innerHTML='<b>Forgot your password?</b><p style="margin:6px 0">Open your Supabase project, go to Authentication, then Users. Click your admin user and choose Send password recovery, or set a new password there.</p>'}
+async function doLg(e){
+ e.preventDefault();if(lgBusy)return false;
+ const em=val('le'),pw=$('#lp').value,er=$('#lerr'),btn=$('#lgb');
+ const done=m=>{lgBusy=false;btn.disabled=false;btn.textContent='Sign in';er.textContent=m||'';return false};
+ if(!em||!pw)return done('Enter your email and password.');
+ if(!sb)return done('Could not load Supabase. Check your internet connection and refresh the page.');
+ lgBusy=true;btn.disabled=true;btn.textContent='Signing in…';er.textContent='';
+ try{
+  const{data,error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  if(error)return done(/invalid login/i.test(error.message)?'Incorrect email or password.':error.message);
+  const v=await sbVerify(data.user);
+  if(!v.ok){await sb.auth.signOut();return done(v.msg)}
+  sbUser=data.user;sbProf=v.p;lgBusy=false;hideLg();toast('Signed in');
+ }catch(x){done('Could not reach Supabase. Check your internet connection and try again.')}
+ return false;
+}
+async function logout(){try{if(sb)await sb.auth.signOut()}catch(e){}sbUser=null;sbProf=null;showLg()}
+function acctC(){
+ const u=sbUser||{},p=sbProf||{};
+ return `<div class="card"><b>Admin account</b><div class="mu" style="margin:4px 0 8px">Signed in as ${esc(u.email||'-')}${p.full_name?' · '+esc(p.full_name):''}${p.role?' · '+esc(p.role):''}</div>
+ <div class="row" style="margin:0 0 4px"><button class="s" style="border:1px solid var(--bd)" onclick="sbTest()">Test database connection</button></div><div id="sbt" class="mu" style="margin-top:8px"></div>
+ <label for="np">New password</label><input id="np" type="password" autocomplete="new-password"><label for="nq">Confirm new password</label><input id="nq" type="password" autocomplete="new-password"><p class="err" id="aerr"></p>
+ <div class="row"><button onclick="chPw()">Change password</button><button class="s" onclick="logout()">Log out</button></div>
+ <div class="mu" style="margin-top:8px">Sign-in is handled by Supabase. Your customers, orders and payments are still saved in this browser until we connect them to the database.</div></div>`;
+}
+async function chPw(){
+ const p=$('#np').value,e=$('#aerr');
+ if(p.length<6){e.textContent='Use at least 6 characters.';return}if(p!==$('#nq').value){e.textContent='Passwords do not match.';return}
+ const{error}=await sb.auth.updateUser({password:p});
+ if(error){e.textContent=error.message;return}e.textContent='';$('#np').value='';$('#nq').value='';toast('Password changed');
+}
+async function sbTest(){
+ const o=$('#sbt');o.innerHTML='Testing…';
+ const lines=[];
+ try{const r=await sb.rpc('is_active_admin');lines.push(r.error?'❌ is_active_admin(): '+esc(r.error.message):(r.data===true?'✅ is_active_admin() = true':'❌ is_active_admin() = '+esc(String(r.data))))}catch(x){lines.push('❌ is_active_admin(): could not reach Supabase')}
+ for(const t of SB_TABLES){try{const r=await sb.from(t).select('*',{count:'exact',head:true});lines.push(r.error?'❌ '+t+': '+esc(r.error.message):'✅ '+t+': '+r.count+' rows')}catch(x){lines.push('❌ '+t+': could not reach Supabase')}}
+ o.innerHTML=lines.join('<br>');
+}
+async function boot(){
+ const el=$('#lg');el.hidden=false;el.innerHTML='<div class="lgw"><div class="mu">Checking sign-in…</div></div>';
+ if(!sb){showLg('Could not load Supabase. Check your internet connection and refresh the page.');return}
+ sb.auth.onAuthStateChange(ev=>{if(ev==='SIGNED_OUT'){sbUser=null;sbProf=null;if($('#lg').hidden)showLg('You were signed out.')}});
+ try{
+  const{data}=await sb.auth.getSession(),s=data&&data.session;
+  if(!s){showLg();return}
+  const v=await sbVerify(s.user);
+  if(!v.ok){await sb.auth.signOut();showLg(v.msg);return}
+  sbUser=s.user;sbProf=v.p;el.hidden=true;render();setTimeout(qsync,1200);
+ }catch(x){showLg('Could not reach Supabase. Check your internet connection and refresh the page.')}
+}
+boot();
 </script></body></html>
