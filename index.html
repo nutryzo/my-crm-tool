@@ -351,6 +351,11 @@ button.lgbtn{width:100%;min-height:44px;justify-content:center}
 button.lgfp{display:flex;margin:12px auto 0}
 .lgh{margin-top:12px;border:1px solid var(--bd);border-radius:10px;padding:12px;font-size:13px;background:var(--bg)}
 .lgh[hidden]{display:none}
+.cst{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:4px 10px;border-radius:99px;background:var(--ac);color:var(--mu);white-space:nowrap}
+.cst.ok{color:var(--gt)}.cst.bad{background:var(--p1);color:var(--wn)}.cst.loc{background:var(--p2);color:var(--wn)}
+.bnr.cbad{background:var(--p1)}.bnr.cbad span{color:var(--tx)}
+.mig .stp{margin:18px 0 6px}
+details summary{cursor:pointer}
 /* ===== UI upgrade ===== */
 [hidden]{display:none!important}
 .ph{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:0 0 18px}
@@ -439,7 +444,7 @@ let S={c:[],o:[],d:[],t:[]};
 try{const x=localStorage.getItem('hfcrm');if(x)S=Object.assign(S,JSON.parse(x))}catch(e){}
 const save=()=>{try{localStorage.setItem('hfcrm',JSON.stringify(S))}catch(e){}toast('Saved');qsync()};
 let tab='home',flt='today';
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const uid=()=>{try{if(crypto&&crypto.randomUUID)return crypto.randomUUID()}catch(e){}const b=Array.from({length:16},()=>Math.floor(Math.random()*256));b[6]=b[6]&15|64;b[8]=b[8]&63|128;const h=b.map(x=>x.toString(16).padStart(2,'0')).join('');return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20)};
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const today=()=>new Date().toLocaleDateString('en-CA');
 const cust=id=>S.c.find(x=>x.id===id)||{name:'Deleted customer'};
@@ -2107,6 +2112,250 @@ function settingsV(){
 const _rnd=render;
 render=function(){_rnd();if(tab==='settings')tplPrev()};
 applyBiz();
+/* ===== Phase 2: Supabase data sync (load on sign-in, save every change, one-time move) ===== */
+const CM={mode:'',busy:false,again:false,tm:0,pulled:0,at:'',err:'',guard:false,SN:null,mig:null,bk:false};
+const sig=o=>JSON.stringify(o);
+const chunk=(a,n)=>{const r=[];for(let i=0;i<a.length;i+=n)r.push(a.slice(i,i+n));return r};
+const emptySN=()=>({c:{},ck:{},o:{},ok:{},t:{},d:{},m:{},p:{},pk:{},pid:{},s:{}});
+const isU=s=>/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(s||''));
+const eMsg=e=>(e&&(e.message||e.details||e.hint))||String(e);
+SB_TABLES.push('app_settings');
+async function sbx(p){const{data,error}=await p;if(error)throw error;return data}
+async function qAll(t){let out=[],f=0;for(;;){const{data,error}=await sb.from(t).select('*').range(f,f+999);if(error)throw error;out=out.concat(data||[]);if(!data||data.length<1000)break;f+=1000}return out}
+async function upAll(t,rows,oc){for(const c of chunk(rows,400))await sbx(sb.from(t).upsert(c,{onConflict:oc||'id'}))}
+async function insAll(t,rows){for(const c of chunk(rows,400))await sbx(sb.from(t).insert(c))}
+async function delIn(t,col,ids){for(const c of chunk(ids,150))await sbx(sb.from(t).delete().in(col,c))}
+
+/* ---- app data -> table rows ---- */
+const cIds=()=>new Set(S.c.map(c=>c.id));
+const staffRow=d=>({id:d.id,name:d.name||'',phone:d.phone||null,status:'Active',legacy_id:d.lid||null});
+const menuRows=()=>[...S.menu.s.map(x=>[x,'meal']),...S.menu.d.map(x=>[x,'drink'])].map(([x,t])=>({id:x.id,name:x.name||'',item_type:t,price:Number(x.price)||0,is_active:!x.off,legacy_id:x.lid||null}));
+const custRow=c=>({id:c.id,customer_number:c.num||null,name:c.name||'',phone:c.phone||null,email:c.email||null,account_type:c.kind||'Customer',status:c.st||'Active',payment_mode:c.pay||'Daily',is_vip:!!c.vip,notes:c.note||'',registration_date:c.reg||null,plan_start_date:c.sdate||null,plan_length_days:c.plen&&c.plen!=='c'?Number(c.plen):null,plan_end_date:planEnd(c)||null,delivery_slot:c.slot||null,area:c.area||null});
+function custKids(c){
+ const as=c.addrs&&c.addrs.length?c.addrs:(c.addr||c.lat!=null||c.dins?[{a:c.addr||'',p:1}]:[]),pi=Math.max(0,as.findIndex(a=>a.p));
+ return{a:as.map((a,i)=>({customer_id:c.id,address:a.a||'',is_primary:i===pi,latitude:i===pi&&c.lat!=null?c.lat:null,longitude:i===pi&&c.lng!=null?c.lng:null,delivery_instructions:i===pi?(c.dins||null):null})),
+  p:c.pm||c.pd||c.pfrom?[{customer_id:c.id,meal_price:c.pm||null,drink_price:c.pd||null,effective_from:c.pfrom||null,is_active:true}]:[],
+  h:[...new Set(c.hol||[])].filter(Boolean).map(d=>({customer_id:c.id,holiday_date:d})),
+  l:[...(c.log||[]).map((l,i)=>({customer_id:c.id,action:'activity',description:l.t||'',details:{d:l.d,i}})),...(c.hist||[]).map((l,i)=>({customer_id:c.id,action:'schedule',description:l.t||'',details:{d:l.d,i}}))]};
+}
+const planRow=(d,p)=>({plan_date:d,st:p.st||'Applied',salad:p.salad||null,drink:p.drink||null,sc:(p.sc||[]).length,dc:(p.dc||[]).length,rev:p.rev!=null?p.rev:null,standard_meal_price:p.std!=null?p.std:null,standard_drink_price:p.dstd!=null?p.dstd:null});
+function planKids(p,cs){const sc=p.sc||[],dc=p.dc||[],ov=p.ov||{},dov=p.dov||{},mp=p.mp||{},dp=p.dp||{};
+ return [...new Set([...sc,...dc])].filter(id=>cs.has(id)).map(id=>({customer_id:id,status:sc.includes(id)?'Assigned':'Drink only',has_drink:dc.includes(id),meal_price:ov[id]&&mp[id]!=null?mp[id]:null,meal_is_override:!!ov[id],drink_price:dov[id]&&dp[id]!=null?dp[id]:null,drink_is_override:!!dov[id]}))}
+const orderRow=(o,cs,ds)=>({id:o.id,customer_id:cs.has(o.cid)?o.cid:null,items:o.items||'',order_date:o.date||null,amount:Number(o.amt)||0,status:o.status||'New',staff_id:o.sid&&ds.has(o.sid)?o.sid:null,plan_id:o.pl&&S.plan[o.pl]&&S.plan[o.pl].id||null,order_number:o.no||null,meal_price:o.mpr!=null?o.mpr:null,drink_price:o.dpr!=null?o.dpr:null,delay_reason:o.dlr||null,status_updated_at:o.satAt||null,legacy_id:o.lid||null});
+function orderKids(o){const it=String(o.items||''),m=it.match(/Salad: (.+?)(?: \+ |$)/),d=it.match(/Drink: (.+)$/),r=(n,t,p)=>({order_id:o.id,item_name:n,item_type:t,quantity:1,unit_price:Number(p)||0,total_price:Number(p)||0});
+ if((o.mpr!=null||o.dpr!=null)&&(m||d))return [m?r(m[1].trim(),'meal',o.mpr):null,d?r(d[1].trim(),'drink',o.dpr):null].filter(Boolean);
+ return it||o.amt?[r(it||'Order','other',o.amt)]:[]}
+const txRow=(x,cs)=>({id:x.id,customer_id:x.cid&&cs.has(x.cid)?x.cid:null,transaction_date:x.date||null,type:x.type||null,kind:x.k==null?null:x.k,name:x.n==null?null:x.n,payment_method:x.meth||null,amount:Number(x.amt)||0,category:x.cat||null,entry_number:x.no||null,legacy_id:x.lid||null});
+const setRows=()=>[{key:'business',value:S.biz||{}},{key:'templates',value:S.tpl||{}}];
+function snap(){const N=emptySN(),cs=cIds(),ds=new Set(S.d.map(d=>d.id));
+ S.d.forEach(d=>N.d[d.id]=sig(staffRow(d)));menuRows().forEach(r=>N.m[r.id]=sig(r));
+ S.c.forEach(c=>{N.c[c.id]=sig(custRow(c));N.ck[c.id]=sig(custKids(c))});
+ Object.keys(S.plan).forEach(d=>{const p=S.plan[d];N.p[d]=sig(planRow(d,p));N.pk[d]=sig(planKids(p,cs));if(p.id)N.pid[d]=p.id});
+ S.o.forEach(o=>{N.o[o.id]=sig(orderRow(o,cs,ds));N.ok[o.id]=sig(orderKids(o))});
+ S.t.forEach(x=>N.t[x.id]=sig(txRow(x,cs)));setRows().forEach(r=>N.s[r.key]=sig(r.value));return N}
+
+/* ---- table rows -> app data ---- */
+async function pull(){
+ const T=['customers','customer_addresses','customer_pricing','customer_holidays','customer_activity_logs','delivery_staff','menu_items','daily_plans','daily_plan_customers','orders','transactions','app_settings'];
+ const [cs,ad,pr,ho,lgs,st,mi,dp,dpc,od,tx,se]=await Promise.all(T.map(qAll));
+ const by=(a,k)=>{const m={};a.forEach(r=>{(m[r[k]]=m[r[k]]||[]).push(r)});return m},A=by(ad,'customer_id'),PR=by(pr,'customer_id'),H=by(ho,'customer_id'),LG=by(lgs,'customer_id'),K=by(dpc,'daily_plan_id');
+ const day=t=>String(t||'').slice(0,10),num=v=>v==null?undefined:Number(v);
+ const N={c:[],o:[],d:[],t:[],plan:{},menu:{s:[],d:[]},skin:S.skin,sync:S.sync,biz:{},tpl:{}};
+ N.c=cs.filter(r=>r.status!=='Deleted').sort((a,b)=>String(b.customer_number||'').localeCompare(String(a.customer_number||''))).map(r=>{
+  const as=(A[r.id]||[]).slice().sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at))),pa=as.find(a=>a.is_primary)||as[0],p=(PR[r.id]||[]).find(x=>x.is_active!==false);
+  const L=(LG[r.id]||[]).map(l=>({a:l.action,i:l.details&&l.details.i!=null?l.details.i:0,d:l.details&&l.details.d||day(l.created_at),t:l.description||''})).sort((a,b)=>a.i-b.i);
+  const c={id:r.id,num:r.customer_number||'',name:r.name||'',phone:r.phone||'',email:r.email||'',kind:r.account_type||'Customer',st:r.status||'Active',pay:r.payment_mode||'Daily',note:r.notes||'',reg:r.registration_date||day(r.created_at),vip:!!r.is_vip,
+   addrs:as.map(a=>({a:a.address||'',p:a.is_primary?1:0})),addr:pa?pa.address||'':'',log:L.filter(l=>l.a!=='schedule').map(l=>({d:l.d,t:l.t})),hist:L.filter(l=>l.a==='schedule').map(l=>({d:l.d,t:l.t})),
+   hol:(H[r.id]||[]).map(h=>h.holiday_date).filter(Boolean).sort(),sdate:r.plan_start_date||'',plen:r.plan_length_days?String(r.plan_length_days):(r.plan_end_date?'c':''),pend:r.plan_length_days?'':(r.plan_end_date||''),slot:r.delivery_slot||'',area:r.area||''};
+  if(pa&&pa.latitude!=null){c.lat=Number(pa.latitude);c.lng=Number(pa.longitude)}if(pa&&pa.delivery_instructions)c.dins=pa.delivery_instructions;
+  if(p){if(p.meal_price!=null)c.pm=Number(p.meal_price);if(p.drink_price!=null)c.pd=Number(p.drink_price);if(p.effective_from)c.pfrom=p.effective_from}
+  return c});
+ N.d=st.slice().sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at))).map(r=>{const d={id:r.id,name:r.name||'',phone:r.phone||''};if(r.legacy_id)d.lid=r.legacy_id;return d});
+ mi.slice().sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at))).forEach(r=>{const x={id:r.id,name:r.name||'',price:Number(r.price)||0};if(r.is_active===false)x.off=true;if(r.legacy_id)x.lid=r.legacy_id;N.menu[r.item_type==='drink'?'d':'s'].push(x)});
+ const pd={};dp.forEach(r=>{if(!r.plan_date)return;pd[r.id]=r.plan_date;const p={id:r.id,st:r.st||'Draft',salad:r.salad||'',std:r.standard_meal_price!=null?Number(r.standard_meal_price):150,drink:r.drink||'',dstd:r.standard_drink_price!=null?Number(r.standard_drink_price):0,sc:[],dc:[],mp:{},ov:{},dp:{},dov:{}};if(r.rev!=null)p.rev=Number(r.rev);
+  (K[r.id]||[]).forEach(k=>{if(k.status!=='Drink only')p.sc.push(k.customer_id);if(k.has_drink)p.dc.push(k.customer_id);if(k.meal_is_override){p.ov[k.customer_id]=1;p.mp[k.customer_id]=Number(k.meal_price)}if(k.drink_is_override){p.dov[k.customer_id]=1;p.dp[k.customer_id]=Number(k.drink_price)}});N.plan[r.plan_date]=p});
+ N.o=od.slice().sort((a,b)=>String(b.order_date).localeCompare(String(a.order_date))||String(b.created_at).localeCompare(String(a.created_at))).map(r=>{const o={id:r.id,cid:r.customer_id||'',items:typeof r.items==='string'?r.items:(r.items==null?'':JSON.stringify(r.items)),date:r.order_date||'',amt:Number(r.amount)||0,status:r.status||'New',sid:r.staff_id||'',pl:r.plan_id&&pd[r.plan_id]||''};
+  if(r.meal_price!=null)o.mpr=Number(r.meal_price);if(r.drink_price!=null)o.dpr=Number(r.drink_price);if(r.order_number)o.no=r.order_number;if(r.delay_reason)o.dlr=r.delay_reason;if(r.status_updated_at){o.satAt=r.status_updated_at;o.sat=new Date(r.status_updated_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}if(r.legacy_id)o.lid=r.legacy_id;return o});
+ N.t=tx.slice().sort((a,b)=>String(b.transaction_date).localeCompare(String(a.transaction_date))||String(b.created_at).localeCompare(String(a.created_at))).map(r=>{const x={id:r.id,type:r.type||'Income',cat:r.category||'',amt:Number(r.amount)||0,date:r.transaction_date||''};
+  if(r.customer_id)x.cid=r.customer_id;if(r.kind!=null)x.k=r.kind;if(r.name!=null)x.n=r.name;if(r.payment_method)x.meth=r.payment_method;if(r.entry_number)x.no=r.entry_number;if(r.legacy_id)x.lid=r.legacy_id;return x});
+ se.forEach(r=>{if(r.key==='business')N.biz=r.value||{};else if(r.key==='templates')N.tpl=r.value||{};else if(r.key==='migration')CM.mig=r.value});
+ const mx=(a,re)=>a.reduce((m,s)=>{const n=parseInt(String(s||'').replace(re,''),10);return n>m?n:m},0);
+ N.seq=mx(N.c.map(c=>c.num),/^C/);N.oseq=mx(N.o.map(o=>o.no),/^O/);N.mseq=mx(N.t.map(x=>x.no),/^M/);
+ S=N;CM.SN=snap();CM.pulled=Date.now();
+ try{localStorage.setItem('hfcrm',JSON.stringify(S))}catch(e){}
+}
+
+/* ---- save changes to the database ---- */
+async function simpleT(t,rows,sn){const ch=rows.filter(r=>sn[r.id]!==sig(r)),ids=new Set(rows.map(r=>r.id)),del=Object.keys(sn).filter(id=>!ids.has(id));
+ if(ch.length){await upAll(t,ch);ch.forEach(r=>sn[r.id]=sig(r))}
+ if(del.length){await delIn(t,'id',del);del.forEach(id=>delete sn[id])}}
+async function clearKids(ids){for(const t of ['customer_addresses','customer_pricing','customer_holidays','customer_activity_logs'])await delIn(t,'customer_id',ids)}
+async function push(){
+ if(CM.mode!=='cloud'&&CM.mode!=='migrating')return true;
+ if(CM.busy){CM.again=true;return true}
+ CM.busy=true;CM.err='';CM.guard=false;cloudUi();
+ const SN=CM.SN,cs=cIds(),ds=new Set(S.d.map(d=>d.id));let ok=true;
+ try{
+  const D=S.d.map(staffRow),M=menuRows(),C=S.c.map(c=>({r:custRow(c),k:custKids(c)})),T=S.t.map(x=>txRow(x,cs)),PD=Object.keys(S.plan);
+  const cDel=Object.keys(SN.c).filter(id=>!cs.has(id));
+  const gone=(sn,cur)=>Object.keys(sn).filter(id=>!cur.has(id)).length;
+  if(cDel.length>1||gone(SN.t,new Set(T.map(r=>r.id)))>3||gone(SN.d,new Set(D.map(r=>r.id)))>2||gone(SN.m,new Set(M.map(r=>r.id)))>2||gone(SN.o,new Set(S.o.map(o=>o.id)))>60)throw{guard:1};
+  [[SN.d,D.length],[SN.m,M.length],[SN.c,C.length],[SN.o,S.o.length],[SN.t,T.length],[SN.p,PD.length]].forEach(([s,n])=>{if(n===0&&Object.keys(s).length>=2)throw{guard:1}});
+  await simpleT('delivery_staff',D,SN.d);
+  await simpleT('menu_items',M,SN.m);
+  const cCh=C.filter(x=>SN.c[x.r.id]!==sig(x.r));
+  if(cCh.length){await upAll('customers',cCh.map(x=>x.r));cCh.forEach(x=>SN.c[x.r.id]=sig(x.r))}
+  const kCh=C.filter(x=>SN.ck[x.r.id]!==sig(x.k));
+  if(kCh.length){await clearKids(kCh.map(x=>x.r.id));const aid=sbUser&&sbUser.id||null;
+   await insAll('customer_addresses',kCh.flatMap(x=>x.k.a));await insAll('customer_pricing',kCh.flatMap(x=>x.k.p));await insAll('customer_holidays',kCh.flatMap(x=>x.k.h.map(h=>({...h,created_by:aid}))));await insAll('customer_activity_logs',kCh.flatMap(x=>x.k.l.map(l=>({...l,actor_id:aid}))));
+   kCh.forEach(x=>SN.ck[x.r.id]=sig(x.k))}
+  const P=PD.map(d=>({d,p:S.plan[d],r:planRow(d,S.plan[d]),k:planKids(S.plan[d],cs)}));
+  const pCh=P.filter(x=>SN.p[x.d]!==sig(x.r)||!x.p.id);
+  if(pCh.length){for(const c of chunk(pCh,200)){const got=await sbx(sb.from('daily_plans').upsert(c.map(x=>x.r),{onConflict:'plan_date'}).select('id,plan_date'));(got||[]).forEach(g=>{if(S.plan[g.plan_date]){S.plan[g.plan_date].id=g.id;SN.pid[g.plan_date]=g.id}})}pCh.forEach(x=>SN.p[x.d]=sig(x.r))}
+  const pkCh=P.filter(x=>x.p.id&&SN.pk[x.d]!==sig(x.k));
+  if(pkCh.length){await delIn('daily_plan_customers','daily_plan_id',pkCh.map(x=>x.p.id));await insAll('daily_plan_customers',pkCh.flatMap(x=>x.k.map(k=>({...k,daily_plan_id:x.p.id}))));pkCh.forEach(x=>SN.pk[x.d]=sig(x.k))}
+  const pDel=Object.keys(SN.p).filter(d=>!S.plan[d]);
+  if(pDel.length){const ids=pDel.map(d=>SN.pid[d]).filter(Boolean);if(ids.length){await delIn('daily_plan_customers','daily_plan_id',ids);await delIn('daily_plans','id',ids)}pDel.forEach(d=>{delete SN.p[d];delete SN.pk[d];delete SN.pid[d]})}
+  const O=S.o.map(o=>({r:orderRow(o,cs,ds),k:orderKids(o)}));
+  const oCh=O.filter(x=>SN.o[x.r.id]!==sig(x.r));
+  if(oCh.length){await upAll('orders',oCh.map(x=>x.r));oCh.forEach(x=>SN.o[x.r.id]=sig(x.r))}
+  const okCh=O.filter(x=>SN.ok[x.r.id]!==sig(x.k));
+  if(okCh.length){await delIn('order_items','order_id',okCh.map(x=>x.r.id));await insAll('order_items',okCh.flatMap(x=>x.k));okCh.forEach(x=>SN.ok[x.r.id]=sig(x.k))}
+  const oIds=new Set(S.o.map(o=>o.id)),oDel=Object.keys(SN.o).filter(id=>!oIds.has(id));
+  if(oDel.length){await delIn('order_items','order_id',oDel);await delIn('orders','id',oDel);oDel.forEach(id=>{delete SN.o[id];delete SN.ok[id]})}
+  await simpleT('transactions',T,SN.t);
+  const sCh=setRows().filter(r=>SN.s[r.key]!==sig(r.value));
+  if(sCh.length){await upAll('app_settings',sCh.map(r=>({key:r.key,value:r.value,updated_at:new Date().toISOString()})),'key');sCh.forEach(r=>SN.s[r.key]=sig(r.value))}
+  if(cDel.length){await clearKids(cDel);try{await delIn('customers','id',cDel)}catch(e){if(e&&e.code==='23503')await sbx(sb.from('customers').update({status:'Deleted'}).in('id',cDel));else throw e}cDel.forEach(id=>{delete SN.c[id];delete SN.ck[id]})}
+  CM.at=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  try{localStorage.setItem('hfcrm',JSON.stringify(S))}catch(e){}
+ }catch(e){ok=false;if(e&&e.guard){CM.guard=true;CM.err='Safety stop: this change would remove a lot of data from the database, so it was not saved. Reload the page to get the latest data.'}else{CM.err='Not saved to the database: '+eMsg(e);if(CM.mode==='cloud')setTimeout(()=>{if(CM.err&&!CM.guard)schedPush()},20000)}}
+ CM.busy=false;cloudUi();
+ if(CM.again){CM.again=false;schedPush()}
+ return ok;
+}
+function schedPush(){clearTimeout(CM.tm);CM.tm=setTimeout(()=>{CM.tm=0;push()},700)}
+function qsync(){if(CM.mode==='cloud'&&authed())schedPush();if(!window.claude||!auto()||!authed())return;clearTimeout(sy.tm);sy.tm=setTimeout(()=>runSync(false),5500)}
+
+/* ---- status shown to the user ---- */
+function cloudUi(){
+ let el=$('#cst');if(!el){const t=$('.tbr');if(t){t.insertAdjacentHTML('afterbegin','<span id="cst" class="cst"></span>');el=$('#cst')}}
+ if(el){const m=CM.mode;el.className='cst '+(CM.err?'bad':CM.busy||CM.tm?'busy':m==='cloud'?'ok':'loc');
+  el.innerHTML=CM.err?ic('x',14)+'Not saved':CM.busy||CM.tm?'Saving…':m==='cloud'?ic('check',14)+'Saved to database'+(CM.at?' '+CM.at:''):m==='local'?'This device only':''}
+ const b=$('#cbn');if(b)b.outerHTML=cbanner();else if(CM.err){const a=$('#app');if(a)a.insertAdjacentHTML('afterbegin',cbanner())}
+}
+function cbanner(){
+ if(CM.err)return `<div class="bnr cbad" id="cbn"><span>${ic('x',18)}${esc(CM.err)}</span><span style="display:flex;gap:8px">${CM.guard?'<button class="s" onclick="location.reload()">Reload</button>':CM.mode==='offline'?'<button class="s" onclick="retryInit()">Try again</button>':'<button class="s" onclick="push()">Try again</button>'}</span></div>`;
+ if(CM.mode==='local'&&tab==='home')return `<div class="bnr" id="cbn"><span>${ic('wallet',18)}Your data is saved only on this device. Move it to the database so every device sees it.</span><button class="s" onclick="go('settings')">Move data</button></div>`;
+ return '<span id="cbn" hidden></span>';
+}
+const _rnd2=render;
+render=function(){_rnd2();const a=$('#app');if(a)a.insertAdjacentHTML('afterbegin',cbanner());cloudUi()};
+window.addEventListener('beforeunload',e=>{if(CM.mode==='cloud'&&(CM.tm||CM.busy)){e.preventDefault();e.returnValue=''}});
+
+/* ---- start-up, sign-in, sign-out ---- */
+async function cloudInit(){
+ CM.err='';
+ try{const{data,error}=await sb.from('app_settings').select('value').eq('key','migration').maybeSingle();if(error)throw error;CM.mig=data?data.value:null}
+ catch(e){CM.mode='offline';CM.err='Could not reach the database: '+eMsg(e);return}
+ if(CM.mig&&CM.mig.done){CM.mode='loading';try{await pull();CM.mode='cloud'}catch(e){CM.mode='offline';CM.err='Could not load your data from the database: '+eMsg(e)}}else CM.mode='local';
+}
+async function retryInit(){CM.err='';cloudUi();await cloudInit();applyBiz();render()}
+async function boot(){
+ const el=$('#lg');el.hidden=false;el.innerHTML='<div class="lgw"><div class="mu">Checking sign-in…</div></div>';
+ if(!sb){showLg('Could not load Supabase. Check your internet connection and refresh the page.');return}
+ sb.auth.onAuthStateChange(ev=>{if(ev==='SIGNED_OUT'){sbUser=null;sbProf=null;if($('#lg').hidden)showLg('You were signed out.')}});
+ try{
+  const{data}=await sb.auth.getSession(),s=data&&data.session;
+  if(!s){showLg();return}
+  const v=await sbVerify(s.user);
+  if(!v.ok){await sb.auth.signOut();showLg(v.msg);return}
+  sbUser=s.user;sbProf=v.p;el.innerHTML='<div class="lgw"><div class="mu">Loading your data…</div></div>';
+  await cloudInit();applyBiz();el.hidden=true;render();
+ }catch(x){showLg('Could not reach Supabase. Check your internet connection and refresh the page.')}
+}
+function hideLg(){const el=$('#lg');el.innerHTML='<div class="lgw"><div class="mu">Loading your data…</div></div>';cloudInit().then(()=>{applyBiz();el.hidden=true;render()})}
+async function logout(){if(CM.tm){clearTimeout(CM.tm);CM.tm=0;await push()}try{if(sb)await sb.auth.signOut()}catch(e){}sbUser=null;sbProf=null;CM.mode='';CM.SN=null;showLg()}
+
+/* ---- keep other devices' changes in view ---- */
+async function autoPull(){
+ if(CM.mode!=='cloud'||CM.busy||CM.tm||!sbUser||document.visibilityState!=='visible'||Date.now()-CM.pulled<20000)return;
+ const a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return;
+ if(!$('#md').hidden||tab==='plan'||(tab==='customers'&&/add|edit/.test(cv.v)))return;
+ if(sig(snap())!==sig(CM.SN))return;
+ const before=JSON.stringify(S);try{await pull();if(JSON.stringify(S)!==before){applyBiz();render()}}catch(e){}
+}
+document.addEventListener('visibilitychange',autoPull);setInterval(autoPull,60000);
+
+/* ---- order status time is saved with the order ---- */
+function setS(id,v){act('Marked '+v,()=>{const o=S.o.find(x=>x.id===id);o.status=v;o.sat=timeNow();o.satAt=new Date().toISOString()})}
+function doDelay(id){const r=val('dr'),n=val('dn');closeMd();act('Marked delayed',()=>{const o=S.o.find(x=>x.id===id);o.status='Delayed';o.dlr=r+(n?': '+n:'');o.sat=timeNow();o.satAt=new Date().toISOString()})}
+
+/* ---- one-time move of this browser's data to Supabase ---- */
+function dlFile(text,name){const u=URL.createObjectURL(new Blob([text],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+function dlBackup(){let t='';try{t=localStorage.getItem('hfcrm_premigration')||localStorage.getItem('hfcrm')||''}catch(e){}if(!t)t=JSON.stringify(S);dlFile(t,'nutryzo-backup-'+today()+'.json');CM.bk=true;render();toast('Backup file downloaded')}
+function dlNow(){dlFile(JSON.stringify(S),'nutryzo-data-'+today()+'.json');toast('Backup file downloaded')}
+function remapIds(){
+ const mp={},nu=x=>{if(x&&!isU(x.id)){x.lid=x.id;mp[x.id]=x.id=uid()}};
+ S.d.forEach(nu);S.menu.s.forEach(nu);S.menu.d.forEach(nu);S.o.forEach(nu);S.t.forEach(nu);
+ S.o.forEach(o=>{if(o.sid&&mp[o.sid])o.sid=mp[o.sid]});
+ Object.values(S.plan).forEach(p=>{if(p.salad&&mp[p.salad])p.salad=mp[p.salad];if(p.drink&&mp[p.drink])p.drink=mp[p.drink]});
+ if(pn.salad&&mp[pn.salad])pn.salad=mp[pn.salad];if(pn.drink&&mp[pn.drink])pn.drink=mp[pn.drink];
+}
+function expCounts(){const cs=cIds(),K=S.c.map(custKids);return{customers:S.c.length,customer_addresses:K.reduce((a,k)=>a+k.a.length,0),customer_pricing:K.reduce((a,k)=>a+k.p.length,0),customer_holidays:K.reduce((a,k)=>a+k.h.length,0),customer_activity_logs:K.reduce((a,k)=>a+k.l.length,0),delivery_staff:S.d.length,menu_items:S.menu.s.length+S.menu.d.length,daily_plans:Object.keys(S.plan).length,daily_plan_customers:Object.values(S.plan).reduce((a,p)=>a+planKids(p,cs).length,0),orders:S.o.length,order_items:S.o.reduce((a,o)=>a+orderKids(o).length,0),transactions:S.t.length}}
+async function migrate(){
+ const out=$('#mgp'),say=h=>{const o=$('#mgp');if(o)o.innerHTML=h};
+ if(CM.mode!=='local'||!CM.bk)return;
+ const btn=$('#mgb');if(btn)btn.disabled=true;
+ try{
+  say('Keeping a safety copy in this browser…');
+  try{if(!localStorage.getItem('hfcrm_premigration'))localStorage.setItem('hfcrm_premigration',localStorage.getItem('hfcrm')||JSON.stringify(S))}catch(e){}
+  norm();remapIds();try{localStorage.setItem('hfcrm',JSON.stringify(S))}catch(e){}
+  say('Uploading your data to Supabase…');
+  CM.mode='migrating';CM.SN=emptySN();
+  const ok=await push();if(!ok)throw new Error(CM.err);
+  say('Checking the database…');
+  const exp=expCounts(),got={};
+  for(const t of Object.keys(exp)){const{count,error}=await sb.from(t).select('*',{count:'exact',head:true});if(error)throw error;got[t]=count}
+  const all=Object.keys(exp).every(t=>got[t]===exp[t]);
+  const tbl=`<div class="tw"><table class="kt"><thead><tr><th>Table</th><th>In this browser</th><th>In database</th><th></th></tr></thead><tbody>${Object.keys(exp).map(t=>`<tr><td>${t}</td><td>${exp[t]}</td><td>${got[t]}</td><td>${got[t]===exp[t]?'✅':'❌'}</td></tr>`).join('')}</tbody></table></div>`;
+  if(!all){CM.mode='local';CM.SN=null;CM.err='';cloudUi();say(`<div class="err">Some numbers do not match, so the app is still using this browser’s data. Nothing was deleted. Send a screenshot of this table.</div>${tbl}<div class="row"><button onclick="migrate()">Try again</button></div>`);if(btn)btn.disabled=false;return}
+  const mv={done:true,at:new Date().toISOString(),by:sbUser&&sbUser.email||'',counts:exp};
+  await sbx(sb.from('app_settings').upsert({key:'migration',value:mv,updated_at:mv.at},{onConflict:'key'}));
+  CM.mig=mv;CM.mode='cloud';CM.SN=snap();CM.pulled=Date.now();CM.at=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});CM.done=tbl;
+  render();toast('Your data is now in Supabase');
+ }catch(e){CM.mode='local';CM.SN=null;CM.err='';cloudUi();say(`<div class="err">The move stopped: ${esc(eMsg(e))}. The app is still using this browser’s data, and nothing was deleted. You can press the button again.</div>`);if(btn)btn.disabled=false}
+}
+async function startEmpty(){
+ if(CM.mode!=='local'||S.c.length||S.o.length||S.t.length)return;
+ try{const mv={done:true,at:new Date().toISOString(),by:sbUser&&sbUser.email||'',counts:{}};await sbx(sb.from('app_settings').upsert({key:'migration',value:mv,updated_at:mv.at},{onConflict:'key'}));CM.mig=mv;await pull();CM.mode='cloud';applyBiz();render();toast('Now using the database')}
+ catch(e){toast('Could not start: '+eMsg(e))}
+}
+async function reloadCloud(){if(CM.mode!=='cloud')return;if(CM.tm||CM.busy){toast('Still saving, try again in a moment');return}try{await pull();applyBiz();render();toast('Loaded the latest data')}catch(e){CM.err='Could not load: '+eMsg(e);cloudUi()}}
+function cloudC(){
+ const n=`${S.c.length} customers · ${S.o.length} orders · ${S.t.length} money entries · ${Object.keys(S.plan).length} meal plans`;
+ if(CM.mode==='cloud')return `<div class="card"><div class="fsh">${ic('check',18)}<b>Database: connected</b></div><div class="mu">Every change is saved to Supabase automatically. Other phones and computers see it after you sign in there.</div><div style="margin:10px 0 4px">${n}</div>${CM.at?`<div class="mu">Last saved at ${esc(CM.at)}</div>`:''}${CM.done?`<details style="margin-top:8px"><summary class="mu">Move check results</summary>${CM.done}</details>`:''}<div class="row"><button class="s" onclick="reloadCloud()">Load latest data</button><button class="s" onclick="dlNow()">Download a backup file</button></div></div>`;
+ if(CM.mode==='offline')return `<div class="card"><div class="fsh">${ic('x',18)}<b>Database: not connected</b></div><div class="err">${esc(CM.err)}</div><div class="row"><button onclick="retryInit()">Try again</button></div></div>`;
+ if(CM.mode!=='local')return '';
+ const none=!S.c.length&&!S.o.length&&!S.t.length;
+ if(none)return `<div class="card"><div class="fsh">${ic('wallet',18)}<b>Move your data to Supabase</b></div><div class="mu">There is no data in this browser. If your data is on another computer, sign in there and move it from that computer’s Settings page.</div><div class="row"><button class="s" onclick="startEmpty()">Start using the database with no data</button></div></div>`;
+ return `<div class="card mig"><div class="fsh">${ic('wallet',18)}<b>Move your data to Supabase</b></div><div class="mu">Right now your data is saved only in this browser: ${n}. Move it once, and after that every change is saved to the database.</div>
+ <div class="stp"><i>1</i><b>Download a backup file</b>${CM.bk?'<span class="pill">Done</span>':''}</div><div class="mu">Keep this file safe. It is a full copy of your data as it is now.</div><div class="row"><button class="${CM.bk?'s':''}" onclick="dlBackup()">${ic('copy',16)}Download backup file</button></div>
+ <div class="stp"><i>2</i><b>Move the data</b></div><div class="mu">Uploads everything, then counts every table to check nothing is missing. Your browser’s copy is kept.</div><div class="row"><button id="mgb" ${CM.bk?'':'disabled'} onclick="migrate()">${ic('check',16)}Move data to Supabase</button></div><div id="mgp" class="mu" style="margin-top:10px"></div></div>`;
+}
+function acctC(){
+ const u=sbUser||{},p=sbProf||{};
+ return `<div class="card"><div class="fsh">${ic('user',18)}<b>Admin account</b></div><div class="mu" style="margin:0 0 8px">Signed in as ${esc(u.email||'-')}${p.full_name?' · '+esc(p.full_name):''}${p.role?' · '+esc(p.role):''}</div>
+ <div class="row" style="margin:0 0 4px"><button class="s" onclick="sbTest()">Test database connection</button></div><div id="sbt" class="mu" style="margin-top:8px"></div>
+ <label for="np">New password</label><input id="np" type="password" autocomplete="new-password"><label for="nq">Confirm new password</label><input id="nq" type="password" autocomplete="new-password"><p class="err" id="aerr"></p>
+ <div class="row"><button onclick="chPw()">Change password</button><button class="s" onclick="logout()">Log out</button></div></div>`;
+}
+function rsBk(){if(CM.mode==='cloud'){err('Restoring a backup is turned off while you use the database, so it cannot overwrite newer data.');return}
+ try{const d=JSON.parse(val('bk'));if(!d||!Array.isArray(d.c))throw 0;bak=JSON.stringify(S);S=Object.assign({c:[],o:[],d:[],t:[],plan:{},menu:{s:[],d:[]}},d);save();render();toast('Backup restored',1)}catch(e){err('That text is not a valid backup.')}}
+function backupC(){return `<div class="card"><div class="fsh">${ic('copy',18)}<b>Backup as text</b></div><div class="mu" style="margin:0 0 8px">${CM.mode==='cloud'?'Copy all your data as text. Restoring is turned off while you use the database.':'Copy all your data as text, or paste a backup to restore it.'}</div><textarea id="bk" rows="4" aria-label="Backup data" placeholder="Backup text appears here."></textarea><p class="err" id="err"></p><div class="row"><button onclick="mkBk()">Create backup</button>${CM.mode==='cloud'?'':'<button class="s" onclick="rsBk()">Restore from text</button>'}</div></div>`}
+function settingsV(){
+ return pageHead('Settings','Business details, menu, team, messages, database and your account.')+`<div class="setg"><div class="stack">${bizC()}${teamC()}${tplC()}</div><div class="stack">${cloudC()}${acctC()}${backupC()}${window.claude?syncC():''}${skinC()}</div></div>`;
+}
 
 boot();
 </script></body></html>
