@@ -285,6 +285,7 @@ button.rm{position:absolute;right:-6px;top:-6px;background:var(--cd);border:1px 
 @media (min-width:860px){.pbar{bottom:12px}}
 .pbar b.tt{font-size:22px;font-weight:600}
 .pbar .okt{display:inline-flex;align-items:center;gap:6px;color:var(--gt)}.pbar .wt{color:var(--wn)}
+.dzc .fsh svg,.dzc .fsh .i{color:var(--wn);stroke:var(--wn)}.dzc{margin-top:16px;border-color:color-mix(in srgb,var(--wn) 40%,var(--bd))}button.dzb{background:transparent;color:var(--wn);border:1px solid var(--wn)}button.dzb:hover{background:color-mix(in srgb,var(--wn) 12%,transparent)}
 .pll{margin:10px 0}.pll ul{margin:4px 0 0;padding-left:20px}.pll li{margin:2px 0}
 input.hid2{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .pr2{display:flex;gap:10px;flex-wrap:wrap}.pr2 label{margin:0;font-size:11px}.pr2 input.pin{margin-top:2px}
@@ -1253,7 +1254,7 @@ function openDel(id){
  const os=S.o.filter(o=>o.cid===id),op=os.filter(open).length,ps=S.t.filter(t=>t.cid===id),paid=ps.reduce((a,t)=>a+t.amt,0),due=cst(c).due,m=$('#md');
  m.innerHTML=`<div class="mdc"><h2 id="mdt">Delete ${esc(c.name)}?</h2>
  <p>This removes ${esc(c.name)} (${esc(c.num||'')}) from your customer list, with their address, location and delivery schedule.</p>
- <p class="mu">${os.length} orders and ${ps.length} payments (${inr(paid)}) stay in your records, so reports and totals do not change.${op?' '+op+' unfinished '+(op===1?'order':'orders')+' will be cancelled.':''}</p>
+ <p class="mu">${os.length||ps.length?`${os.length} ${os.length===1?'order':'orders'} and ${ps.length} ${ps.length===1?'payment':'payments'} (${inr(paid)}) stay in your records, so reports and totals do not change.`:'They have no orders or payments yet.'}${op?' '+op+' unfinished '+(op===1?'order':'orders')+' will be cancelled.':''}</p>
  ${due>0?`<p class="warn">${esc(c.name)} still owes ${inr(due)}. It will no longer be tracked.</p>`:''}
  <p class="mu">Not sure? <button class="lnk" onclick="closeMd();archDirect('${id}')">Archive instead</button> to keep everything and hide them from daily meals.</p>
  <div class="row"><button class="s" id="mdx" onclick="closeMd()">Cancel</button><button class="d2" onclick="doDel('${id}')">${ic('trash',18)}Delete customer</button></div></div>`;
@@ -2436,6 +2437,11 @@ function plUpdDo(){
  const parts=[st.upd.length?st.upd.length+' updated':'',st.miss.length?st.miss.length+' created':'',st.rem.length?st.rem.length+' removed':''].filter(Boolean).join(', ');
  plDone('Orders for '+fd(d)+': '+(parts||'no changes')+'.'+(st.kept.length?' '+st.kept.length+' assigned or on the way were kept as they are.':''));
 }
+
+/* ===== Delete customer from the Edit page (separate, below the form) ===== */
+function dzC(c){return `<div class="card dzc"><div class="fsh">${ic('trash',18)}<b>Delete customer</b></div><div class="mu">Removes ${esc(c.name)} from your customer list. Their orders and payments stay in your records. You will be asked to confirm, and you can archive instead.</div><div class="row" style="margin-top:12px"><button class="dzb" onclick="openDel('${c.id}')">${ic('trash',18)}Delete customer…</button></div></div>`}
+{const _ev=editV;editV=function(c){return _ev(c)+dzC(c)}}
+function archDirect(id){const c=cby(id);if(!c)return;if(tab==='customers'&&cv.v==='edit')cv.v='profile';act(c.name+' archived',()=>{const x=cby(id);x.st='Archived';lg(x,'Customer archived')})}
 
 boot();
 </script></body></html>
