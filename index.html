@@ -284,6 +284,8 @@ button.rm{position:absolute;right:-6px;top:-6px;background:var(--cd);border:1px 
 .pbar{position:sticky;bottom:90px;z-index:20;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.14);margin-top:24px}
 @media (min-width:860px){.pbar{bottom:12px}}
 .pbar b.tt{font-size:22px;font-weight:600}
+.pbar .okt{display:inline-flex;align-items:center;gap:6px;color:var(--gt)}.pbar .wt{color:var(--wn)}
+.pll{margin:10px 0}.pll ul{margin:4px 0 0;padding-left:20px}.pll li{margin:2px 0}
 input.hid2{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .pr2{display:flex;gap:10px;flex-wrap:wrap}.pr2 label{margin:0;font-size:11px}.pr2 input.pin{margin-top:2px}
 .sw3{margin:0;color:var(--tx);font-size:13px;display:inline-flex;align-items:center;gap:8px;min-width:118px}
@@ -1521,7 +1523,7 @@ function planV(){
  ${showD?`<div style="margin-top:8px"><button class="lnk" onclick="pn.drink='';pn.dOn=false;render()">Remove drink from this plan</button></div>`:''}
  ${ready?`<div class="stp"><i>3</i><b>Prices</b><span>${rowsP.length} ${rowsP.length===1?'customer':'customers'} · ${nsp} with special prices</span></div><div class="card">${vis.map(prow).join('')||'<div class="mu">Everyone is on the standard price.</div>'}${rowsP.length>nsp?`<div class="row" style="margin-top:10px"><button class="s" onclick="pn.px=!pn.px;render()">${pn.px?'Show special prices only':'Show all '+rowsP.length+' customers'}</button></div>`:''}</div>`:''}
  ${ready?kitchenC(d,el,sl,dk,dcs):''}
- <div class="pbar"><div><b class="tt">${inr(mr+dr)}</b><div class="mu">${sl?el.length+(el.length===1?' meal':' meals'):'No meal'}${dk?' · '+dcs.length+(dcs.length===1?' drink':' drinks'):''}${ds?' · discount '+inr(ds):''}</div></div><div class="row" style="margin:0"><button class="s" onclick="applyPlan(true)">Save draft</button><button ${ready?'':'disabled'} onclick="applyPlan(false)">${ic('check',18)}Apply to customers</button></div></div>`;
+ ${plBar(ready,mr,dr,el,sl,dk,dcs,ds)}`;
 }
 function openMenu(k){
  const m=$('#md'),L=S.menu[k],nm=k==='s'?'salad meals':'drinks',one=k==='s'?'salad meal':'drink';
@@ -1867,12 +1869,12 @@ async function doLg(e){
   const{data,error}=await sb.auth.signInWithPassword({email:em,password:pw});
   if(error)return done(/invalid login/i.test(error.message)?'Incorrect email or password.':error.message);
   const v=await sbVerify(data.user);
-  if(!v.ok){await sb.auth.signOut();return done(v.msg)}
+  if(!v.ok){await sb.auth.signOut({scope:'local'});return done(v.msg)}
   sbUser=data.user;sbProf=v.p;lgBusy=false;hideLg();toast('Signed in');
  }catch(x){done('Could not reach Supabase. Check your internet connection and try again.')}
  return false;
 }
-async function logout(){try{if(sb)await sb.auth.signOut()}catch(e){}sbUser=null;sbProf=null;showLg()}
+async function logout(){try{if(sb)await sb.auth.signOut({scope:'local'})}catch(e){}sbUser=null;sbProf=null;showLg()}
 function acctC(){
  const u=sbUser||{},p=sbProf||{};
  return `<div class="card"><b>Admin account</b><div class="mu" style="margin:4px 0 8px">Signed in as ${esc(u.email||'-')}${p.full_name?' · '+esc(p.full_name):''}${p.role?' · '+esc(p.role):''}</div>
@@ -1902,7 +1904,7 @@ async function boot(){
   const{data}=await sb.auth.getSession(),s=data&&data.session;
   if(!s){showLg();return}
   const v=await sbVerify(s.user);
-  if(!v.ok){await sb.auth.signOut();showLg(v.msg);return}
+  if(!v.ok){await sb.auth.signOut({scope:'local'});showLg(v.msg);return}
   sbUser=s.user;sbProf=v.p;el.hidden=true;render();setTimeout(qsync,1200);
  }catch(x){showLg('Could not reach Supabase. Check your internet connection and refresh the page.')}
 }
@@ -2155,7 +2157,7 @@ function snap(){const N=emptySN(),cs=cIds(),ds=new Set(S.d.map(d=>d.id));
  S.t.forEach(x=>N.t[x.id]=sig(txRow(x,cs)));setRows().forEach(r=>N.s[r.key]=sig(r.value));return N}
 
 /* ---- table rows -> app data ---- */
-async function pull(){
+async function pull(ok){
  const T=['customers','customer_addresses','customer_pricing','customer_holidays','customer_activity_logs','delivery_staff','menu_items','daily_plans','daily_plan_customers','orders','transactions','app_settings'];
  const [cs,ad,pr,ho,lgs,st,mi,dp,dpc,od,tx,se]=await Promise.all(T.map(qAll));
  const by=(a,k)=>{const m={};a.forEach(r=>{(m[r[k]]=m[r[k]]||[]).push(r)});return m},A=by(ad,'customer_id'),PR=by(pr,'customer_id'),H=by(ho,'customer_id'),LG=by(lgs,'customer_id'),K=by(dpc,'daily_plan_id');
@@ -2181,8 +2183,10 @@ async function pull(){
  se.forEach(r=>{if(r.key==='business')N.biz=r.value||{};else if(r.key==='templates')N.tpl=r.value||{};else if(r.key==='migration')CM.mig=r.value});
  const mx=(a,re)=>a.reduce((m,s)=>{const n=parseInt(String(s||'').replace(re,''),10);return n>m?n:m},0);
  N.seq=mx(N.c.map(c=>c.num),/^C/);N.oseq=mx(N.o.map(o=>o.no),/^O/);N.mseq=mx(N.t.map(x=>x.no),/^M/);
+ if(ok&&!ok())return false;
  S=N;CM.SN=snap();CM.pulled=Date.now();
  try{localStorage.setItem('hfcrm',JSON.stringify(S))}catch(e){}
+ return true;
 }
 
 /* ---- save changes to the database ---- */
@@ -2269,21 +2273,24 @@ async function boot(){
   const{data}=await sb.auth.getSession(),s=data&&data.session;
   if(!s){showLg();return}
   const v=await sbVerify(s.user);
-  if(!v.ok){await sb.auth.signOut();showLg(v.msg);return}
+  if(!v.ok){await sb.auth.signOut({scope:'local'});showLg(v.msg);return}
   sbUser=s.user;sbProf=v.p;el.innerHTML='<div class="lgw"><div class="mu">Loading your data…</div></div>';
   await cloudInit();applyBiz();el.hidden=true;render();
  }catch(x){showLg('Could not reach Supabase. Check your internet connection and refresh the page.')}
 }
 function hideLg(){const el=$('#lg');el.innerHTML='<div class="lgw"><div class="mu">Loading your data…</div></div>';cloudInit().then(()=>{applyBiz();el.hidden=true;render()})}
-async function logout(){if(CM.tm){clearTimeout(CM.tm);CM.tm=0;await push()}try{if(sb)await sb.auth.signOut()}catch(e){}sbUser=null;sbProf=null;CM.mode='';CM.SN=null;showLg()}
+async function logout(){if(CM.tm){clearTimeout(CM.tm);CM.tm=0;await push()}try{if(sb)await sb.auth.signOut({scope:'local'})}catch(e){}sbUser=null;sbProf=null;CM.mode='';CM.SN=null;showLg()}
 
 /* ---- keep other devices' changes in view ---- */
+function snDirty(){const a=snap(),b=CM.SN||{};for(const k of Object.keys(a)){const x=a[k]||{},y=b[k]||{},kx=Object.keys(x);if(kx.length!==Object.keys(y).length)return true;for(const id of kx)if(x[id]!==y[id])return true}return false}
 async function autoPull(){
  if(CM.mode!=='cloud'||CM.busy||CM.tm||!sbUser||document.visibilityState!=='visible'||Date.now()-CM.pulled<20000)return;
  const a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return;
  if(!$('#md').hidden||tab==='plan'||(tab==='customers'&&/add|edit/.test(cv.v)))return;
- if(sig(snap())!==sig(CM.SN))return;
- const before=JSON.stringify(S);try{await pull();if(JSON.stringify(S)!==before){applyBiz();render()}}catch(e){}
+ if(snDirty())return;
+ const before=JSON.stringify(S);
+ const calm=()=>!CM.busy&&!CM.tm&&JSON.stringify(S)===before&&$('#md').hidden&&tab!=='plan'&&!(tab==='customers'&&/add|edit/.test(cv.v))&&!(document.activeElement&&/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
+ try{if(await pull(calm)&&JSON.stringify(S)!==before){applyBiz();render()}}catch(e){}
 }
 document.addEventListener('visibilitychange',autoPull);setInterval(autoPull,60000);
 
@@ -2355,6 +2362,79 @@ function rsBk(){if(CM.mode==='cloud'){err('Restoring a backup is turned off whil
 function backupC(){return `<div class="card"><div class="fsh">${ic('copy',18)}<b>Backup as text</b></div><div class="mu" style="margin:0 0 8px">${CM.mode==='cloud'?'Copy all your data as text. Restoring is turned off while you use the database.':'Copy all your data as text, or paste a backup to restore it.'}</div><textarea id="bk" rows="4" aria-label="Backup data" placeholder="Backup text appears here."></textarea><p class="err" id="err"></p><div class="row"><button onclick="mkBk()">Create backup</button>${CM.mode==='cloud'?'':'<button class="s" onclick="rsBk()">Restore from text</button>'}</div></div>`}
 function settingsV(){
  return pageHead('Settings','Business details, menu, team, messages, database and your account.')+`<div class="setg"><div class="stack">${bizC()}${teamC()}${tplC()}</div><div class="stack">${cloudC()}${acctC()}${backupC()}${window.claude?syncC():''}${skinC()}</div></div>`;
+}
+
+/* ===== Meal plan: what the bar offers after a plan is applied ===== */
+const plFresh=o=>o.status==='New'&&!o.sid; // not yet assigned or started
+const plOrd=d=>S.o.filter(o=>o.date===d&&o.pl===d);
+const plSame=(o,w)=>o.items===w.items&&Number(o.amt)===w.amt&&Number(o.mpr||0)===w.mpr&&Number(o.dpr||0)===w.dpr;
+function plOvK(ov,mp){return Object.keys(ov||{}).filter(k=>ov[k]).sort().map(k=>k+':'+Number((mp||{})[k]))}
+function plKey(p){const s=p.salad||'',dr=p.drink||'';return JSON.stringify([s,s?Number(p.std)||0:0,dr,dr?Number(p.dstd)||0:0,dr?(p.dc||[]).slice().sort():[],s?plOvK(p.ov,p.mp):[],dr?plOvK(p.dov,p.dp):[]])}
+function plWant(){
+ const{el,sl,dk,dcs}=calc();
+ const ids=[...new Set([...(sl?el:[]).map(c=>c.id),...dcs.map(c=>c.id)])];
+ return ids.map(id=>{const c=cby(id),hs=!!sl,hd=dcs.some(x=>x.id===id),a=hs?pr(c,'m').p:0,b=hd?pr(c,'d').p:0;
+  return{cid:id,items:[hs?'Salad: '+sl.name:'',hd?'Drink: '+dk.name:''].filter(Boolean).join(' + '),amt:a+b,mpr:a,dpr:b}});
+}
+function plSt(){
+ const d=pn.date,p=S.plan[d];if(!p||(p.st||'Applied')!=='Applied')return null;
+ const os=plOrd(d),W=plWant(),wm=new Map(W.map(w=>[w.cid,w])),has=new Set(os.map(o=>o.cid));
+ const cur={salad:S.menu.s.some(x=>x.id===pn.salad)?pn.salad:'',std:pn.std,drink:S.menu.d.some(x=>x.id===pn.drink)?pn.drink:'',dstd:pn.dstd,dc:calc().dcs.map(c=>c.id),ov:pn.ov,mp:pn.mp,dov:pn.dov,dp:pn.dp};
+ return{os,
+  miss:W.filter(w=>!has.has(w.cid)),
+  upd:os.filter(o=>plFresh(o)&&wm.has(o.cid)&&!plSame(o,wm.get(o.cid))),
+  rem:os.filter(o=>plFresh(o)&&!wm.has(o.cid)),
+  kept:os.filter(o=>!plFresh(o)&&open(o)&&(!wm.has(o.cid)||!plSame(o,wm.get(o.cid)))),
+  setCh:plKey(cur)!==plKey(p)};
+}
+function plBar(ready,mr,dr,el,sl,dk,dcs,ds){
+ const st=plSt();
+ if(!st)return `<div class="pbar"><div><b class="tt">${inr(mr+dr)}</b><div class="mu">${sl?el.length+(el.length===1?' meal':' meals'):'No meal'}${dk?' · '+dcs.length+(dcs.length===1?' drink':' drinks'):''}${ds?' · discount '+inr(ds):''}</div></div><div class="row" style="margin:0"><button class="s" onclick="applyPlan(true)">Save draft</button><button ${ready?'':'disabled'} onclick="applyPlan(false)">${ic('check',18)}Apply to customers</button></div></div>`;
+ const n=st.os.length,tot=st.os.reduce((a,o)=>a+(Number(o.amt)||0),0),ch=st.upd.length+st.rem.length,mi=st.miss.length;
+ const left=note=>`<div><b class="tt okt">${ic('check',20)}Applied</b><div class="mu">${n} ${n===1?'order':'orders'} · ${inr(tot)}${note?' · '+note:''}</div></div>`;
+ const view=cls=>`<button ${cls?'class="s"':''} onclick="go('orders')">View orders</button>`;
+ const disc=st.setCh?`<button class="s" onclick="plDiscard()">Discard changes</button>`:'';
+ let L,R;
+ if(ch){L=left(`<span class="wt">${ch} ${ch===1?'order needs':'orders need'} updating</span>`);R=`${disc}<button onclick="plUpdAsk()">${ic('check',18)}Update orders</button>`}
+ else if(mi){L=left(`<span class="wt">${mi} ${mi===1?'customer has':'customers have'} no order yet</span>`);R=`${disc||view(1)}<button onclick="plAddNew()">${ic('plus',18)}Create orders for ${mi} new ${mi===1?'customer':'customers'}</button>`}
+ else if(st.setCh){const k=st.kept.length;L=left('<span class="wt">changes not saved</span>'+(k?' · '+k+(k===1?' order is':' orders are')+' already on the way and won’t change':''));R=`${disc}<button onclick="plSaveOnly()">${ic('check',18)}Save changes</button>`}
+ else{L=left('');R=view(0)}
+ return `<div class="pbar">${L}<div class="row" style="margin:0">${R}</div></div>`;
+}
+function plSave(){
+ const{d,el,sl,dk,dcs,mr,dr}=calc(),old=S.plan[d]||{};
+ S.plan[d]={...old,st:'Applied',salad:sl?pn.salad:'',std:pn.std,sc:sl?el.map(c=>c.id):[],mp:{...pn.mp},ov:{...pn.ov},drink:dk?pn.drink:'',dstd:pn.dstd,dc:dcs.map(c=>c.id),dp:{...pn.dp},dov:{...pn.dov},rev:mr+dr};
+}
+const plMk=(w,d)=>({id:uid(),cid:w.cid,items:w.items,date:d,amt:w.amt,mpr:w.mpr,dpr:w.dpr,status:'New',sid:'',pl:d});
+function plDone(msg){pn.st='Applied';pn.msg=msg;save();render();window.scrollTo(0,0)}
+function plAddNew(){
+ const st=plSt();if(!st||!st.miss.length)return render();const d=pn.date,n=st.miss.length;
+ plSave();st.miss.forEach(w=>S.o.unshift(plMk(w,d)));
+ plDone('Created '+n+' new '+(n===1?'order':'orders')+' for '+fd(d)+'. Existing orders were not changed.');
+}
+function plSaveOnly(){plSave();plDone('Plan saved for '+fd(pn.date)+'. No orders needed changes.')}
+function plDiscard(){loadPn(pn.date);render()}
+function plUpdAsk(){
+ const st=plSt();if(!st)return render();const W=new Map(plWant().map(w=>[w.cid,w])),nm=id=>esc(cust(id).name);
+ const li=(t,a)=>a.length?`<div class="pll"><b>${t}</b><ul>${a.join('')}</ul></div>`:'';
+ const m=$('#md');
+ m.innerHTML=`<div class="mdc"><h2 id="mdt">Update orders for ${fd(pn.date)}?</h2>
+ ${li('Update '+st.upd.length+(st.upd.length===1?' order':' orders'),st.upd.map(o=>{const w=W.get(o.cid);return `<li>${nm(o.cid)}: ${inr(o.amt)} → ${inr(w.amt)}${o.items!==w.items?' · '+esc(w.items):''}</li>`}))}
+ ${li('Create '+st.miss.length+(st.miss.length===1?' order':' orders'),st.miss.map(w=>`<li>${nm(w.cid)}: ${inr(w.amt)}</li>`))}
+ ${li('Remove '+st.rem.length+(st.rem.length===1?' order':' orders')+' (no longer in this plan)',st.rem.map(o=>`<li>${nm(o.cid)}: ${inr(o.amt)}</li>`))}
+ ${li('Keep '+st.kept.length+(st.kept.length===1?' order':' orders')+' as it is (already assigned or on the way)',st.kept.map(o=>`<li>${nm(o.cid)}: ${esc(o.status)}${o.sid?' · '+esc(staff(o.sid)):''}</li>`))}
+ <div class="mu">Orders that are assigned, on the way or delivered are never changed.</div>
+ <div class="row"><button class="s" onclick="closeMd()">Cancel</button><button onclick="plUpdDo()">${ic('check',18)}Update orders</button></div></div>`;
+ m.hidden=false;
+}
+function plUpdDo(){
+ closeMd();const st=plSt();if(!st)return render();const d=pn.date,W=new Map(plWant().map(w=>[w.cid,w]));
+ plSave();
+ st.upd.forEach(o=>{const w=W.get(o.cid);if(w)Object.assign(o,{items:w.items,amt:w.amt,mpr:w.mpr,dpr:w.dpr})});
+ const rm=new Set(st.rem.map(o=>o.id));if(rm.size)S.o=S.o.filter(o=>!rm.has(o.id));
+ st.miss.forEach(w=>S.o.unshift(plMk(w,d)));
+ const parts=[st.upd.length?st.upd.length+' updated':'',st.miss.length?st.miss.length+' created':'',st.rem.length?st.rem.length+' removed':''].filter(Boolean).join(', ');
+ plDone('Orders for '+fd(d)+': '+(parts||'no changes')+'.'+(st.kept.length?' '+st.kept.length+' assigned or on the way were kept as they are.':''));
 }
 
 boot();
