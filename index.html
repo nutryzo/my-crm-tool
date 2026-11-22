@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nutryzo CRM</title>
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
 <style>
 :root{--bg:#f2f7f3;--cd:#fff;--tx:#14261c;--mu:#5f7266;--bd:#d9e5dc;--pr:#1f6b45;--pt:#fff;--ac:#e3f1e7;--wn:#b4561b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
@@ -351,6 +351,80 @@ button.lgbtn{width:100%;min-height:44px;justify-content:center}
 button.lgfp{display:flex;margin:12px auto 0}
 .lgh{margin-top:12px;border:1px solid var(--bd);border-radius:10px;padding:12px;font-size:13px;background:var(--bg)}
 .lgh[hidden]{display:none}
+/* ===== UI upgrade ===== */
+[hidden]{display:none!important}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:0 0 18px}
+.ph h1{margin:0 0 4px!important}
+.fcard{padding:0!important;overflow:hidden}
+.fsec{padding:18px 20px;border-bottom:1px solid var(--bd)}
+.fsec h2{margin:16px 0 6px}
+.fsh{display:flex;align-items:center;gap:10px;margin-bottom:6px}.fsh b{font-size:15px;font-weight:600}.fsh .i{color:var(--gt,var(--pr))}
+.fact{padding:4px 20px 18px}
+.fg2{display:grid;gap:0 16px;grid-template-columns:1fr}
+@media (min-width:700px){.fg2{grid-template-columns:1fr 1fr}}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--ac);color:var(--tx);margin-left:6px;vertical-align:1px;white-space:nowrap}
+.pill.w{background:var(--p2);color:var(--wn)}.pill.x{background:var(--p1);color:var(--wn)}
+.wh{display:inline-flex;align-items:center;gap:6px}
+.setg{display:grid;gap:14px}
+@media (min-width:1000px){.setg{grid-template-columns:1fr 1fr;align-items:start}}
+.setg .card{margin:0}
+.bizl{display:flex;align-items:center;gap:14px;margin:12px 0 4px;flex-wrap:wrap}
+.blogo{width:56px;height:56px;border-radius:14px;background:var(--ac);color:var(--gt,var(--pr));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;overflow:hidden;flex:none}
+.blogo img,.brand .logo img,.tb .av img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+.tb .av{overflow:hidden}
+label.btn{margin:0;font-size:14px}
+code{background:var(--ac);padding:1px 6px;border-radius:6px;font-size:12px}
+.tpv{background:var(--bg);border:1px dashed var(--bd);border-radius:10px;padding:9px 12px;font-size:13px;margin-top:6px;white-space:pre-wrap;color:var(--mu)}
+.tpv:before{content:"Preview: ";font-weight:600;color:var(--tx)}
+.kg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kg>div{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;min-width:0}
+.kg b{font-size:26px;font-weight:600;line-height:1.2}
+.kg .mu{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+table.kt{min-width:0;margin-top:12px}
+.wk{display:grid;gap:10px}
+.wkd{display:grid;grid-template-columns:170px 1fr 1fr 110px;gap:8px 12px;align-items:end;background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:12px 14px}
+.wkd label{margin:0 0 4px}
+.wkd .wdh{display:flex;flex-direction:column;align-self:center}.wkd .wdh .pill{margin:4px 0 0;align-self:flex-start}
+.wkd .wda{display:flex;justify-content:flex-end}
+.wkd.td{border-color:var(--pr);box-shadow:0 0 0 1px var(--pr)}
+.wkd.past{opacity:.6}
+@media (max-width:760px){.wkd{grid-template-columns:1fr 1fr}.wkd .wdh,.wkd .wda{grid-column:1/-1}.wkd .wda{justify-content:flex-start}}
+/* dashboard */
+.mealc{background:linear-gradient(135deg,#1f9d55 0%,#0e6b38 100%)!important;color:#fff;border:0!important;padding:22px!important;position:relative;overflow:hidden}
+.mealc:after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.08)}
+.mealc .mu{color:rgba(255,255,255,.82)}
+.mealc .mlh{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.85)}
+.mealc .mlh span:first-child{display:inline-flex;align-items:center;gap:6px}
+.mealc .pill{background:rgba(255,255,255,.18);color:#fff}
+.mealc .mln{font-size:26px;font-weight:600;line-height:1.2;margin:10px 0 4px}
+.mealc button{background:#fff;color:#0e6b38;border-color:#fff;position:relative;z-index:1}
+.mealc button.s{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.55)}
+.mealc button.lnk{background:none;border:0;color:#fff;padding:6px 4px;min-height:0}
+.tdg .sx b{font-size:30px}
+.attn .rw{min-height:48px}
+/* general polish */
+.crm .card,.crm .act,.crm .stat{box-shadow:0 1px 2px rgba(0,0,0,.04),0 6px 18px rgba(0,0,0,.035)}
+.crow,.orow,.erow{transition:border-color .15s,box-shadow .15s}
+.crow:hover,.erow:hover{box-shadow:0 6px 18px rgba(0,0,0,.07)}
+.crm h2{margin-top:22px}
+.crm input:focus,.crm select:focus,.crm textarea:focus{border-color:var(--pr);outline:2px solid color-mix(in srgb,var(--pr) 35%,transparent);outline-offset:0}
+.crm .tabs button.tab{font-size:14px}
+/* phones */
+@media (max-width:600px){
+ main{padding:14px 12px}
+ .crm h1,h1,.crm h1.pgt,h1.pgt{font-size:20px}
+ .fsec{padding:14px}.fact{padding:4px 14px 14px}
+ .kg{grid-template-columns:1fr 1fr}
+ .crow{gap:6px 10px}.crow .cm{display:none}.crow .ca{width:100%;justify-content:flex-end;border-top:1px solid var(--bd);padding-top:6px}
+ .orow .od{display:none}
+ .tdg .sx{padding:10px 8px}.tdg .sx b{font-size:22px}
+ .kvs b{font-size:18px}
+ .mealc .mln{font-size:22px}
+ .pbar{bottom:84px}
+ .ph>.row,.ph>button{width:100%}
+ .tabs{gap:16px}
+ .setg{gap:12px}
+}
 </style></head><body>
 <header class="tb"><div class="bc" id="bc"></div><div class="tbr"><div class="sw tbs"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><input id="gs" aria-label="Search customers" placeholder="Search customers by name, phone or ID" onkeydown="if(event.key==='Enter')gsearch(this.value)"></div><span class="mu" id="syt"></span><span class="av t4">N</span></div></header>
 <main id="app"></main>
@@ -790,7 +864,7 @@ function applyPlan(draft){
 }
 function listPV(){
  const ks=Object.keys(S.plan).sort().reverse();
- return `<div class="row" style="margin:0 0 8px"><button class="s" onclick="go('home')">← Dashboard</button></div><div class="top"><h1>Daily meal plans</h1><button onclick="openPlan(today())">${ic('plus',18)}Create daily plan</button></div>
+ return `<div class="row" style="margin:0 0 8px"><button class="s" onclick="go('home')">← Dashboard</button></div><div class="top"><h1>Daily meal plans</h1><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="s" onclick="showWeek()">Weekly menu</button><button onclick="openPlan(today())">${ic('plus',18)}Create daily plan</button></span></div>
  ${ks.map(k=>{const p=S.plan[k],s=S.menu.s.find(x=>x.id===p.salad),d=S.menu.d.find(x=>x.id===p.drink),st=p.st||'Applied';return `<div class="card"><div class="top"><b>${fd(k)}</b><span class="badge ${st==='Draft'?'w':''}">${st}</span></div><div>${esc(s?s.name:'No salad')}${d?' + '+esc(d.name):''}</div><div class="mu">${(p.sc||[]).length} meal · ${(p.dc||[]).length} drink customers · ${p.rev!=null?inr(p.rev):'-'}</div><div class="row"><button class="s" onclick="openPlan('${k}')">${ic('edit',18)}Edit</button></div></div>`}).join('')||empty('No daily plans yet.')}`;
 }
 function planV(){
@@ -1163,7 +1237,7 @@ function bcHtml(){
   else if(cv.v==='sched'&&c)a=[hm,cs,L(nm,"openP('"+c.id+"')"),'Delivery schedule'];
   else if(cv.v==='profile'&&c)a=[hm,cs,nm];
   else a=[hm,'Customers'];
- }else if(tab==='plan')a=pn.v==='list'?[hm,'Daily meal plans']:[hm,L('Daily meal plans',"showPlans()"),fd(pn.date)];
+ }else if(tab==='plan')a=pn.v==='week'?[hm,L('Daily meal plans',"showPlans()"),'Weekly menu']:pn.v==='list'?[hm,'Daily meal plans']:[hm,L('Daily meal plans',"showPlans()"),fd(pn.date)];
  else a=[hm,({orders:'Orders',delivery:'Delivery Management',money:'Finance',reports:'Reports',settings:'Settings'}[tab]||'')];
  return a.length>1?`<div class="crumbs" role="navigation" aria-label="Breadcrumb">${a.map((x,i)=>i<a.length-1?x+'<i>›</i>':`<b aria-current="page">${x}</b>`).join('')}</div>`:'';
 }
@@ -1418,7 +1492,7 @@ function togD(id){if(pn.drink===id){pn.drink='';render()}else selD(id)}
 function openPlan(d){loadPn(d);pn.dOn=false;pn.px=false;pn.em=false;tab='plan';render();window.scrollTo(0,0)}
 function pickD(v){if(v){loadPn(v);pn.dOn=false;pn.px=false}render()}
 function planV(){
- if(pn.v==='list')return listPV();
+ if(pn.v==='list')return listPV();if(pn.v==='week')return weekV();
  const{d,el,m,sl,dk,dcs,mr,dr,ds}=calc(),T=today(),TM=addDay(T,1),ex=S.c.filter(c=>c.st!=='Archived'&&onHol(c.id,d)),showD=pn.dOn||!!pn.drink,ready=!!(sl||dk);
  const tile=(k,x,on,fn)=>`<div class="tw"><button class="tl2 ${on?'on':''}" onclick="${fn}"><b>${esc(x.name)}</b><span class="mu">${x.price?inr(x.price):'No price set'}</span>${on?`<span class="tick">${ic('check',18)}</span>`:''}</button></div>`;
  const lab=c=>`<b>${esc(c.name)}</b>${c.vip?'<span class="tag v">VIP</span>':''}`;
@@ -1427,7 +1501,7 @@ function planV(){
  const rowsP=el.map(c=>({c,mp:sl?pr(c,'m'):null,dp:dk&&pn.dc.includes(c.id)?pr(c,'d'):null})),sp=x=>(x.mp&&x.mp.t!=='Standard')||(x.dp&&x.dp.t!=='Standard'),nsp=rowsP.filter(sp).length,vis=pn.px?rowsP:rowsP.filter(sp);
  const prow=x=>`<div class="fl prow"><div>${lab(x.c)}<div class="mu" style="font-size:12px">${x.c.num||''}${x.mp?' · Meal: '+tg2(x.mp):''}${x.dp?' · Drink: '+tg2(x.dp):''}</div></div><div class="pr2">${x.mp?`<label><span class="mu">Meal ₹</span>${pin('m',x.c,x.mp)}</label>`:''}${x.dp?`<label><span class="mu">Drink ₹</span>${pin('d',x.c,x.dp)}</label>`:''}</div></div>`;
  const addS=pn.addS||!m.s.some(x=>!x.off),addD=pn.addD;
- return `<div class="top" style="align-items:flex-start"><div style="display:flex;align-items:center;gap:10px"><h1 style="margin:0">Plan meals</h1>${pn.st&&pn.st!=='New'?`<span class="badge ${pn.st==='Applied'?'st-a':'w'}">${pn.st}</span>`:''}</div><div style="display:flex;gap:8px"><button class="s" onclick="dupPrev()">Copy previous plan</button><button class="s" onclick="showPlans()">All plans</button></div></div><p class="err" id="err"></p>
+ return `<div class="top" style="align-items:flex-start"><div style="display:flex;align-items:center;gap:10px"><h1 style="margin:0">Plan meals</h1>${pn.st&&pn.st!=='New'?`<span class="badge ${pn.st==='Applied'?'st-a':'w'}">${pn.st}</span>`:''}</div><div style="display:flex;gap:8px"><button class="s" onclick="dupPrev()">Copy previous plan</button><button class="s" onclick="showWeek()">Weekly menu</button><button class="s" onclick="showPlans()">All plans</button></div></div><p class="err" id="err"></p>
  ${pn.msg?`<div class="card" style="background:var(--p4)">${esc(pn.msg)}${pn.st==='Applied'?`<div class="row"><button class="s" onclick="go('orders')">View orders</button></div>`:''}</div>`:''}
  <div class="pw" style="margin:12px 0 0"><div class="seg"><button class="${d===T?'on':''}" onclick="pickD('${T}')">Today</button><button class="${d===TM?'on':''}" onclick="pickD('${TM}')">Tomorrow</button><button class="${d!==T&&d!==TM?'on':''}" onclick="pkD('pd-in')">${ic('cd',16)}<span>${d!==T&&d!==TM?fs(d):'Pick date'}</span></button></div><input class="hid2" type="date" id="pd-in" value="${d}" aria-label="Plan date" onchange="pickD(this.value)"></div>
  ${ex.length?`<div class="bnr" style="margin:12px 0 0"><span>${ic('cd',18)}${ex.length} on holiday and left out: ${ex.map(c=>esc(c.name)).join(', ')}</span></div>`:''}
@@ -1441,7 +1515,7 @@ function planV(){
  ${dk?`<div class="card" style="margin-top:10px"><div class="fl"><span>Standard price ₹</span><input class="pin" type="number" inputmode="decimal" min="0" aria-label="Standard drink price" value="${pn.dstd}" onchange="pn.dstd=Number(this.value)||0;render()"></div><div class="fl" style="margin-top:12px"><b>Who gets the drink?</b><span><button class="lnk" onclick="selAll('dc')">Select all</button><button class="lnk" onclick="pn.dc=[];render()">Clear</button></span></div><div class="chs" style="flex-wrap:wrap;margin:8px 0 0">${el.map(c=>`<button class="ch2 ${pn.dc.includes(c.id)?'on':''}" onclick="tg('dc','${c.id}');render()">${esc(c.name)}</button>`).join('')||'<span class="mu">No eligible customers.</span>'}</div></div>`:''}
  ${showD?`<div style="margin-top:8px"><button class="lnk" onclick="pn.drink='';pn.dOn=false;render()">Remove drink from this plan</button></div>`:''}
  ${ready?`<div class="stp"><i>3</i><b>Prices</b><span>${rowsP.length} ${rowsP.length===1?'customer':'customers'} · ${nsp} with special prices</span></div><div class="card">${vis.map(prow).join('')||'<div class="mu">Everyone is on the standard price.</div>'}${rowsP.length>nsp?`<div class="row" style="margin-top:10px"><button class="s" onclick="pn.px=!pn.px;render()">${pn.px?'Show special prices only':'Show all '+rowsP.length+' customers'}</button></div>`:''}</div>`:''}
- 
+ ${ready?kitchenC(d,el,sl,dk,dcs):''}
  <div class="pbar"><div><b class="tt">${inr(mr+dr)}</b><div class="mu">${sl?el.length+(el.length===1?' meal':' meals'):'No meal'}${dk?' · '+dcs.length+(dcs.length===1?' drink':' drinks'):''}${ds?' · discount '+inr(ds):''}</div></div><div class="row" style="margin:0"><button class="s" onclick="applyPlan(true)">Save draft</button><button ${ready?'':'disabled'} onclick="applyPlan(false)">${ic('check',18)}Apply to customers</button></div></div>`;
 }
 function openMenu(k){
@@ -1498,7 +1572,7 @@ function dlScope(){return S.o.filter(o=>inR('del',o.date)&&o.status!=='Rejected'
 function bulkAssignD(did){const d=S.d.find(x=>x.id===did),ids=dlScope().filter(o=>open(o)&&!o.sid).map(o=>o.id);act(ids.length+(ids.length===1?' order':' orders')+' assigned to '+(d?d.name:''),()=>{S.o.forEach(o=>{if(ids.includes(o.id)){o.sid=did;if(o.status==='New')o.status='Preparing'}})})}
 function showLate(){const ds=S.o.filter(o=>open(o)&&o.date<today()).map(o=>o.date).sort();RG.del={m:'custom',d:today(),f:ds[0],t:today()};render()}
 function routeU(cs){const pts=cs.filter(c=>c.lat!=null).map(c=>c.lat+','+c.lng);if(!pts.length)return '';const wp=pts.slice(0,-1).slice(0,9);return 'https://www.google.com/maps/dir/?api=1&destination='+pts[pts.length-1]+(wp.length?'&waypoints='+encodeURIComponent(wp.join('|')):'')}
-function routeMsg(d,L){return 'Hi '+d.name+', your Nutryzo stops for '+rgLbl('del')+':\n\n'+L.filter(open).map((o,i)=>{const c=cust(o.cid);return (i+1)+'. '+c.name+(c.addr?', '+c.addr:'')+'\n   '+(o.items||'')+(c.dins?'\n   Note: '+c.dins:'')+(c.lat!=null?'\n   Map: '+mapU({lat:c.lat,lng:c.lng}):'')+(c.phone?'\n   Call: '+c.phone:'')}).join('\n\n')}
+function routeMsg(d,L){return 'Hi '+d.name+', your '+bizN()+' stops for '+rgLbl('del')+':\n\n'+L.filter(open).map((o,i)=>{const c=cust(o.cid);return (i+1)+'. '+c.name+(c.addr?', '+c.addr:'')+'\n   '+(o.items||'')+(c.dins?'\n   Note: '+c.dins:'')+(c.lat!=null?'\n   Map: '+mapU({lat:c.lat,lng:c.lng}):'')+(c.phone?'\n   Call: '+c.phone:'')}).join('\n\n')}
 function navI(c){
  if(c.lat!=null)return `<a class="ib" aria-label="Navigate" title="Navigate" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}">${ic('pin',18)}</a>`;
  return c.addr?`<a class="ib" aria-label="Find address on map" title="Find address on map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.addr)}">${ic('pin',18)}</a>`:'';
@@ -1827,5 +1901,212 @@ async function boot(){
   sbUser=s.user;sbProf=v.p;el.hidden=true;render();setTimeout(qsync,1200);
  }catch(x){showLg('Could not reach Supabase. Check your internet connection and refresh the page.')}
 }
+/* ===== UI upgrade: customer plan fields, kitchen summary, weekly menu, settings ===== */
+Object.assign(P,{clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',store:'<path d="M4 9l1-5h14l1 5"/><path d="M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/>',msg:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',chef:'<path d="M7 14a4 4 0 1 1 1.5-7.7A4 4 0 0 1 16 6a4 4 0 0 1 1 7.9V14z"/><path d="M7 14h10v6H7z"/>',share:'<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>',copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',user:'<circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3-6 7-6s7 2.4 7 6"/>'});
+S.biz=S.biz||{};S.tpl=S.tpl||{};
+const SLOTS=['Breakfast (7–9 am)','Morning (9–11 am)','Lunch (12–2 pm)','Evening (4–7 pm)','Night (7–9 pm)'];
+const PLANS=[['','Ongoing (no end date)'],['7','7 days'],['15','15 days'],['30','30 days'],['60','60 days'],['90','90 days'],['c','Custom end date']];
+const bizN=()=>(S.biz&&S.biz.name)||'Nutryzo';
+const slotS=s=>String(s||'').split(' (')[0];
+const planEnd=c=>c.plen==='c'?(c.pend||''):(c.sdate&&c.plen?addDay(c.sdate,Number(c.plen)-1):'');
+const daysLeft=c=>{const e=planEnd(c);return e?Math.round((new Date(e+'T00:00:00')-new Date(today()+'T00:00:00'))/864e5):null};
+function planPill(c){const d=daysLeft(c);if(d==null||c.st==='Archived')return '';if(d<0)return '<span class="pill x">Plan ended</span>';if(d===0)return '<span class="pill w">Ends today</span>';if(d<=3)return `<span class="pill w">Ends in ${d}d</span>`;return ''}
+const pageHead=(t,sub,right)=>`<div class="ph"><div><h1>${t}</h1>${sub?`<div class="mu">${sub}</div>`:''}</div>${right||''}</div>`;
+const fsec=(icon,title,body)=>`<div class="fsec"><div class="fsh">${ic(icon,18)}<b>${title}</b></div>${body}</div>`;
+
+/* ---- Customer form: plan and delivery fields ---- */
+function planF(c){
+ const pl=c?(c.plen||''):'',areas=[...new Set(S.c.map(x=>x.area).filter(Boolean))].sort();
+ const sd=c?(c.sdate||''):today();
+ return `<div class="fg2"><div><label for="fsd">Start date</label><input id="fsd" type="date" value="${sd}" onchange="pfUpd()"></div>
+ <div><label for="fpl">Plan length</label><select id="fpl" onchange="pfUpd()">${PLANS.map(p=>`<option value="${p[0]}" ${p[0]===pl?'selected':''}>${p[1]}</option>`).join('')}</select></div>
+ <div id="fpe-w" ${pl==='c'?'':'hidden'}><label for="fpe">End date</label><input id="fpe" type="date" value="${c&&c.pend||''}" onchange="pfUpd()"></div>
+ <div><label for="fsl">Delivery time</label><select id="fsl"><option value="">Any time</option>${SLOTS.map(s=>`<option ${c&&c.slot===s?'selected':''}>${s}</option>`).join('')}</select></div>
+ <div><label for="far">Area / route</label><input id="far" list="areas" value="${esc(c&&c.area||'')}" placeholder="e.g. RS Puram" autocomplete="off"><datalist id="areas">${areas.map(a=>`<option value="${esc(a)}">`).join('')}</datalist></div></div>
+ <div class="mu" id="fpi" style="margin-top:8px">${pfInfo({sdate:sd,plen:pl,pend:c&&c.pend||''})}</div>`;
+}
+function pfInfo(c){if(!c.sdate)return 'No start date set.';const e=planEnd(c);return e?'Plan runs '+fd(c.sdate)+' to '+fd(e)+'.':'Ongoing plan from '+fd(c.sdate)+'.'}
+function pfUpd(){const pl=val('fpl'),w=$('#fpe-w');if(w)w.hidden=pl!=='c';const i=$('#fpi');if(i)i.textContent=pfInfo({sdate:val('fsd'),plen:pl,pend:pl==='c'?val('fpe'):''})}
+function pfV(){const pl=val('fpl');return{sdate:val('fsd'),plen:pl,pend:pl==='c'?val('fpe'):'',slot:val('fsl'),area:val('far')}}
+function pfChk(){if(val('fpl')==='c'){if(!val('fpe'))return 'Choose the plan end date.';if(val('fsd')&&val('fpe')<val('fsd'))return 'The plan end date must be after the start date.'}if(val('fpl')&&val('fpl')!=='c'&&!val('fsd'))return 'Choose the plan start date.';return ''}
+function addV(){return pageHead('Add customer','Fill in the details. You can change them any time.')+`<div class="card fcard">
+ ${fsec('user','Personal details',`<div class="fg2"><div><label for="fn">Full name</label><input id="fn" autocomplete="off"></div><div><label for="fk">Account type</label><select id="fk"><option>Customer</option><option>Trial</option></select></div><div><label for="fy">Payment</label><select id="fy"><option>Prepaid</option><option>Postpaid</option><option>Daily</option></select></div></div>`)}
+ ${fsec('phone','Contact',`<div class="fg2"><div><label for="fp">Phone</label><input id="fp" type="tel" inputmode="tel" placeholder="10-digit mobile number"></div><div><label for="fe">Email (optional)</label><input id="fe" type="email"></div></div>`)}
+ ${fsec('cd','Plan and delivery',planF(null))}
+ ${fsec('pin','Delivery address',`<label for="fa">Address</label><input id="fa" placeholder="House no., street, area">${locF(null)}${insF(null)}`)}
+ ${fsec('edit','Notes',`<textarea id="fm" rows="2" aria-label="Notes" placeholder="Internal notes, not shown to the delivery partner"></textarea>`)}
+ <div class="fact"><p class="err" id="err"></p><div class="row"><button onclick="saveC()">${ic('check',18)}Save customer</button><button class="s" onclick="cv.v='list';render()">Cancel</button></div></div></div>`}
+function editV(c){return pageHead('Edit customer',esc(c.name)+' · '+esc(c.num||''))+`<div class="card fcard">
+ ${fsec('user','Personal details',`<div class="fg2"><div><label for="fn">Full name</label><input id="fn" value="${esc(c.name)}"></div><div><label for="fk">Account type</label><select id="fk">${opt(['Customer','Trial'],c.kind)}</select></div><div><label for="fy">Payment</label><select id="fy">${opt(['Prepaid','Postpaid','Daily'],c.pay)}</select></div></div>`)}
+ ${fsec('phone','Contact',`<div class="fg2"><div><label for="fp">Phone</label><input id="fp" type="tel" inputmode="tel" value="${esc(c.phone)}"></div><div><label for="fe">Email (optional)</label><input id="fe" type="email" value="${esc(c.email)}"></div></div>`)}
+ ${fsec('cd','Plan and delivery',planF(c))}
+ ${fsec('pin','Location and delivery instructions',`<div class="mu">Change addresses in the customer’s Addresses tab.</div>${locF(c)}${insF(c)}`)}
+ ${fsec('edit','Notes',`<textarea id="fm" rows="2" aria-label="Notes">${esc(c.note)}</textarea>`)}
+ <div class="fact"><p class="err" id="err"></p><div class="row"><button onclick="updC()">${ic('check',18)}Save changes</button><button class="s" onclick="cv.v='profile';render()">Cancel</button></div></div></div>`}
+function saveC(){
+ const e=chk()||(val('fa')?'':'Enter the delivery address.')||pfChk();if(e)return err(e);
+ const c={id:uid(),num:'C'+String(++S.seq).padStart(3,'0'),name:val('fn'),phone:val('fp'),email:val('fe'),addr:val('fa'),addrs:[{a:val('fa'),p:1}],kind:val('fk'),pay:val('fy'),note:val('fm'),st:'Active',log:[],hol:[],hist:[],...locV(),dins:val('fi'),...pfV()};
+ lg(c,'Customer registered');S.c.unshift(c);save();openP(c.id);
+}
+function updC(){const e=chk()||pfChk();if(e)return err(e);const c=cby(cv.id);Object.assign(c,{name:val('fn'),kind:val('fk'),pay:val('fy'),phone:val('fp'),email:val('fe'),note:val('fm')},pfV());if($('#fl')&&!val('fl')){delete c.lat;delete c.lng}else{const L=locV();if(L.lat!=null){c.lat=L.lat;c.lng=L.lng}}c.dins=val('fi');lg(c,'Profile updated');save();cv.v='profile';render()}
+
+/* ---- Show plan, time and area in profile, list and delivery ---- */
+function ovV(c,os){
+ const kv=(l,v)=>v?`<div class="fl kvr"><span class="mu">${l}</span><span style="text-align:right">${v}</span></div>`:'';
+ const e=planEnd(c),per=c.sdate?fd(c.sdate)+' to '+(e?fd(e):'ongoing')+planPill(c):'';
+ return `<div class="card"><b>Contact and delivery</b>${kv('Phone',esc(c.phone))}${kv('Email',esc(c.email))}${kv('Address',esc(c.addr))}${c.lat!=null?kv('Location',`<a href="${mapU({lat:c.lat,lng:c.lng})}" target="_blank" rel="noopener">Open in Google Maps</a>`):''}${kv('Area',esc(c.area))}${kv('Delivery time',esc(c.slot))}${kv('Plan period',per)}${kv('Payment',esc((c.pay||'')+' · '+(c.kind||'')))}${c.pm||c.pd?kv('Preferred prices',[c.pm?'Meal '+inr(c.pm):'',c.pd?'Drink '+inr(c.pd):''].filter(Boolean).join(' · ')):''}${kv('Notes',esc(c.note))}
+ ${c.dins?`<div class="ins"><b>Delivery instructions:</b> ${esc(c.dins)}</div>`:''}
+ <div class="row"><button class="s" onclick="cv.v='sched';cv.sel='';render()">${ic('cd',18)}Delivery schedule</button></div></div>
+ <div class="fl" style="margin-top:18px"><h2 style="margin:0">Recent orders</h2>${os.length>3?`<button class="lnk" onclick="cv.tab='orders';render()">View all</button>`:''}</div>${os.slice(0,3).map(ordC).join('')||empty('No orders yet.')}
+ <h2>Recent activity</h2>${c.log.slice(0,3).map(logC).join('')||empty('No activity yet.')}`;
+}
+CVV.splice(4,0,['ending','Plan ending']);
+function listV(){
+ const tot=S.c.filter(c=>c.st!=='Archived').reduce((a,c)=>a+cst(c).due,0);
+ return pageHead('Customers',`${S.c.length} ${S.c.length===1?'customer':'customers'}${tot?` · <b style="color:var(--wn)">${inr(tot)}</b> to collect`:''}`,`<button onclick="cv.v='add';render()">${ic('plus',18)}Add customer</button>`)+`
+ <div class="otb"><div class="sw" style="flex:1;min-width:200px">${ic('search')}<input aria-label="Search customers" placeholder="Search name, phone, ID or area" value="${esc(cv.q)}" oninput="cv.q=this.value;cvn=25;drawL()"></div>
+ <div class="pw"><button class="pt" onclick="tgp('pp-cs')">${ic('sort',16)}${CSL[cvs]}${ic('chd',14)}</button><div class="pop pr" id="pp-cs" hidden>${Object.keys(CSL).map(k=>`<button class="pi ${cvs===k?'on':''}" onclick="cvs='${k}';render()">${CSL[k]}${cvs===k?ic('check',16):''}</button>`).join('')}</div></div></div>
+ <div id="cl">${rows()}</div>`;
+}
+function rows(){
+ const q=cv.q.toLowerCase(),info=S.c.map(c=>({c,s:cst(c)})),base=info.filter(x=>!q||(x.c.name+' '+x.c.phone+' '+x.c.num+' '+(x.c.area||'')).toLowerCase().includes(q));
+ const f={active:x=>x.c.st!=='Archived',owes:x=>x.c.st!=='Archived'&&x.s.due>0,vip:x=>!!x.c.vip&&x.c.st!=='Archived',trial:x=>x.c.kind==='Trial'&&x.c.st!=='Archived',ending:x=>{const d=daysLeft(x.c);return x.c.st!=='Archived'&&d!=null&&d<=3},archived:x=>x.c.st==='Archived',all:()=>true},cnt=k=>base.filter(f[k]).length;
+ const srt={new:(a,b)=>String(b.c.reg).localeCompare(String(a.c.reg))||String(b.c.num).localeCompare(String(a.c.num)),name:(a,b)=>String(a.c.name).localeCompare(String(b.c.name)),owes:(a,b)=>b.s.due-a.s.due,orders:(a,b)=>b.s.n-a.s.n}[cvs];
+ const L=base.filter(f[cvv]).sort(srt),vis=L.slice(0,cvn);
+ const chips=`<div class="chs">${CVV.map(v=>`<button class="ch2 ${cvv===v[0]?'on':''}" onclick="cvv='${v[0]}';cvn=25;drawL()">${v[1]}<span class="cn">${cnt(v[0])}</span></button>`).join('')}</div>`;
+ const stop='onclick="event.stopPropagation()"';
+ const row=x=>{const c=x.c,s=x.s,ar=c.st==='Archived',sub=[esc(c.phone||'No phone'),c.pay||'',c.area?esc(c.area):'',c.slot?esc(slotS(c.slot)):''].filter(Boolean).join(' · ');return `<div class="crow" onclick="openP('${c.id}')"><div class="av ${['t1','t2','t3','t4'][String(c.name).length%4]}">${esc(iniOf(c.name))}</div>
+ <div class="cb"><span><b>${esc(c.name)}</b>${c.vip?'<span class="tag v">VIP</span>':''}${c.kind==='Trial'?'<span class="tag t">Trial</span>':''}${ar?'<span class="tag">Archived</span>':''}${planPill(c)}</span><span class="mu">${sub}</span></div>
+ <span class="cm mu">${s.n} ${s.n===1?'order':'orders'}</span><span class="co ${s.due>0?'warn':'ok'}">${s.due>0?inr(s.due)+' due':'Settled'}</span>
+ <div class="ca">${s.due>0?`<button class="b2" onclick="event.stopPropagation();collect('${c.id}')">Collect</button>`:''}${c.phone?`<a class="ib" aria-label="Call" title="Call" ${stop} href="tel:${String(c.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a><a class="ib" aria-label="WhatsApp" title="WhatsApp" ${stop} target="_blank" rel="noopener" href="https://wa.me/${wa(c.phone)}">${ic('chat',18)}</a>`:''}
+ <div class="pw"><button class="ib" aria-label="More actions" onclick="event.stopPropagation();tgp('cm-${c.id}')">${ic('more',18)}</button><div class="pop pr" id="cm-${c.id}" hidden ${stop}><button class="pi" onclick="cv.id='${c.id}';cv.v='edit';render()">Edit customer</button>${s.due>0?`<button class="pi" onclick="collect('${c.id}')">Collect payment</button>`:''}<button class="pi" onclick="togArch('${c.id}')">${ar?'Restore':'Archive'}</button><div class="pd">Danger zone</div><button class="pi" style="color:var(--wn)" onclick="openDel('${c.id}')">Delete customer</button></div></div></div></div>`};
+ let body;
+ if(vis.length)body=vis.map(row).join('')+(L.length>cvn?`<div class="row" style="justify-content:center"><button class="s" onclick="cvn+=25;drawL()">Show ${L.length-cvn} more</button></div>`:'');
+ else if(!S.c.length)body=`<div class="empty">No customers yet.<div class="row" style="justify-content:center"><button onclick="cv.v='add';render()">${ic('plus',18)}Add your first customer</button></div></div>`;
+ else body=`<div class="empty">${cv.q?'No customers match your search.':'No customers in this view.'}<div class="row" style="justify-content:center"><button class="s" onclick="cv.q='';cvv='all';render()">Show all customers</button></div></div>`;
+ return chips+body;
+}
+function stopRow(o,i){
+ const c=cust(o.cid),dn=o.status==='Delivered',un=!o.sid&&open(o),wh=[c.slot?slotS(c.slot):'',c.area||''].filter(Boolean).map(esc).join(' · ');
+ return `<div class="stop ${dn?'dn':''}"><div class="sn">${dn?ic('check',14):i}</div><div class="sb"><span><b>${esc(c.name)}</b> <span class="sp s${ST.indexOf(o.status)}">${o.status}</span></span><span class="mu">${esc(o.items)}</span><span class="mu">${esc(c.addr||'No address')}</span>${wh?`<span class="mu wh">${ic('clock',14)}${wh}</span>`:''}${o.status==='Delayed'&&o.dlr?`<span class="od warn">Delayed: ${esc(o.dlr)}</span>`:''}${c.dins&&!dn?`<div class="ins">${esc(c.dins)}</div>`:''}</div><div class="sa">${c.phone?`<a class="ib" aria-label="Call customer" title="Call customer" href="tel:${String(c.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a>`:''}${navI(c)}${un?smartB(o):stopBtn(o)}${stopMenu(o)}</div></div>`;
+}
+function goEnd(){cvv='ending';cvn=25;cv.q='';goC()}
+
+/* ---- Dashboard ---- */
+function home(){
+ const T=today(),sumT=(ty,f)=>S.t.filter(x=>x.type===ty&&f(x.date)).reduce((a,x)=>a+x.amt,0);
+ const tod=S.o.filter(o=>o.date===T),un=tod.filter(o=>open(o)&&!o.sid).length,out=S.c.reduce((a,c)=>a+cst(c).due,0),hol=S.c.filter(c=>c.st!=='Archived'&&onHol(c.id,T)).length;
+ const end=S.c.filter(c=>{const d=daysLeft(c);return c.st!=='Archived'&&d!=null&&d<=3}).length;
+ const L=S.t.filter(x=>inR('dash',x.date)),I=sumT('Income',d=>inR('dash',d)),E=sumT('Expense',d=>inR('dash',d)),net=I-E;
+ const al=[un?[un+(un===1?' delivery':' deliveries')+' not assigned','goD()','var(--wn)']:0,out?[inr(out)+' outstanding','goF()','var(--wn)']:0,end?[end+(end===1?' plan ends':' plans end')+' within 3 days','goEnd()','#f5b04c']:0,hol?[hol+' on holiday today','goC()','var(--mu)']:0].filter(Boolean);
+ const dt=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+ const hero=S.c.length?mealM():`<div class="card" style="padding:20px"><div style="font-size:22px;margin-bottom:14px">Add your first customer</div><button onclick="cv.v='add';go('customers')">${ic('plus',18)}Add customer</button></div>`;
+ return `<div class="stack"><div><div class="mu">${esc(bizN())} · Admin dashboard</div><h1 class="pgt">${dt}</h1></div>
+ <div class="dg ${al.length?'':'noattn'}"><div class="a-meal">${hero}</div>
+ ${S.c.length?`<div class="a-today"><div class="card tdc"><div class="mu">Today</div><div class="tdg"><button class="sx" onclick="goT(0)"><b>${tod.length}</b><span>Orders</span></button><button class="sx" onclick="goD()"><b>${tod.filter(open).length}</b><span>To deliver</span></button><button class="sx" onclick="goF()"><b>${inr(sumT('Income',d=>d===T))}</b><span>Collected</span></button></div></div></div>`:''}
+ ${al.length?`<div class="a-attn"><h2 style="margin:0 0 8px">Needs attention</h2><div class="attn">${al.map(r=>`<button class="rw" onclick="${r[1]}"><span><i class="dot" style="background:${r[2]}"></i>${r[0]}</span>${ic('chev',16)}</button>`).join('')}</div></div>`:''}
+ <div class="a-perf"><div class="card" style="padding:20px"><div class="fl" style="margin-bottom:14px"><b>Performance</b>${rgUI('dash')}</div><div class="kvs pm" style="border:0;margin:0;padding:0"><div><span>Income</span><b style="color:var(--gt)">${inr(I)}</b></div><div><span>Expenses</span><b>${inr(E)}</b></div><div><span>${net<0?'Loss':'Profit'}</span><b style="color:${net<0?'var(--wn)':'var(--tx)'}">${inr(net)}</b></div></div><div class="mu" style="margin:14px 0 0"><i class="sw2" style="background:var(--pr);margin-left:0"></i>Income<i class="sw2" style="background:var(--wn);opacity:.75"></i>Expenses</div>${trend('dash',L)}<div class="row" style="justify-content:flex-end;margin:6px 0 0"><button class="s" onclick="go('reports')">Open full reports ${ic('chev',16)}</button></div></div></div></div></div>`;
+}
+function mealM(){
+ const T=today(),p0=S.plan[T],p=p0&&p0.st!=='Draft'?p0:null,sd=p&&S.menu.s.find(x=>x.id===p.salad),dk=p&&S.menu.d.find(x=>x.id===p.drink),pl=!!(sd||dk);
+ const sc=sd?p.sc.filter(id=>cby(id)&&!onHol(id,T)).length:0,dc=dk?p.dc.filter(id=>cby(id)&&!onHol(id,T)).length:0;
+ return `<div class="card mealc"><div class="mlh"><span>${ic('leaf',16)}Today’s meal</span><span class="pill">${pl?'Planned':'Not planned'}</span></div>`+(pl?`<div class="mln">${sd?esc(sd.name):'Drink only'}</div><div class="mu">${sd?sc+' customers':''}${sd&&dk?' · ':''}${dk?esc(dk.name)+' for '+dc:''}</div><div class="row" style="margin-top:16px"><button onclick="openPlan(nextD(today()))">Plan tomorrow</button><button class="s" onclick="openPlan(today())">Edit today</button></div>`:`<div class="mln">Not planned yet</div><div class="row" style="margin-top:14px"><button onclick="openPlan(today())">Plan today’s meal</button><button class="s" onclick="openPlan(nextD(today()))">Plan tomorrow</button></div>`)+`<div class="row" style="margin-top:6px"><button class="lnk" onclick="showWeek()">Weekly menu</button><button class="lnk" onclick="showPlans()">All plans</button></div></div>`;
+}
+
+/* ---- Meal planning: kitchen prep summary ---- */
+let kitTxt='';
+function kitchenC(d,el,sl,dk,dcs){
+ const hx=S.c.filter(c=>c.st!=='Archived'&&onHol(c.id,d)).length,g={};
+ if(sl)el.forEach(c=>{const k=c.slot||'Any time';(g[k]=g[k]||{m:0,d:0}).m++});
+ dcs.forEach(c=>{const k=c.slot||'Any time';(g[k]=g[k]||{m:0,d:0}).d++});
+ const ks=Object.keys(g).sort((a,b)=>(SLOTS.indexOf(a)<0?99:SLOTS.indexOf(a))-(SLOTS.indexOf(b)<0?99:SLOTS.indexOf(b)));
+ kitTxt=`${bizN()} kitchen prep, ${fd(d)}\n`+(sl?`\nSalad: ${sl.name} × ${el.length}`:'')+(dk?`\nDrink: ${dk.name} × ${dcs.length}`:'')+(ks.length>1||(ks[0]&&ks[0]!=='Any time')?'\n\nBy delivery time:\n'+ks.map(k=>`- ${k}: ${[sl?g[k].m+' meals':'',dk&&g[k].d?g[k].d+' drinks':''].filter(Boolean).join(', ')}`).join('\n'):'')+(hx?`\n\n${hx} on holiday (not included)`:'');
+ return `<div class="stp"><i>4</i><b>Kitchen prep</b><span>what to prepare for ${fd(d)}</span></div>
+ <div class="card kit"><div class="kg"><div><span class="mu">Salad meals</span><b>${sl?el.length:0}</b><span class="mu">${sl?esc(sl.name):'None'}</span></div><div><span class="mu">Drinks</span><b>${dcs.length}</b><span class="mu">${dk?esc(dk.name):'None'}</span></div><div><span class="mu">On holiday</span><b>${hx}</b><span class="mu">Not included</span></div></div>
+ ${ks.length?`<div class="tw"><table class="kt"><thead><tr><th>Delivery time</th><th>Meals</th><th>Drinks</th></tr></thead><tbody>${ks.map(k=>`<tr><td>${esc(k)}</td><td>${sl?g[k].m:'-'}</td><td>${dk?g[k].d:'-'}</td></tr>`).join('')}</tbody></table></div>`:''}
+ <div class="row"><button class="s" onclick="kitCopy()">${ic('copy',16)}Copy list</button><a class="btn s" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(kitTxt)}">${ic('share',16)}Share on WhatsApp</a></div></div>`;
+}
+function kitCopy(){try{navigator.clipboard.writeText(kitTxt).then(()=>toast('Kitchen list copied'),()=>toast('Could not copy'))}catch(e){toast('Could not copy')}}
+
+/* ---- Weekly menu planner ---- */
+let wkS='';
+const monOf=d=>addDay(d,-((new Date(d+'T00:00:00').getDay()+6)%7));
+function showWeek(){pn.v='week';if(!wkS)wkS=today();tab='plan';render();window.scrollTo(0,0)}
+function wkStep(n){wkS=addDay(wkS||today(),7*n);render()}
+function wkSet(d,k,v){
+ let p=S.plan[d];if(p&&(p.st||'Applied')==='Applied')return;
+ if(!p)p=S.plan[d]={st:'Draft',salad:'',std:150,sc:[],mp:{},ov:{},drink:'',dstd:0,dc:[],dp:{},dov:{}};
+ p[k]=v;
+ if(k==='salad'){const s=S.menu.s.find(x=>x.id===v);if(s&&s.price)p.std=s.price}
+ if(k==='drink'){const s=S.menu.d.find(x=>x.id===v);p.dstd=s?s.price:0}
+ if(!p.salad&&!p.drink)delete S.plan[d];
+ save();render();
+}
+function wkCopy(){
+ const T=today();let n=0;
+ for(let i=0;i<7;i++){const d=addDay(wkS,i),src=S.plan[addDay(d,-7)],cur=S.plan[d];if(d<T||!src||cur)continue;S.plan[d]={st:'Draft',salad:src.salad||'',std:src.std||150,sc:[],mp:{},ov:{},drink:src.drink||'',dstd:src.dstd||0,dc:(src.dc||[]).slice(),dp:{},dov:{}};n++}
+ if(!n){toast('Nothing to copy: no plans last week for the open days');return}
+ save();render();toast(n+(n===1?' day':' days')+' copied from last week');
+}
+function weekV(){
+ if(!wkS)wkS=today();
+ const T=today(),m=S.menu,days=[...Array(7)].map((_,i)=>addDay(wkS,i)),lbl=fs(days[0])+' – '+fs(days[6])+' '+days[6].slice(0,4);
+ const sel=(d,k,list,cur,dis)=>`<select aria-label="${k==='salad'?'Salad meal':'Drink'} for ${fd(d)}" ${dis?'disabled':''} onchange="wkSet('${d}','${k}',this.value)"><option value="">${k==='salad'?'No salad':'No drink'}</option>${list.filter(x=>!x.off||x.id===cur).map(x=>`<option value="${x.id}" ${x.id===cur?'selected':''}>${esc(x.name)}${x.price?' · '+inr(x.price):''}</option>`).join('')}</select>`;
+ const row=d=>{const p=S.plan[d],st=p?(p.st||'Applied'):'',ap=st==='Applied',past=d<T,dis=ap||past;
+  return `<div class="wkd ${d===T?'td':''} ${past?'past':''}"><div class="wdh"><b>${new Date(d+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long'})}</b><span class="mu">${fs(d)}${d===T?' · Today':''}</span>${st?`<span class="pill ${ap?'':'w'}">${st}</span>`:''}</div>
+  <div><label>Salad meal</label>${sel(d,'salad',m.s,p&&p.salad,dis)}</div><div><label>Drink</label>${sel(d,'drink',m.d,p&&p.drink,dis)}</div>
+  <div class="wda">${past&&!p?'':`<button class="s" onclick="openPlan('${d}')">${ap?'View':'Open'}${ic('chev',16)}</button>`}</div></div>`};
+ return `${pageHead('Weekly menu','Pick the salad and drink for each day. They are saved as drafts.',`<div class="row" style="margin:0"><button class="s" onclick="wkCopy()">${ic('copy',16)}Copy last week</button><button class="s" onclick="showPlans()">All plans</button></div>`)}
+ <div class="dn" style="margin-bottom:14px"><button class="dnb" aria-label="Previous week" onclick="wkStep(-1)">${ic('chl',18)}</button><button class="dpb" onclick="wkS=today();render()" title="Back to today">${ic('cd',16)}<span>${lbl}</span></button><button class="dnb" aria-label="Next week" onclick="wkStep(1)">${ic('chev',18)}</button></div>
+ ${m.s.length||m.d.length?'':`<div class="bnr"><span>${ic('leaf',18)}Add salad meals and drinks first.</span><button class="s" onclick="openMenu('s')">Add salad meals</button></div>`}
+ <div class="wk">${days.map(row).join('')}</div>
+ <div class="mu" style="margin-top:12px">Drafts do not create orders. On the day, open it to choose who gets the drink and check prices, then press Apply to customers.</div>`;
+}
+
+/* ---- WhatsApp templates ---- */
+const DEF_TPL={ready:'Hi {name}, your healthy meal is getting ready. We will send it out soon. Thank you! - {business}',out:'Hi {name}, your food is out for delivery with {staff}. It will reach you shortly. Thank you! - {business}'};
+const tplT=k=>(S.tpl&&S.tpl[k])||DEF_TPL[k];
+const fillT=(t,o,c)=>t.replace(/\{name\}/g,c.name||'').replace(/\{staff\}/g,o&&o.sid?staff(o.sid):'our delivery partner').replace(/\{business\}/g,bizN()).replace(/\{items\}/g,o&&o.items||'').replace(/\{date\}/g,o?fd(o.date):'');
+function wb(o){const c=cust(o.cid);if(!c.phone)return '';const a=(k,t)=>`<a class="btn s" target="_blank" rel="noopener" href="https://wa.me/${wa(c.phone)}?text=${encodeURIComponent(fillT(tplT(k),o,c))}">${t}</a>`;return a('ready','WhatsApp: getting ready')+a('out','WhatsApp: out for delivery')}
+function wbm(o){const c=cust(o.cid);if(!c.phone)return '';const a=(k,t)=>`<a class="pi" target="_blank" rel="noopener" href="https://wa.me/${wa(c.phone)}?text=${encodeURIComponent(fillT(tplT(k),o,c))}">${t}</a>`;return a('ready','WhatsApp: getting ready')+a('out','WhatsApp: out for delivery')}
+function tplPrev(){const o={sid:S.d[0]?S.d[0].id:'',items:'Salad: Greek bowl',date:today()},c={name:'Priya'};['ready','out'].forEach(k=>{const t=$('#tp-'+k),p=$('#tv-'+k);if(t&&p)p.textContent=fillT(t.value||DEF_TPL[k],o,c)})}
+function tplSave(){S.tpl={ready:$('#tp-ready').value.trim(),out:$('#tp-out').value.trim()};save();render();toast('Messages saved')}
+function tplReset(){S.tpl={};save();render();toast('Default messages restored')}
+function tplC(){
+ const box=(k,l)=>`<label for="tp-${k}">${l}</label><textarea id="tp-${k}" rows="3" oninput="tplPrev()">${esc(tplT(k))}</textarea><div class="tpv" id="tv-${k}"></div>`;
+ return `<div class="card"><div class="fsh">${ic('msg',18)}<b>WhatsApp messages</b></div><div class="mu">Used by the WhatsApp buttons on orders and deliveries. You can use <code>{name}</code> <code>{staff}</code> <code>{business}</code> <code>{items}</code> <code>{date}</code>.</div>
+ ${box('ready','“Getting ready” message')}${box('out','“Out for delivery” message')}
+ <div class="row"><button onclick="tplSave()">Save messages</button><button class="s" onclick="tplReset()">Restore defaults</button></div></div>`;
+}
+
+/* ---- Business details ---- */
+function applyBiz(){const n=bizN(),b=S.biz||{},lo=document.querySelector('nav .brand .logo'),bn=document.querySelector('nav .brand b'),av=document.querySelector('.tb .av');
+ if(bn)bn.textContent=n;if(lo)lo.innerHTML=b.logo?`<img src="${b.logo}" alt="">`:esc(n[0].toUpperCase());if(av)av.innerHTML=b.logo?`<img src="${b.logo}" alt="">`:esc(n[0].toUpperCase());document.title=n+' CRM'}
+function bizSave(){const n=val('bn');if(!n){$('#berr').textContent='Enter the business name.';return}S.biz=Object.assign(S.biz||{},{name:n,phone:val('bp'),addr:val('ba')});save();applyBiz();render();toast('Business details saved')}
+function bizLogo(inp){const f=inp.files&&inp.files[0];if(!f)return;if(!/^image\//.test(f.type)){toast('Choose an image file');return}
+ const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=160,cv2=document.createElement('canvas');cv2.width=s;cv2.height=s;const x=cv2.getContext('2d'),m=Math.min(im.width,im.height);x.fillStyle='#fff';x.fillRect(0,0,s,s);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,s,s);S.biz=S.biz||{};S.biz.logo=cv2.toDataURL('image/jpeg',.85);save();applyBiz();render();toast('Logo updated')};im.onerror=()=>toast('Could not read that image');im.src=r.result};r.readAsDataURL(f)}
+function bizC(){const b=S.biz||{};return `<div class="card"><div class="fsh">${ic('store',18)}<b>Business details</b></div><div class="mu">Shown in the menu, WhatsApp messages and kitchen lists.</div>
+ <div class="bizl"><div class="blogo">${b.logo?`<img src="${b.logo}" alt="Logo">`:esc(bizN()[0].toUpperCase())}</div><div class="row" style="margin:0"><label class="btn s" for="blf">${ic('plus',16)}${b.logo?'Change logo':'Upload logo'}</label><input id="blf" type="file" accept="image/*" class="hid2" onchange="bizLogo(this)">${b.logo?`<button class="s" onclick="S.biz.logo='';save();applyBiz();render()">Remove</button>`:''}</div></div>
+ <div class="fg2"><div><label for="bn">Business name</label><input id="bn" value="${esc(bizN())}"></div><div><label for="bp">Phone</label><input id="bp" type="tel" inputmode="tel" value="${esc(b.phone||'')}"></div></div>
+ <label for="ba">Address</label><textarea id="ba" rows="2">${esc(b.addr||'')}</textarea>
+ <p class="err" id="berr"></p><div class="row" style="margin-top:4px"><button onclick="bizSave()">Save business details</button></div></div>`}
+
+/* ---- Menu and delivery team ---- */
+function teamC(){const ns=S.menu.s.filter(x=>!x.off).length,nd=S.menu.d.filter(x=>!x.off).length;
+ return `<div class="card"><div class="fsh">${ic('leaf',18)}<b>Menu and delivery team</b></div><div class="mu" style="margin-bottom:10px">Add, edit or switch off items and people.</div><div class="stack" style="gap:8px">
+ <button class="rw" onclick="openMenu('s')"><span>Salad meals <span class="mu">· ${ns} in season of ${S.menu.s.length}</span></span>${ic('chev',16)}</button>
+ <button class="rw" onclick="openMenu('d')"><span>Drinks <span class="mu">· ${nd} in season of ${S.menu.d.length}</span></span>${ic('chev',16)}</button>
+ <button class="rw" onclick="openTeam()"><span>Delivery team <span class="mu">· ${S.d.length} ${S.d.length===1?'person':'people'}</span></span>${ic('chev',16)}</button>
+ <button class="rw" onclick="showWeek()"><span>Weekly menu planner</span>${ic('chev',16)}</button></div></div>`}
+
+/* ---- Settings page ---- */
+function backupC(){return `<div class="card"><div class="fsh">${ic('copy',18)}<b>Data backup</b></div><div class="mu" style="margin:0 0 8px">Your customers and orders are still saved in this browser. Keep a backup until we move them to the database.</div><textarea id="bk" rows="4" aria-label="Backup data" placeholder="Backup text appears here. To restore, paste it here."></textarea><p class="err" id="err"></p><div class="row"><button onclick="mkBk()">Create backup</button><button class="s" onclick="rsBk()">Restore from text</button></div></div>`}
+function settingsV(){
+ return pageHead('Settings','Business details, menu, team, messages and your account.')+`<div class="setg"><div class="stack">${bizC()}${teamC()}${tplC()}</div><div class="stack">${acctC()}${backupC()}${syncC()}${skinC()}</div></div>`;
+}
+const _rnd=render;
+render=function(){_rnd();if(tab==='settings')tplPrev()};
+applyBiz();
+
 boot();
 </script></body></html>
