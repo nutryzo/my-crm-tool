@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
+<script>try{var t=localStorage.getItem('hfTheme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nutryzo CRM</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -433,6 +434,13 @@ table.kt{min-width:0;margin-top:12px}
  .tabs{gap:16px}
  .setg{gap:12px}
 }
+
+/* ===== Clearer cards vs background ===== */
+html.crm{--bg:#edf1ee;--bd:#dbe2dd;--shc:0 1px 2px rgba(16,24,40,.05),0 2px 8px rgba(16,24,40,.05)}
+@media (prefers-color-scheme:dark){html.crm:not([data-theme="light"]){--bg:#080c0a;--cd:#1c2721;--bd:#33453a;--ac:#25362d;--sb:#0e1511;--shc:0 1px 2px rgba(0,0,0,.45),0 4px 14px rgba(0,0,0,.25)}}
+html.crm[data-theme="dark"]{--bg:#080c0a;--cd:#1c2721;--bd:#33453a;--ac:#25362d;--sb:#0e1511;--shc:0 1px 2px rgba(0,0,0,.45),0 4px 14px rgba(0,0,0,.25)}
+.crm .card,.crm .stat{box-shadow:var(--shc)}
+.thb .i{width:20px;height:20px}
 </style></head><body>
 <header class="tb"><div class="bc" id="bc"></div><div class="tbr"><div class="sw tbs"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><input id="gs" aria-label="Search customers" placeholder="Search customers by name, phone or ID" onkeydown="if(event.key==='Enter')gsearch(this.value)"></div><span class="mu" id="syt"></span><span class="av t4">N</span></div></header>
 <main id="app"></main>
@@ -2442,6 +2450,22 @@ function plUpdDo(){
 function dzC(c){return `<div class="card dzc"><div class="fsh">${ic('trash',18)}<b>Delete customer</b></div><div class="mu">Removes ${esc(c.name)} from your customer list. Their orders and payments stay in your records. You will be asked to confirm, and you can archive instead.</div><div class="row" style="margin-top:12px"><button class="dzb" onclick="openDel('${c.id}')">${ic('trash',18)}Delete customer…</button></div></div>`}
 {const _ev=editV;editV=function(c){return _ev(c)+dzC(c)}}
 function archDirect(id){const c=cby(id);if(!c)return;if(tab==='customers'&&cv.v==='edit')cv.v='profile';act(c.name+' archived',()=>{const x=cby(id);x.st='Archived';lg(x,'Customer archived')})}
+
+/* ===== Day / night mode (saved on this device) ===== */
+Object.assign(P,{sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/>',moon:'<path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/>'});
+const thMq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
+function thPref(){try{const t=localStorage.getItem('hfTheme');return t==='light'||t==='dark'?t:''}catch(e){return ''}}
+function thNow(){return thPref()||(thMq&&thMq.matches?'dark':'light')}
+function thUi(){let b=$('#thb');if(!b){const av=document.querySelector('.tb .av');if(!av)return;av.insertAdjacentHTML('beforebegin','<button class="ib thb" id="thb" type="button" onclick="thToggle()"></button>');b=$('#thb')}
+ const d=thNow()==='dark';b.innerHTML=ic(d?'sun':'moon',20);b.title=d?'Switch to day mode':'Switch to night mode';b.setAttribute('aria-label',b.title)}
+function thApply(){const p=thPref(),r=document.documentElement;if(p)r.setAttribute('data-theme',p);else r.removeAttribute('data-theme');thUi()}
+function thSet(t){try{if(t)localStorage.setItem('hfTheme',t);else localStorage.removeItem('hfTheme')}catch(e){}thApply();if(tab==='settings')render()}
+function thToggle(){thSet(thNow()==='dark'?'light':'dark')}
+if(thMq&&thMq.addEventListener)thMq.addEventListener('change',()=>{if(!thPref()){thUi();if(tab==='settings')render()}});
+function thC(){const p=thPref(),o=(v,l,i)=>`<button class="${p===v?'':'s'}" onclick="thSet('${v}')">${i?ic(i,18):''}${l}</button>`;
+ return `<div class="card"><div class="fsh">${ic(thNow()==='dark'?'moon':'sun',18)}<b>Day and night mode</b></div><div class="mu" style="margin:0 0 10px">Saved on this device only.${p?'':' Now following this device’s setting, which is '+(thNow()==='dark'?'night':'day')+' mode.'}</div><div class="row" style="margin:0">${o('light','Day','sun')}${o('dark','Night','moon')}${o('','Same as this device','')}</div></div>`}
+{const _sk=skinC;skinC=function(){return thC()+_sk()}}
+thApply();
 
 boot();
 </script></body></html>
