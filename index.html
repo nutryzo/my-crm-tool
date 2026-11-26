@@ -259,6 +259,8 @@ button.ch2.on{background:var(--tx);color:var(--cd);border-color:var(--tx)}
 .sp{font-size:12px;padding:2px 10px;border-radius:99px;background:var(--ac);color:var(--tx);white-space:nowrap}
 .sp.s1,.sp.s5{background:var(--p2)}.sp.s2{background:var(--p3)}.sp.s3{background:var(--p4)}.sp.s4{background:var(--p1)}
 .od{font-size:13px;min-width:70px}.od.warn{color:var(--wn);font-weight:500}
+.dut{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}.dut::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--pr);flex:none}.dut.off::before{background:var(--mu);opacity:.5}
+a.b2.ok{display:inline-flex;align-items:center;gap:6px;background:var(--pr);color:var(--pt);font-weight:500}
 button.b2{min-height:34px;padding:0 12px;gap:6px;font-size:13px;background:var(--cd);color:var(--tx);border:1px solid var(--bd)}
 button.b2.ok{background:var(--pr);color:var(--pt);border-color:var(--pr)}
 .pop a.pi{display:flex;justify-content:space-between;align-items:center;width:100%;color:var(--tx);border-radius:8px;padding:9px 12px;min-height:38px;text-decoration:none}
@@ -1584,7 +1586,7 @@ Object.assign(P,{pin:'<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10
 let dcl={},tEi='';
 const timeNow=()=>new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
 function setS(id,v){act('Marked '+v,()=>{const o=S.o.find(x=>x.id===id);o.status=v;o.sat=timeNow()})}
-function dlScope(){return S.o.filter(o=>inR('del',o.date)&&o.status!=='Rejected')}
+function dlScope(){return S.o.filter(o=>inR('del',o.date)&&(o.status!=='Rejected'||o.ret))}
 function bulkAssignD(did){const d=S.d.find(x=>x.id===did),ids=dlScope().filter(o=>open(o)&&!o.sid).map(o=>o.id);act(ids.length+(ids.length===1?' order':' orders')+' assigned to '+(d?d.name:''),()=>{S.o.forEach(o=>{if(ids.includes(o.id)){o.sid=did;if(o.status==='New')o.status='Preparing'}})})}
 function showLate(){const ds=S.o.filter(o=>open(o)&&o.date<today()).map(o=>o.date).sort();RG.del={m:'custom',d:today(),f:ds[0],t:today()};render()}
 function routeU(cs){const pts=cs.filter(c=>c.lat!=null).map(c=>c.lat+','+c.lng);if(!pts.length)return '';const wp=pts.slice(0,-1).slice(0,9);return 'https://www.google.com/maps/dir/?api=1&destination='+pts[pts.length-1]+(wp.length?'&waypoints='+encodeURIComponent(wp.join('|')):'')}
@@ -1594,6 +1596,7 @@ function navI(c){
  return c.addr?`<a class="ib" aria-label="Find address on map" title="Find address on map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.addr)}">${ic('pin',18)}</a>`:'';
 }
 function stopBtn(o){
+ if(o.ret)return `<span class="mu" style="padding:0 8px">Returned${o.sat?' '+o.sat:''}</span>`;
  if(o.status==='Delivered')return `<span class="mu" style="padding:0 8px">Delivered${o.sat?' '+o.sat:''}</span>`;
  if(o.status==='Out for delivery'||o.status==='Delayed')return `<button class="b2 ok" onclick="setS('${o.id}','Delivered')">${ic('check',16)}Delivered</button>`;
  return `<button class="b2" onclick="setS('${o.id}','Out for delivery')">${ic('truck',16)}Out for delivery</button>`;
@@ -1615,7 +1618,7 @@ function setRs(v,b){$('#dr').value=v;b.parentElement.querySelectorAll('button').
 function doDelay(id){const r=val('dr'),n=val('dn');closeMd();act('Marked delayed',()=>{const o=S.o.find(x=>x.id===id);o.status='Delayed';o.dlr=r+(n?': '+n:'');o.sat=timeNow()})}
 function openTeam(eid){
  tEi=eid||'';const m=$('#md'),used=id=>S.o.some(o=>o.sid===id);
- const row=d=>d.id===tEi?`<div class="mrow ed"><input class="mn" id="tnn" value="${esc(d.name)}" aria-label="Name"><input class="mn" id="tpp" type="tel" value="${esc(d.phone||'')}" placeholder="Phone" aria-label="Phone"><button class="ib" aria-label="Save" title="Save" onclick="tSave('${d.id}')">${ic('check',18)}</button><button class="ib" aria-label="Cancel" title="Cancel" onclick="openTeam()">${ic('x',18)}</button></div>`:`<div class="mrow"><div class="mt"><b>${esc(d.name)}</b><span class="mu">${esc(d.phone||'No phone')} · ${S.o.filter(o=>o.sid===d.id&&open(o)).length} open stops</span></div>${d.phone?`<a class="ib" aria-label="Call" title="Call" href="tel:${String(d.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a>`:''}<button class="ib" aria-label="Edit ${esc(d.name)}" title="Edit" onclick="openTeam('${d.id}')">${ic('edit',18)}</button><button class="ib" aria-label="Remove" title="${used(d.id)?'Has orders, so it cannot be removed':'Remove'}" ${used(d.id)?'disabled':''} onclick="tDel('${d.id}')">${ic('trash',18)}</button></div>`;
+ const row=d=>d.id===tEi?`<div class="mrow ed"><input class="mn" id="tnn" value="${esc(d.name)}" aria-label="Name"><input class="mn" id="tpp" type="tel" value="${esc(d.phone||'')}" placeholder="Phone" aria-label="Phone"><button class="ib" aria-label="Save" title="Save" onclick="tSave('${d.id}')">${ic('check',18)}</button><button class="ib" aria-label="Cancel" title="Cancel" onclick="openTeam()">${ic('x',18)}</button></div>${rstL(d)}`:`<div class="mrow"><div class="mt"><b>${esc(d.name)}</b><span class="mu">${esc(d.phone||'No phone')} · ${S.o.filter(o=>o.sid===d.id&&open(o)).length} open stops${dutyTxt(d)}</span></div>${d.phone?`<a class="ib" aria-label="Call" title="Call" href="tel:${String(d.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a>`:''}<button class="ib" aria-label="Send ${esc(d.name)} the rider page on WhatsApp" title="Send rider page on WhatsApp" onclick="sendRoute('${d.id}')">${ic('chat',18)}</button><button class="ib" aria-label="Edit ${esc(d.name)}" title="Edit" onclick="openTeam('${d.id}')">${ic('edit',18)}</button><button class="ib" aria-label="Remove" title="${used(d.id)?'Has orders, so it cannot be removed':'Remove'}" ${used(d.id)?'disabled':''} onclick="tDel('${d.id}')">${ic('trash',18)}</button></div>`;
  m.innerHTML=`<div class="mdc" style="max-width:540px"><h2 id="mdt">Delivery team</h2><div class="mu">The people you can assign orders to.</div><div style="margin-top:10px">${S.d.map(row).join('')||'<div class="mu" style="padding:10px 0">No delivery people yet.</div>'}</div><div class="pd" style="padding-left:0">Add a delivery person</div><div class="mrow" style="border:0"><input class="mn" id="tan" placeholder="Name" aria-label="New name"><input class="mn" id="tap" type="tel" placeholder="Phone" aria-label="New phone"><button onclick="tAdd()">${ic('plus',18)}Add</button></div><p class="err" id="merr"></p><div class="row"><button onclick="closeMd()">Done</button></div></div>`;
  m.hidden=false;if(tEi){const f=$('#tnn');if(f){f.focus();f.select()}}
 }
@@ -1627,11 +1630,11 @@ function delivery(){
  const sc=dlScope(),T=today(),dn=sc.filter(o=>o.status==='Delivered').length,un=sc.filter(o=>open(o)&&!o.sid),late=S.o.filter(o=>open(o)&&o.date<T&&!inR('del',o.date)).length;
  const people=S.d.map(d=>({d,L:sc.filter(o=>o.sid===d.id).sort((a,b)=>(+open(b)-+open(a))||String(cust(a.cid).name).localeCompare(String(cust(b.cid).name)))})).filter(x=>x.L.length);
  const psec=x=>{const d=x.d,L=x.L,dd=L.filter(o=>o.status==='Delivered').length,pct=Math.round(dd/L.length*100),col=dcl[d.id],ru=routeU(L.filter(open).map(o=>cust(o.cid)));
-  return `<div class="dsec"><div class="dh"><button class="ib" aria-label="Show or hide stops" onclick="dcl['${d.id}']=!dcl['${d.id}'];render()">${ic(col?'chev':'chd',18)}</button><div class="nm"><b>${esc(d.name)}</b><div class="mu">${dd} of ${L.length} delivered</div><div class="prg"><i style="width:${pct}%"></i></div></div><div class="sa">${d.phone?`<a class="ib" aria-label="Call ${esc(d.name)}" title="Call" href="tel:${String(d.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a><a class="ib" aria-label="Send stops on WhatsApp" title="Send stops on WhatsApp" target="_blank" rel="noopener" href="https://wa.me/${wa(d.phone)}?text=${encodeURIComponent(routeMsg(d,L))}">${ic('chat',18)}</a>`:''}${ru?`<a class="ib" aria-label="Open route in Google Maps" title="Open route in Google Maps" target="_blank" rel="noopener" href="${ru}">${ic('route',18)}</a>`:''}</div></div>${col?'':L.map((o,i)=>stopRow(o,i+1)).join('')}</div>`};
+  return `<div class="dsec"><div class="dh"><button class="ib" aria-label="Show or hide stops" onclick="dcl['${d.id}']=!dcl['${d.id}'];render()">${ic(col?'chev':'chd',18)}</button><div class="nm"><b>${esc(d.name)}</b><div class="mu">${dd} of ${L.length} delivered${dutyTxt(d)}</div><div class="prg"><i style="width:${pct}%"></i></div></div><div class="sa">${d.phone?`<a class="ib" aria-label="Call ${esc(d.name)}" title="Call" href="tel:${String(d.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a><button class="ib" aria-label="Send ${esc(d.name)} the rider page on WhatsApp" title="Send rider page on WhatsApp" onclick="sendRoute('${d.id}')">${ic('chat',18)}</button>`:''}${ru?`<a class="ib" aria-label="Open route in Google Maps" title="Open route in Google Maps" target="_blank" rel="noopener" href="${ru}">${ic('route',18)}</a>`:''}</div></div>${col?'':L.map((o,i)=>stopRow(o,i+1)).join('')}</div>`};
  return `<div class="top" style="align-items:flex-start"><div><h1 style="margin-bottom:4px">Delivery Management</h1><div class="mu">Assign stops, track progress and send routes to your team.</div></div><button class="ib" aria-label="Delivery team" title="Delivery team" onclick="openTeam()">${ic('users',20)}</button></div>
  <div class="otb" style="margin-top:14px">${rgUI('del')}</div>
  ${late?`<div class="bnr" style="margin-top:12px"><span>${ic('alert',18)}<b>${late}</b>&nbsp;undelivered ${late===1?'order':'orders'} from earlier days</span><button class="s" onclick="showLate()">Show them</button></div>`:''}
- <div class="card" style="margin-top:12px;padding:4px 16px 14px"><div class="kvs" style="border-top:0"><div><span>Stops</span><b>${sc.length}</b></div><div><span>Delivered</span><b>${dn}</b></div><div><span>Remaining</span><b>${sc.length-dn}</b></div></div></div>
+ <div class="card" style="margin-top:12px;padding:4px 16px 14px"><div class="kvs" style="border-top:0"><div><span>Stops</span><b>${sc.length}</b></div><div><span>Delivered</span><b>${dn}</b></div><div><span>Remaining</span><b>${sc.filter(open).length}</b></div></div></div>
  <div style="margin-top:16px">${un.length?`<div class="dsec"><div class="dh" style="background:var(--p2)"><div class="nm"><b>Unassigned</b><div class="mu">${un.length} ${un.length===1?'stop needs':'stops need'} a delivery person</div></div><div class="pw"><button onclick="tgp('pp-bd')">Assign all to…</button><div class="pop pr" id="pp-bd" hidden>${S.d.map(d=>`<button class="pi" onclick="bulkAssignD('${d.id}')">${esc(d.name)}</button>`).join('')||noP}</div></div></div>${un.map((o,i)=>stopRow(o,i+1)).join('')}</div>`:''}
  ${people.map(psec).join('')}
  ${sc.length?'':`<div class="empty">No deliveries in this period.<div class="row" style="justify-content:center"><button onclick="openPlan(today())">Plan today’s meal</button></div></div>`}</div>`;
@@ -2003,8 +2006,8 @@ function rows(){
  return chips+body;
 }
 function stopRow(o,i){
- const c=cust(o.cid),dn=o.status==='Delivered',un=!o.sid&&open(o),wh=[c.slot?slotS(c.slot):'',c.area||''].filter(Boolean).map(esc).join(' · ');
- return `<div class="stop ${dn?'dn':''}"><div class="sn">${dn?ic('check',14):i}</div><div class="sb"><span><b>${esc(c.name)}</b> <span class="sp s${ST.indexOf(o.status)}">${o.status}</span></span><span class="mu">${esc(o.items)}</span><span class="mu">${esc(c.addr||'No address')}</span>${wh?`<span class="mu wh">${ic('clock',14)}${wh}</span>`:''}${o.status==='Delayed'&&o.dlr?`<span class="od warn">Delayed: ${esc(o.dlr)}</span>`:''}${c.dins&&!dn?`<div class="ins">${esc(c.dins)}</div>`:''}</div><div class="sa">${c.phone?`<a class="ib" aria-label="Call customer" title="Call customer" href="tel:${String(c.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a>`:''}${navI(c)}${un?smartB(o):stopBtn(o)}${stopMenu(o)}</div></div>`;
+ const c=cust(o.cid),dn=o.status==='Delivered'||!!o.ret,un=!o.sid&&open(o),wh=[c.slot?slotS(c.slot):'',c.area||''].filter(Boolean).map(esc).join(' · ');
+ return `<div class="stop ${dn?'dn':''}"><div class="sn">${o.ret?ic('x',14):dn?ic('check',14):i}</div><div class="sb"><span><b>${esc(c.name)}</b> <span class="sp s${ST.indexOf(o.status)}">${o.ret?'Returned · not charged':o.status}</span></span><span class="mu">${esc(o.items)}</span><span class="mu">${esc(c.addr||'No address')}</span>${wh?`<span class="mu wh">${ic('clock',14)}${wh}</span>`:''}${rkLine(o)}${o.status==='Delayed'&&o.dlr?`<span class="od warn">Delayed: ${esc(o.dlr)}</span>`:''}${c.dins&&!dn?`<div class="ins">${esc(c.dins)}</div>`:''}</div><div class="sa">${c.phone?`<a class="ib" aria-label="Call customer" title="Call customer" href="tel:${String(c.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a>`:''}${navI(c)}${un?smartB(o):stopBtn(o)}${stopMenu(o)}</div></div>`;
 }
 function goEnd(){cvv='ending';cvn=25;cv.q='';goC()}
 
@@ -2181,19 +2184,19 @@ async function pull(ok){
   if(pa&&pa.latitude!=null){c.lat=Number(pa.latitude);c.lng=Number(pa.longitude)}if(pa&&pa.delivery_instructions)c.dins=pa.delivery_instructions;
   if(p){if(p.meal_price!=null)c.pm=Number(p.meal_price);if(p.drink_price!=null)c.pd=Number(p.drink_price);if(p.effective_from)c.pfrom=p.effective_from}
   return c});
- N.d=st.slice().sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at))).map(r=>{const d={id:r.id,name:r.name||'',phone:r.phone||''};if(r.legacy_id)d.lid=r.legacy_id;return d});
+ N.d=st.slice().sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at))).map(r=>{const d={id:r.id,name:r.name||'',phone:r.phone||''};if(r.on_duty)d.duty=true;if(r.last_seen_at)d.seen=r.last_seen_at;if(r.last_lat!=null&&r.last_lng!=null){d.lat=Number(r.last_lat);d.lng=Number(r.last_lng)}if(r.legacy_id)d.lid=r.legacy_id;return d});
  mi.slice().sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at))).forEach(r=>{const x={id:r.id,name:r.name||'',price:Number(r.price)||0};if(r.is_active===false)x.off=true;if(r.legacy_id)x.lid=r.legacy_id;N.menu[r.item_type==='drink'?'d':'s'].push(x)});
  const pd={};dp.forEach(r=>{if(!r.plan_date)return;pd[r.id]=r.plan_date;const p={id:r.id,st:r.st||'Draft',salad:r.salad||'',std:r.standard_meal_price!=null?Number(r.standard_meal_price):150,drink:r.drink||'',dstd:r.standard_drink_price!=null?Number(r.standard_drink_price):0,sc:[],dc:[],mp:{},ov:{},dp:{},dov:{}};if(r.rev!=null)p.rev=Number(r.rev);
   (K[r.id]||[]).forEach(k=>{if(k.status!=='Drink only')p.sc.push(k.customer_id);if(k.has_drink)p.dc.push(k.customer_id);if(k.meal_is_override){p.ov[k.customer_id]=1;p.mp[k.customer_id]=Number(k.meal_price)}if(k.drink_is_override){p.dov[k.customer_id]=1;p.dp[k.customer_id]=Number(k.drink_price)}});N.plan[r.plan_date]=p});
  N.o=od.slice().sort((a,b)=>String(b.order_date).localeCompare(String(a.order_date))||String(b.created_at).localeCompare(String(a.created_at))).map(r=>{const o={id:r.id,cid:r.customer_id||'',items:typeof r.items==='string'?r.items:(r.items==null?'':JSON.stringify(r.items)),date:r.order_date||'',amt:Number(r.amount)||0,status:r.status||'New',sid:r.staff_id||'',pl:r.plan_id&&pd[r.plan_id]||''};
-  if(r.meal_price!=null)o.mpr=Number(r.meal_price);if(r.drink_price!=null)o.dpr=Number(r.drink_price);if(r.order_number)o.no=r.order_number;if(r.delay_reason)o.dlr=r.delay_reason;if(r.status_updated_at){o.satAt=r.status_updated_at;o.sat=new Date(r.status_updated_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}if(r.legacy_id)o.lid=r.legacy_id;return o});
+  if(r.meal_price!=null)o.mpr=Number(r.meal_price);if(r.drink_price!=null)o.dpr=Number(r.drink_price);if(r.order_number)o.no=r.order_number;if(r.delay_reason)o.dlr=r.delay_reason;if(r.picked_up_at)o.pu=r.picked_up_at;if(r.at_gate_at)o.gate=r.at_gate_at;if(r.delivered_at)o.dat=r.delivered_at;if(r.delivered_distance_m!=null)o.ddist=Number(r.delivered_distance_m);if(r.returned)o.ret=true;if(r.stop_no!=null)o.stop=r.stop_no;if(r.status_updated_at){o.satAt=r.status_updated_at;o.sat=new Date(r.status_updated_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}if(r.legacy_id)o.lid=r.legacy_id;return o});
  N.t=tx.slice().sort((a,b)=>String(b.transaction_date).localeCompare(String(a.transaction_date))||String(b.created_at).localeCompare(String(a.created_at))).map(r=>{const x={id:r.id,type:r.type||'Income',cat:r.category||'',amt:Number(r.amount)||0,date:r.transaction_date||''};
   if(r.customer_id)x.cid=r.customer_id;if(r.kind!=null)x.k=r.kind;if(r.name!=null)x.n=r.name;if(r.payment_method)x.meth=r.payment_method;if(r.entry_number)x.no=r.entry_number;if(r.legacy_id)x.lid=r.legacy_id;return x});
  se.forEach(r=>{if(r.key==='business')N.biz=r.value||{};else if(r.key==='templates')N.tpl=r.value||{};else if(r.key==='migration')CM.mig=r.value});
  const mx=(a,re)=>a.reduce((m,s)=>{const n=parseInt(String(s||'').replace(re,''),10);return n>m?n:m},0);
  N.seq=mx(N.c.map(c=>c.num),/^C/);N.oseq=mx(N.o.map(o=>o.no),/^O/);N.mseq=mx(N.t.map(x=>x.no),/^M/);
  if(ok&&!ok())return false;
- S=N;CM.SN=snap();CM.pulled=Date.now();
+ S=N;RK=rkMap(od);RT=rtMap(st);if(bak){bak=null;const t=$('#ts');if(t&&!t.hidden&&$('#tcn'))t.hidden=true}CM.SN=snap();CM.pulled=Date.now();
  try{localStorage.setItem('hfcrm',JSON.stringify(S))}catch(e){}
  return true;
 }
@@ -2217,7 +2220,7 @@ async function push(){
   await simpleT('delivery_staff',D,SN.d);
   await simpleT('menu_items',M,SN.m);
   const cCh=C.filter(x=>SN.c[x.r.id]!==sig(x.r));
-  if(cCh.length){await upAll('customers',cCh.map(x=>x.r));cCh.forEach(x=>SN.c[x.r.id]=sig(x.r))}
+  if(cCh.length)await safeUp('customers',cCh.map(x=>x.r),SN.c);
   const kCh=C.filter(x=>SN.ck[x.r.id]!==sig(x.k));
   if(kCh.length){await clearKids(kCh.map(x=>x.r.id));const aid=sbUser&&sbUser.id||null;
    await insAll('customer_addresses',kCh.flatMap(x=>x.k.a));await insAll('customer_pricing',kCh.flatMap(x=>x.k.p));await insAll('customer_holidays',kCh.flatMap(x=>x.k.h.map(h=>({...h,created_by:aid}))));await insAll('customer_activity_logs',kCh.flatMap(x=>x.k.l.map(l=>({...l,actor_id:aid}))));
@@ -2231,11 +2234,11 @@ async function push(){
   if(pDel.length){const ids=pDel.map(d=>SN.pid[d]).filter(Boolean);if(ids.length){await delIn('daily_plan_customers','daily_plan_id',ids);await delIn('daily_plans','id',ids)}pDel.forEach(d=>{delete SN.p[d];delete SN.pk[d];delete SN.pid[d]})}
   const O=S.o.map(o=>({r:orderRow(o,cs,ds),k:orderKids(o)}));
   const oCh=O.filter(x=>SN.o[x.r.id]!==sig(x.r));
-  if(oCh.length){await upAll('orders',oCh.map(x=>x.r));oCh.forEach(x=>SN.o[x.r.id]=sig(x.r))}
+  if(oCh.length)await safeUp('orders',oCh.map(x=>x.r),SN.o);
   const okCh=O.filter(x=>SN.ok[x.r.id]!==sig(x.k));
   if(okCh.length){await delIn('order_items','order_id',okCh.map(x=>x.r.id));await insAll('order_items',okCh.flatMap(x=>x.k));okCh.forEach(x=>SN.ok[x.r.id]=sig(x.k))}
   const oIds=new Set(S.o.map(o=>o.id)),oDel=Object.keys(SN.o).filter(id=>!oIds.has(id));
-  if(oDel.length){await delIn('order_items','order_id',oDel);await delIn('orders','id',oDel);oDel.forEach(id=>{delete SN.o[id];delete SN.ok[id]})}
+  if(oDel.length){const okD=await delOk(oDel,SN);if(okD.length){for(const c of chunk(okD,150))await sbx(sb.from('transactions').update({order_id:null}).in('order_id',c));await delIn('order_items','order_id',okD);await delIn('orders','id',okD)}oDel.forEach(id=>{delete SN.o[id];delete SN.ok[id]})}
   await simpleT('transactions',T,SN.t);
   const sCh=setRows().filter(r=>SN.s[r.key]!==sig(r.value));
   if(sCh.length){await upAll('app_settings',sCh.map(r=>({key:r.key,value:r.value,updated_at:new Date().toISOString()})),'key');sCh.forEach(r=>SN.s[r.key]=sig(r.value))}
@@ -2466,6 +2469,97 @@ function thC(){const p=thPref(),o=(v,l,i)=>`<button class="${p===v?'':'s'}" oncl
  return `<div class="card"><div class="fsh">${ic(thNow()==='dark'?'moon':'sun',18)}<b>Day and night mode</b></div><div class="mu" style="margin:0 0 10px">Saved on this device only.${p?'':' Now following this device’s setting, which is '+(thNow()==='dark'?'night':'day')+' mode.'}</div><div class="row" style="margin:0">${o('light','Day','sun')}${o('dark','Night','moon')}${o('','Same as this device','')}</div></div>`}
 {const _sk=skinC;skinC=function(){return thC()+_sk()}}
 thApply();
+
+/* ---- riders: safe saving, rider updates and private links ---- */
+let RK={},RT={};
+const rkSig=r=>[r.picked_up_at||'',r.at_gate_at||'',r.delivered_at||'',r.returned?1:0].join('|');
+const rkMap=rows=>{const m={};(rows||[]).forEach(r=>m[r.id]=rkSig(r));return m};
+const rkCols=o=>{const r={};if(!o)return r;if(o.pu)r.picked_up_at=o.pu;if(o.gate)r.at_gate_at=o.gate;if(o.dat)r.delivered_at=o.dat;if(o.ddist!=null)r.delivered_distance_m=o.ddist;if(o.ret)r.returned=true;if(o.stop!=null)r.stop_no=o.stop;return r};
+const rtMap=rows=>{const m={};(rows||[]).forEach(r=>{if(r.link_token)m[r.id]=r.link_token});return m};
+/* fields a rider can change: only saved when nobody else changed them first */
+const GUARD={orders:{status:['status_updated_at','delay_reason']},customers:{plan_length_days:['plan_end_date']}};
+async function safeUp(t,rows,sn){
+ const G=GUARD[t]||{},fresh=rows.filter(r=>!sn[r.id]),lost=[];
+ const ins=t==='orders'?fresh.map(r=>({...r,...rkCols(S.o.find(o=>o.id===r.id))})):fresh;
+ for(const c of chunk(ins,400))await sbx(sb.from(t).upsert(c,t==='orders'?{onConflict:'id',ignoreDuplicates:true}:{onConflict:'id'}));
+ fresh.forEach(r=>sn[r.id]=sig(r));
+ const grp=new Map();
+ for(const r of rows){
+  if(sn[r.id]===sig(r))continue;
+  let old=null;try{old=JSON.parse(sn[r.id])}catch(e){}
+  const df={};for(const k of Object.keys(r))if(!old||sig(r[k])!==sig(old[k]))df[k]=r[k];
+  delete df.id;if(!Object.keys(df).length){sn[r.id]=sig(r);continue}
+  const w={};if(old)Object.keys(G).forEach(k=>{if(k in df)w[k]=old[k]});
+  const key=sig(df)+'|'+sig(w);if(!grp.has(key))grp.set(key,{df,w,rows:[]});grp.get(key).rows.push(r)}
+ for(const g of grp.values()){
+  const gw=Object.keys(g.w);
+  for(const part of chunk(g.rows.map(r=>r.id),150)){
+   let q=sb.from(t).update(g.df).in('id',part);
+   gw.forEach(k=>{q=g.w[k]==null?q.is(k,null):q.eq(k,g.w[k])});
+   if(!gw.length){await sbx(q);continue}
+   const got=new Set((await sbx(q.select('id'))||[]).map(x=>x.id)),miss=part.filter(id=>!got.has(id));
+   if(miss.length){const rest={...g.df};gw.forEach(k=>{delete rest[k];(G[k]||[]).forEach(x=>delete rest[x])});
+    if(Object.keys(rest).length)await sbx(sb.from(t).update(rest).in('id',miss));lost.push(...miss)}
+  }
+  g.rows.forEach(r=>sn[r.id]=sig(r))}
+ if(lost.length)CM.lost=(CM.lost||0)+lost.length;
+ return lost}
+/* an order is only deleted if no rider worked on it since this page last loaded it */
+async function delOk(ids,SN){
+ const got={};for(const c of chunk(ids,150))((await sbx(sb.from('orders').select('id,status,picked_up_at,at_gate_at,delivered_at,returned').in('id',c)))||[]).forEach(r=>got[r.id]=r);
+ const ok=[];let kept=0;
+ ids.forEach(id=>{const r=got[id];if(!r){ok.push(id);return}
+  let old=null;try{old=JSON.parse(SN.o[id])}catch(e){}
+  if((RK[id]||rkSig({}))!==rkSig(r)||(old&&old.status!==r.status))kept++;else ok.push(id)});
+ if(kept)CM.kept=(CM.kept||0)+kept;
+ return ok}
+function pullSoon(ms){clearTimeout(CM.ps);CM.ps=setTimeout(()=>{CM.ps=0;CM.pulled=0;autoPull()},ms||1500)}
+const _pushR=push;
+push=async function(){const r=await _pushR();
+ if(CM.kept||CM.lost){const k=CM.kept||0,l=CM.lost||0;CM.kept=0;CM.lost=0;
+  toast(k?(k===1?'This order was not deleted':k+' orders were not deleted')+' because a rider already worked on '+(k===1?'it':'them')+'. Showing the latest.':'A rider updated '+(l===1?'this just now':l+' items just now')+', so that change was not saved. Showing the latest.');
+  pullSoon(k?5500:1500)}
+ return r};
+
+/* ---- rider updates shown on the Delivery page ---- */
+const tmS=x=>new Date(x).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+const distS=m=>m>=1000?(m/1000).toFixed(1)+' km':Math.round(m)+' m';
+const agoS=ms=>ms<60e3?'just now':ms<3600e3?Math.round(ms/60e3)+' min ago':ms<86400e3?Math.round(ms/3600e3)+' h ago':Math.round(ms/86400e3)+' days ago';
+function rkLine(o){
+ const a=[];if(o.pu)a.push('Picked up '+tmS(o.pu));if(o.gate)a.push('At gate '+tmS(o.gate));
+ let h=a.length?`<span class="mu wh">${ic('truck',14)}${a.join(' · ')}</span>`:'';
+ if(o.ret)h+=`<span class="od warn">Brought back to the kitchen${o.dlr?': '+esc(o.dlr):''}. Not charged${cust(o.cid).pay==='Prepaid'?', +1 plan day':''}.</span>`;
+ if(o.status==='Delivered'&&o.ddist>300)h+=`<span class="od warn wh">${ic('alert',14)}Marked delivered ${distS(o.ddist)} from the customer’s map pin</span>`;
+ return h}
+function dutyTxt(d){
+ if(!d.seen)return '';const ms=Math.max(0,Date.now()-new Date(d.seen).getTime());
+ if(d.duty&&ms<3*3600e3)return ` · <span class="dut">On duty${ms>3*60e3?' · seen '+agoS(ms):''}</span>`;
+ return ` · <span class="dut off">${d.duty?'Last seen '+agoS(ms):'Off duty'}</span>`}
+
+/* ---- private rider link, sent on WhatsApp ---- */
+function riderUrl(tok){return location.origin+location.pathname.replace(/[^/]*$/,'')+'rider.html#t='+tok}
+function rMsg(d,tok){const n=S.o.filter(o=>o.sid===d.id&&o.date===today()&&open(o)).length;
+ return 'Hi '+d.name+' 👋\n\nThis is your '+bizN()+' delivery page'+(n?' ('+n+' '+(n===1?'stop':'stops')+' today)':'')+':\n'+riderUrl(tok)+'\n\nOpen it when you reach the kitchen. It shows your stops, the map and each customer’s phone.\n\nTip: in Chrome, tap ⋮ and then "Add to Home screen". After that, just tap the icon every day.\n\nThis link is only for you. Please don’t share it.'}
+async function sendRoute(id,reset){
+ const d=S.d.find(x=>x.id===id);if(!d)return;
+ if(CM.mode!=='cloud'||!sb){toast('Sign in to the database first.');return}
+ const go=tok=>'https://wa.me/'+(d.phone?wa(d.phone):'')+'?text='+encodeURIComponent(rMsg(d,tok));
+ if(RT[id]&&!reset){const w=window.open(go(RT[id]),'_blank');if(w)w.opener=null;else waBox(d,go(RT[id]));return}
+ const w=window.open('','_blank');
+ try{
+  if(!CM.SN||!CM.SN.d[id])await push();
+  const tok=await sbx(sb.rpc('rider_link',{p_staff:id,p_reset:!!reset}));
+  if(!tok||typeof tok!=='string')throw new Error('No link came back');
+  RT[id]=tok;const u=go(tok);
+  if(w&&!w.closed){w.opener=null;w.location.href=u}else waBox(d,u);
+  if(reset)toast('New link made for '+d.name+'. The old link no longer works.');
+ }catch(e){if(w&&!w.closed)w.close();toast('Could not make the link: '+eMsg(e))}
+}
+function waBox(d,u){const m=$('#md');
+ m.innerHTML=`<div class="mdc" style="max-width:460px"><h2 id="mdt">Send ${esc(d.name)} their link</h2><div class="mu">Your browser blocked the new tab. Tap the button to open WhatsApp.</div><div class="row"><button class="s" onclick="closeMd()">Close</button><a class="b2 ok wh" style="min-height:40px;padding:0 14px;border-radius:12px;text-decoration:none" href="${esc(u)}" target="_blank" rel="noopener" onclick="closeMd()">${ic('chat',18)}Open WhatsApp</a></div></div>`;m.hidden=false}
+function rstL(d){return `<div class="mu" style="padding:2px 0 10px">Phone lost, or link shared by mistake? <button class="lnk" onclick="askReset('${d.id}')">Make a new link</button></div>`}
+function askReset(id){const d=S.d.find(x=>x.id===id);if(!d)return;const m=$('#md');
+ m.innerHTML=`<div class="mdc" style="max-width:460px"><h2 id="mdt">Make a new link for ${esc(d.name)}?</h2><div class="mu">The old link stops working straight away. Then WhatsApp opens so you can send the new link to ${esc(d.name)}.</div><div class="row"><button class="s" onclick="openTeam('${d.id}')">Cancel</button><button onclick="closeMd();sendRoute('${d.id}',true)">${ic('check',18)}Make new link</button></div></div>`;m.hidden=false}
 
 boot();
 </script></body></html>
