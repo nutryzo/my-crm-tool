@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nutryzo Rider</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#17803f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nutryzo Rider">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317803f'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' text-anchor='middle' fill='white'%3EN%3C/text%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('nzTheme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf1ee;--cd:#fff;--tx:#1b1f1d;--t2:#3f4a44;--mu:#5f6b64;--bd:#cfd8d2;--ln:#e3e8e4;--p:#17803f;--pt:#146c39;--pl:#e3f4ea;--bl:#1d4f99;--bll:#e6eefb;--or:#b4561b;--ot:#7a3a12;--ol:#fdf0e6;--yt:#5c4a10;--yl:#fff6dc;--sh:0 1px 2px rgba(16,24,40,.06),0 2px 8px rgba(16,24,40,.05);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080c0a;--cd:#1c2721;--tx:#e6ece8;--t2:#c3cec7;--mu:#97a79d;--bd:#33453a;--ln:#2a3830;--pt:#5fd394;--pl:#163322;--bl:#8fb8f5;--bll:#16243a;--ot:#f2b48a;--ol:#2d1b0f;--yt:#f0d98a;--yl:#2a2410;--sh:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#080c0a;--cd:#1c2721;--tx:#e6ece8;--t2:#c3cec7;--mu:#97a79d;--bd:#33453a;--ln:#2a3830;--pt:#5fd394;--pl:#163322;--bl:#8fb8f5;--bll:#16243a;--ot:#f2b48a;--ol:#2d1b0f;--yt:#f0d98a;--yl:#2a2410;--sh:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 Poppins,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button,a.btn{font:inherit;cursor:pointer;border-radius:12px;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:1px solid var(--bd);background:var(--cd);color:var(--tx);padding:0 14px;font-weight:600}
+button.pri,a.pri{background:var(--p);border-color:var(--p);color:#fff}
+button.warn,a.warn{background:var(--cd);border:1.5px solid var(--or);color:var(--ot)}
+button.warnf{background:var(--or);border-color:var(--or);color:#fff}
+button.ghost{background:transparent;border-color:transparent;color:var(--t2);font-weight:500}
+button:disabled{opacity:.5;cursor:default}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #2f7de1;outline-offset:2px}
+.i{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px 120px}
+.hd{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.av{width:44px;height:44px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:18px;flex:none}
+.hd .nm{font-size:18px;font-weight:600;line-height:1.2}.mu{color:var(--mu);font-size:13px}
+.duty{margin-left:auto;border-radius:22px;min-height:44px;font-size:14px}
+.duty.on{background:var(--pl);border-color:var(--pt);color:var(--pt)}
+.dot{width:10px;height:10px;border-radius:50%;background:currentColor}
+.card{background:var(--cd);border-radius:16px;padding:14px 16px;box-shadow:var(--sh);margin-bottom:12px}
+.row{display:flex;align-items:center;gap:10px}
+.bar{height:8px;border-radius:4px;background:var(--ln);overflow:hidden;margin:8px 0}.bar>i{display:block;height:8px;background:var(--p)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--ln);border-radius:12px;padding:4px;gap:4px;margin-bottom:12px}
+.seg button{min-height:40px;border:0;background:transparent;color:var(--t2);font-weight:500}.seg button.on{background:var(--cd);color:var(--tx);font-weight:600;box-shadow:var(--sh)}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--mu);margin:14px 2px 6px}
+.next{border:2px solid var(--p)}
+.num{width:32px;height:32px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;flex:none}
+.num.o{background:transparent;border:2px solid var(--p);color:var(--pt);width:28px;height:28px;font-size:13px}
+.num.d{background:var(--ln);color:var(--t2);width:28px;height:28px}
+.cname{font-size:20px;font-weight:600;flex:1;min-width:0;overflow-wrap:anywhere}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill.b{background:var(--bll);color:var(--bl)}.pill.g{background:var(--pl);color:var(--pt)}.pill.o{background:var(--ol);color:var(--ot)}.pill.n{background:var(--ln);color:var(--t2)}
+.note{background:var(--yl);color:var(--yt);border-radius:10px;padding:9px 12px;font-size:14px;margin-top:8px;white-space:pre-line}
+.pay{display:flex;justify-content:space-between;align-items:center;border-radius:10px;padding:9px 12px;margin-top:8px;font-size:14px}
+.pay.c{background:var(--ol);color:var(--ot)}.pay.c b{font-size:16px}.pay.p{background:var(--pl);color:var(--pt)}.pay.n{background:var(--ln);color:var(--t2)}
+.acts{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-top:10px}
+.acts .sm{flex-direction:column;gap:0;font-size:11px;padding:0}
+.li{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--ln);width:100%;background:none;border-radius:0;border-left:0;border-right:0;border-top:0;min-height:56px;text-align:left;font-weight:400}
+.li:last-child{border-bottom:0}.li .t{flex:1;min-width:0}.li b{font-weight:600;display:block}
+.bot{position:fixed;left:0;right:0;bottom:0;background:var(--cd);border-top:1px solid var(--ln);padding:10px 14px calc(14px + env(safe-area-inset-bottom));box-shadow:0 -6px 18px rgba(0,0,0,.08);z-index:20}
+.bot .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.bot button{min-height:56px;font-size:15px}
+.ovl{position:fixed;inset:0;background:rgba(10,15,12,.55);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--cd);width:100%;max-width:560px;border-radius:24px 24px 0 0;padding:10px 20px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+.hdl{width:40px;height:5px;border-radius:3px;background:var(--bd);margin:0 auto 10px}
+.sheet h2{margin:0;font-size:20px;font-weight:600}
+.opt{width:100%;justify-content:flex-start;margin-top:8px;font-weight:500;text-align:left;padding:8px 14px;min-height:50px;flex-direction:column;align-items:flex-start;gap:0}
+.opt.on{border:2px solid var(--or);background:var(--ol);color:var(--ot);font-weight:600}
+.opt small{font-size:12px;color:var(--mu);font-weight:400}
+.big{font-size:40px;font-weight:700;line-height:1.1}
+input[type=text],input[type=number]{width:100%;min-height:48px;border-radius:12px;border:1px solid var(--bd);background:var(--cd);color:var(--tx);font:inherit;padding:0 12px}
+.chk{display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid var(--ln);min-height:52px}
+.chk input{width:24px;height:24px;accent-color:var(--p);margin:0;flex:none}
+#toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(12px + env(safe-area-inset-top));background:#1b1f1d;color:#fff;border-radius:14px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;z-index:60;max-width:92vw;box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:14px}
+#toast.bad{background:#8a2f12}#toast button{min-height:40px;background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff}
+#map{height:calc(100vh - 260px);min-height:320px;border-radius:16px;overflow:hidden;background:var(--ln)}
+.pin{width:30px;height:30px;border-radius:50%;background:#fff;border:2.5px solid #17803f;color:#146c39;display:flex;align-items:center;justify-content:center;font:600 13px Poppins,sans-serif}
+.pin.cur{background:#17803f;color:#fff;width:38px;height:38px;border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+.pin.done{background:#c9d9cf;border-color:#fff;color:#3f4a44}
+.me{width:18px;height:18px;border-radius:50%;background:#2f7de1;border:3px solid #fff;box-shadow:0 0 0 8px rgba(47,125,225,.25)}
+:root[data-theme="dark"] .leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.9)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.9)}}
+.ctr{text-align:center;padding:40px 20px}
+.sync{font-size:12px;color:var(--mu);text-align:center;margin-top:8px}
+.thb{min-height:44px;width:44px;padding:0;border-radius:22px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"><div class="ctr mu">Loading your deliveries…</div></div>
+<div id="ovl" class="ovl" hidden></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script>
+'use strict';
+const SB='https://rhzxfkxqgqzmczuqcskh.supabase.co/rest/v1/rpc/';
+const KEY='sb_publishable_Vy-ow2w0RPmSdutT-4mzKQ_Vt8b8YDT';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+Number(n||0).toLocaleString('en-IN');
+const tm=t=>t?new Date(t).toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit'}):'';
+const P={nav:'<path d="M3 11l18-8-8 18-2-8z"/>',call:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',chat:'<path d="M4 5h16v11H9l-5 4z"/>',check:'<path d="M5 12l5 5 9-10"/>',alert:'<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/>',route:'<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7.5a3.5 3.5 0 0 0 0-7h-7a3.5 3.5 0 0 1 0-7H16"/>',pin:'<path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/>',moon:'<path d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/>',refresh:'<path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/>'};
+const ic=n=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
+
+// ---------- link code ----------
+function codeFromHash(){const m=/(?:^|[#&])t=([0-9a-f]{32,128})/i.exec(location.hash);return m?m[1]:''}
+let T=codeFromHash();
+try{if(T)localStorage.setItem('nzRider',T);else{T=localStorage.getItem('nzRider')||'';if(T)history.replaceState(null,'','#t='+T)}}catch(e){}
+
+// ---------- state ----------
+let D=null,bad=false,netErr=false,sel=null,view='list',picked={},sheet=null,lastLoad=0,busy=false,map=null,mapLayer=null,leafletP=null;
+let Q=[];try{Q=JSON.parse(localStorage.getItem('nzQ')||'[]');Q.forEach(a=>{delete a.hold})}catch(e){Q=[]}
+try{D=JSON.parse(localStorage.getItem('nzD')||'null');if(D&&D.date!==todayIST())D=null}catch(e){D=null}
+function todayIST(){return new Date(Date.now()+330*60000).toISOString().slice(0,10)}
+const saveQ=()=>{try{localStorage.setItem('nzQ',JSON.stringify(Q))}catch(e){}};
+
+async function rpc(fn,body){
+  const r=await fetch(SB+fn,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const t=await r.text();let j=null;try{j=JSON.parse(t)}catch(e){}
+  if(!r.ok){const e=new Error((j&&j.message)||('Server error '+r.status));e.server=true;throw e}
+  return j;
+}
+
+// ---------- location ----------
+let pos=null,geoId=null,lastPing=0;
+function startGeo(){if(geoId!==null||!navigator.geolocation)return;try{geoId=navigator.geolocation.watchPosition(p=>{pos={la:p.coords.latitude,ln:p.coords.longitude,at:Date.now()}},()=>{},{enableHighAccuracy:true,maximumAge:30000,timeout:20000})}catch(e){}}
+function stopGeo(){if(geoId!==null&&navigator.geolocation){navigator.geolocation.clearWatch(geoId)}geoId=null}
+function freshPos(){return pos&&Date.now()-pos.at<120000?pos:null}
+function getPos(ms){const f=freshPos();if(f||!navigator.geolocation)return Promise.resolve(f);return new Promise(res=>{let done=false;const fin=v=>{if(!done){done=true;res(v)}};setTimeout(()=>fin(null),ms||4000);try{navigator.geolocation.getCurrentPosition(p=>{pos={la:p.coords.latitude,ln:p.coords.longitude,at:Date.now()};fin(pos)},()=>fin(null),{enableHighAccuracy:true,maximumAge:30000,timeout:ms||4000})}catch(e){fin(null)}})}
+
+// ---------- actions (saved first, sent when there is internet) ----------
+function applyLocal(a){
+  if(!D)return;const s=a.o?D.stops.find(x=>x.id===a.o):null;const now=new Date(a.ts).toISOString();
+  if(a.k==='duty_on'||a.k==='duty_off')D.rider.on_duty=a.k==='duty_on';
+  else if(a.k==='picked_up')D.stops.forEach(x=>{if(x.status==='New'||x.status==='Preparing'){x.status='Out for delivery';x.picked_up_at=now}});
+  else if(s){
+    if(a.k==='at_gate')s.at_gate_at=now;
+    else if(a.k==='delivered'){s.status='Delivered';s.delivered_at=now}
+    else if(a.k==='problem'){s.status='Delayed';s.delay_reason=a.r}
+    else if(a.k==='returned'){s.status='Rejected';s.returned=true;s.amount=0;s.collect=0;s.delay_reason=a.r||'Customer not at home'}
+    else if(a.k==='collected'){s.paid=true;s.collect=0;if(a.m==='Cash')D.cash_with_you=Number(D.cash_with_you||0)+Number(a.am||0)}
+  }
+}
+function act(k,o,extra){
+  const p=freshPos(),need=!p&&(k==='delivered'||k==='at_gate'||k==='returned'||k==='picked_up');
+  const a=Object.assign({id:Math.random().toString(36).slice(2),k,o:o||null,ts:Date.now(),la:p?p.la:null,ln:p?p.ln:null},need?{hold:1}:{},extra||{});
+  Q.push(a);saveQ();applyLocal(a);cacheD();render();
+  if(need)getPos(3500).then(q=>{if(q){a.la=q.la;a.ln=q.ln}delete a.hold;saveQ();flush()});else flush();
+  return a;
+}
+async function flush(){
+  if(busy||!Q.length)return;busy=true;let reload=false;
+  try{
+    while(Q.length){
+      const a=Q[0];if(a.hold)break;if(a.after&&Date.now()<a.after){setTimeout(flush,a.after-Date.now()+50);break}
+      try{await rpc('rider_act',{p_token:T,p_action:a.k,p_order:a.o,p_lat:a.la,p_lng:a.ln,p_reason:a.r||null,p_amount:a.am==null?null:a.am,p_method:a.m||null});Q.shift();saveQ();netErr=false}
+      catch(e){if(e.server){Q.shift();saveQ();toast(e.message,null,true);reload=true}else{netErr=true;break}}
+    }
+  }finally{busy=false}
+  renderSync();if(reload)load(true);
+}
+function cacheD(){try{localStorage.setItem('nzD',JSON.stringify(D))}catch(e){}}
+
+// ---------- load ----------
+async function load(force){
+  if(!T){bad=true;render();return}
+  try{
+    const d=await rpc('rider_today',{p_token:T});
+    D=d;bad=false;netErr=false;lastLoad=Date.now();
+    Q.forEach(applyLocal);cacheD();
+    if(D.rider&&D.rider.on_duty)startGeo();
+  }catch(e){if(e.server&&/Link not valid/i.test(e.message)){bad=true;try{localStorage.removeItem('nzRider')}catch(x){}}else netErr=true}
+  if((!sheet&&view!=='map')||force)render();else renderSync();
+}
+
+// ---------- helpers ----------
+const isOpen=s=>!(s.status==='Delivered'||s.returned||s.status==='Rejected');
+const waiting=s=>s.status==='New'||s.status==='Preparing';
+function stops(){return D?D.stops:[]}
+function openStops(){return stops().filter(s=>isOpen(s)&&!waiting(s))}
+function cur(){const o=openStops();return o.find(s=>s.id===sel)||o[0]||null}
+function phone91(p){p=String(p||'').replace(/\D/g,'');return p.length===10?'91'+p:p}
+function place(s){return s.lat!=null&&s.lng!=null?`${s.lat},${s.lng}`:[s.address,s.area,'Coimbatore'].filter(Boolean).join(', ')}
+function navUrl(s){return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination='+encodeURIComponent(place(s))}
+function routeUrl(list){const d=list[list.length-1],w=list.slice(0,-1);return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='+encodeURIComponent(place(d))+(w.length?'&waypoints='+encodeURIComponent(w.map(place).join('|')):'')}
+function waUrl(s){const first=String(s.customer||'').split(' ')[0];const who=D&&D.rider?D.rider.name:'your rider';return 'https://wa.me/'+phone91(s.phone)+'?text='+encodeURIComponent(`Hi ${first}, this is ${who} from Team Nutryzo. I'm about 5 minutes away with your meal.`)}
+function dateLabel(d){try{return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'})}catch(e){return d}}
+function payRow(s){
+  if(s.returned)return `<div class="pay n"><span>Returned</span><b>Not charged</b></div>`;
+  if(Number(s.collect)>0)return `<div class="pay c"><span>Pays daily · not paid yet</span><b>Collect ${inr(s.collect)}</b></div>`;
+  if(s.paid)return `<div class="pay p"><span>Payment</span><b>Paid ✓</b></div>`;
+  return `<div class="pay n"><span>${esc(s.payment_mode||'')}</span><b>Nothing to collect</b></div>`;
+}
+function statusPill(s){
+  if(s.returned)return '<span class="pill n">Returned</span>';
+  if(s.status==='Delivered')return `<span class="pill g">✓ ${tm(s.delivered_at)||'Delivered'}</span>`;
+  if(s.status==='Delayed')return '<span class="pill o">! Problem</span>';
+  if(s.at_gate_at)return '<span class="pill b">At gate</span>';
+  if(waiting(s))return '<span class="pill n">To pick up</span>';
+  return '';
+}
+
+// ---------- screens ----------
+function render(){
+  const app=$('#app');
+  if(bad){app.innerHTML=`<div class="ctr"><div class="av" style="margin:0 auto 14px;border-radius:14px">N</div><h1 style="font-size:22px;margin:0 0 8px">This link doesn't work</h1><p class="mu" style="font-size:15px">Ask the Nutryzo office to send you your rider link again on WhatsApp.</p></div>`;$('#ovl').hidden=true;return}
+  if(!D){app.innerHTML=`<div class="ctr mu">${netErr?'No internet. Connect and tap Refresh.':'Loading your deliveries…'}</div>${netErr?'<div class="ctr"><button onclick="load(true)">'+ic('refresh')+'Refresh</button></div>':''}`;return}
+  const all=stops(),done=all.filter(s=>!isOpen(s)),toPick=all.filter(waiting),open=openStops(),c=cur();
+  const delivered=all.filter(s=>s.status==='Delivered').length;
+  const r=D.rider||{},dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
+  let h=`<div class="hd"><div class="av">${esc((r.name||'R').trim().charAt(0).toUpperCase())}</div><div><div class="nm">Hi ${esc(r.name||'')}</div><div class="mu">${esc(dateLabel(D.date))}</div></div>
+  <button class="duty ${r.on_duty?'on':''}" onclick="toggleDuty()" aria-pressed="${r.on_duty?'true':'false'}"><span class="dot"></span>${r.on_duty?'On duty':'Off duty'}</button>
+  <button class="thb" onclick="toggleTheme()" aria-label="${dark?'Switch to day mode':'Switch to night mode'}">${ic(dark?'sun':'moon')}</button></div>`;
+  if(!all.length){
+    h+=`<div class="card ctr"><h2 style="margin:0 0 6px;font-size:20px">No deliveries for you today</h2><p class="mu">When the office gives you stops, they appear here.</p><button onclick="load(true)">${ic('refresh')}Refresh</button></div>`;
+    app.innerHTML=h+syncLine();$('#ovl').hidden=!sheet;return;
+  }
+  h+=`<div class="card"><div class="row" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;font-weight:600">${delivered} of ${all.length} delivered</span><span class="mu">${inr(D.cash_with_you)} cash with you</span></div>
+  <div class="bar"><i style="width:${all.length?Math.round(delivered/all.length*100):0}%"></i></div>
+  ${all.some(s=>s.picked_up_at)?`<div class="mu">Picked up from the kitchen at ${tm(all.map(s=>s.picked_up_at).filter(Boolean).sort()[0])}</div>`:''}
+  ${open.length?`<a class="btn pri" style="width:100%;margin-top:10px" href="${esc(routeUrl(open.slice(0,4)))}" target="_blank" rel="noopener">${ic('route')}Start route · next ${Math.min(4,open.length)} ${open.length===1?'stop':'stops'}</a>`:''}</div>`;
+  if(toPick.length){
+    h+=`<div class="card" style="border:2px solid var(--p)"><div style="font-size:18px;font-weight:600">Kitchen pickup</div><div class="mu" style="margin-bottom:6px">Tick every bag before you leave.</div>
+    ${toPick.map(s=>`<label class="chk"><input type="checkbox" ${picked[s.id]?'checked':''} onchange="tick('${s.id}',this.checked)"><span style="flex:1"><b style="font-weight:600">${esc(s.customer)}</b><br><span class="mu">${esc(s.items||'')}</span></span></label>`).join('')}
+    <button id="pickbtn" class="pri" style="width:100%;margin-top:12px" ${toPick.every(s=>picked[s.id])?'':'disabled'} onclick="pickUp()">${ic('check')}Picked up ${toPick.length} ${toPick.length===1?'meal':'meals'} · Start</button>
+    <div class="mu" style="text-align:center;margin-top:6px">The office sees the time you leave the kitchen.</div></div>`;
+  }
+  if(open.length){
+    h+=`<div class="seg" role="tablist"><button role="tab" class="${view==='list'?'on':''}" aria-selected="${view==='list'}" onclick="setView('list')">List</button><button role="tab" class="${view==='map'?'on':''}" aria-selected="${view==='map'}" onclick="setView('map')">Map</button></div>`;
+    if(view==='map')h+=`<div id="map" role="region" aria-label="Map of your stops"></div>`;
+    else{
+      h+=`<div class="lbl">NEXT STOP</div>`+stopCard(c);
+      const rest=open.filter(s=>s!==c);
+      if(rest.length)h+=`<div class="lbl">UP NEXT</div><div class="card" style="padding:2px 14px">${rest.map(s=>`<button class="li" onclick="pick('${s.id}')"><span class="num o">${all.indexOf(s)+1}</span><span class="t"><b>${esc(s.customer)}</b><span class="mu">${esc([s.area,s.slot].filter(Boolean).join(' · '))}</span></span>${statusPill(s)||(Number(s.collect)>0?`<span class="pill o">${inr(s.collect)}</span>`:'')}</button>`).join('')}</div>`;
+    }
+  }
+  if(!open.length&&!toPick.length)h+=`<div class="card ctr" style="padding:24px 16px"><div style="font-size:20px;font-weight:600">All done for today</div><p class="mu" style="font-size:14px;margin:6px 0 12px">${r.on_duty?'Back at the kitchen? Tap Off duty to stop sharing your location.':'Thank you! See you tomorrow.'}</p>${r.on_duty?`<button onclick="toggleDuty()">Go off duty</button>`:''}</div>`;
+  if(done.length)h+=`<div class="lbl">DONE</div><div class="card" style="padding:2px 14px">${done.map(s=>`<div class="li"><span class="num d">${ic(s.returned?'x':'check')}</span><span class="t"><b>${esc(s.customer)}</b><span class="mu">${esc(s.returned?'Returned · not charged':(s.paid?'Paid':'Delivered'))}</span></span>${statusPill(s)}</div>`).join('')}</div>`;
+  app.innerHTML=h+syncLine()+(c&&view==='list'?bottomBar(c):'');
+  if(view==='map'&&open.length)drawMap();
+  $('#ovl').hidden=!sheet;
+}
+function stopCard(s){
+  if(!s)return '';const n=stops().indexOf(s)+1;
+  return `<div class="card next"><div class="row"><span class="num">${n}</span><span class="cname">${esc(s.customer)}</span>${s.slot?`<span class="pill b">${esc(s.slot)}</span>`:''}</div>
+  <div style="color:var(--t2);margin-top:6px">${esc(s.items||'')}</div>
+  <div class="row" style="margin-top:6px;align-items:flex-start">${ic('pin')}<span>${esc([s.address,s.area].filter(Boolean).join(', ')||'No address saved')}${s.lat!=null?'<br><span class="mu" style="color:var(--pt);font-weight:600">Exact pin saved</span>':''}</span></div>
+  ${s.instructions?`<div class="note">${esc(s.instructions)}</div>`:''}
+  ${s.status==='Delayed'&&s.delay_reason?`<div class="pay c"><span>Problem reported</span><b>${esc(s.delay_reason)}</b></div>`:''}
+  ${payRow(s)}
+  <div class="acts"><a class="btn pri" href="${esc(navUrl(s))}" target="_blank" rel="noopener">${ic('nav')}Navigate</a>
+  <a class="btn" href="tel:${esc(String(s.phone||'').replace(/[^\d+]/g,''))}" aria-label="Call ${esc(s.customer)}">${ic('call')}</a>
+  <a class="btn sm" href="${esc(waUrl(s))}" target="_blank" rel="noopener" aria-label="Send I am 5 minutes away on WhatsApp">${ic('chat')}5 min</a></div></div>`;
+}
+function bottomBar(s){
+  return `<div class="bot"><div class="in"><button class="warn" onclick="openProblem('${s.id}')">${ic('alert')}Problem</button>
+  <button onclick="atGate('${s.id}')" ${s.at_gate_at?'disabled':''}>${ic('bell')}${s.at_gate_at?'At gate ✓':'At gate'}</button>
+  <button class="pri" onclick="delivered('${s.id}')">${ic('check')}Delivered</button></div></div>`;
+}
+function syncLine(){const n=Q.length;return `<div class="sync">${n?`${n} ${n===1?'update':'updates'} waiting for internet…`:(netErr?'No internet right now':(lastLoad?'Updated '+tm(lastLoad):''))}</div>`}
+function renderSync(){const el=document.querySelector('.sync');if(el)el.outerHTML=syncLine();else render()}
+
+// ---------- user actions ----------
+function tick(id,v){picked[id]=v;const btn=document.getElementById('pickbtn');if(btn)btn.disabled=!stops().filter(waiting).every(s=>picked[s.id])}
+function pickUp(){if(!D.rider.on_duty){startGeo();act('duty_on')}act('picked_up');picked={};render();toast('Picked up. Have a safe ride!')}
+async function toggleDuty(){if(!D)return;const on=!(D.rider&&D.rider.on_duty);if(on)startGeo();act(on?'duty_on':'duty_off');if(!on)stopGeo();toast(on?'You are on duty. Your location is shared with the office while on duty.':'You are off duty. Location sharing stopped.')}
+function pick(id){sel=id;window.scrollTo({top:0,behavior:'smooth'});render()}
+function setView(v){view=v;render()}
+function atGate(id){act('at_gate',id);toast('Customer told you are at the gate')}
+function delivered(id){
+  const s=stops().find(x=>x.id===id);if(!s)return;
+  if(Number(s.collect)>0){openCollect(id);return}
+  finishDelivered(id);
+}
+function finishDelivered(id){
+  const s0=stops().find(x=>x.id===id),prev=s0?s0.status:'Out for delivery';
+  const a=act('delivered',id,{after:Date.now()+5000});sel=null;render();
+  toast('Delivered ✓','Undo',false,()=>{const i=Q.findIndex(x=>x.id===a.id);if(i>=0){Q.splice(i,1);saveQ();const s=stops().find(x=>x.id===id);if(s){s.status=prev;s.delivered_at=null}cacheD();render();toast('Undone')}else toast('Already sent. Ask the office to change it.',null,true)},5000);
+}
+function openCollect(id){
+  const s=stops().find(x=>x.id===id);sheet={k:'collect',id,m:'Cash',amt:Number(s.collect)};drawSheet();
+}
+function openProblem(id){sheet={k:'problem',id,r:''};drawSheet()}
+function closeSheet(){sheet=null;$('#ovl').hidden=true;$('#ovl').innerHTML='';render()}
+const REASONS=['Customer not answering','Customer not at home','Can\'t find the address','Customer refused the order','Food spilled or damaged','Running late (traffic)'];
+function drawSheet(){
+  const o=$('#ovl');if(!sheet){o.hidden=true;return}
+  const s=stops().find(x=>x.id===sheet.id);if(!s){closeSheet();return}
+  let h='';
+  if(sheet.k==='collect'){
+    h=`<div class="row" style="justify-content:space-between;align-items:flex-start"><div><div class="lbl" style="margin:0">COLLECT PAYMENT</div><h2>${esc(s.customer)}</h2></div><button class="thb" onclick="closeSheet()" aria-label="Close">${ic('x')}</button></div>
+    <div style="text-align:center;margin:14px 0"><div class="big">${inr(sheet.amt)}</div><div class="mu">${esc(s.items||'')}</div></div>
+    <div class="seg"><button class="${sheet.m==='Cash'?'on':''}" onclick="sheet.m='Cash';drawSheet()">Cash</button><button class="${sheet.m==='UPI'?'on':''}" onclick="sheet.m='UPI';drawSheet()">UPI</button></div>
+    ${sheet.m==='UPI'?'<div class="note" style="margin:0 0 10px">Ask the customer to pay Nutryzo by UPI, and tap the button once you see it is paid.</div>':''}
+    <label for="amt" class="mu">Amount received (₹)</label><input id="amt" type="number" inputmode="numeric" min="1" value="${sheet.amt}" oninput="sheet.amt=Number(this.value)||0">
+    <button class="pri" style="width:100%;margin-top:14px;min-height:56px" onclick="doCollect()">${ic('check')}Got ${inr(sheet.amt)} by ${sheet.m} · Delivered</button>
+    <button class="ghost" style="width:100%;margin-top:6px" onclick="payLater()">Customer will pay later · Delivered</button>`;
+  }else{
+    const ret=sheet.r==='Customer not at home';
+    h=`<div class="row" style="justify-content:space-between;align-items:flex-start"><div><h2>What's the problem?</h2><div class="mu">${esc(s.customer)}</div></div><button class="thb" onclick="closeSheet()" aria-label="Close">${ic('x')}</button></div>
+    ${REASONS.map((t,i)=>`<button class="opt ${sheet.r===t?'on':''}" onclick="sheet.r=REASONS[${i}];drawSheet()">${sheet.r===t?'✓ ':''}${esc(t)}${i===0&&s.instructions?`<small>Their note: ${esc(s.instructions)}</small>`:''}</button>`).join('')}
+    <label for="pn" class="mu" style="display:block;margin-top:12px">Add a note (optional)</label><input id="pn" type="text" maxlength="120" placeholder="e.g. Called twice, no answer" value="${esc(sheet.n||'')}" oninput="sheet.n=this.value">
+    ${ret?`<div class="card" style="background:var(--ln);box-shadow:none;margin:12px 0 0"><b style="font-weight:600">What happens next</b><div>Take the meal back to the kitchen.</div><div>The customer is <b>not charged</b>.${s.payment_mode==='Prepaid'?' Their plan gets <b>1 extra day</b>.':''}</div></div>`:''}
+    <button class="${ret?'warnf':'pri'}" style="width:100%;margin-top:14px;min-height:56px" ${sheet.r?'':'disabled'} onclick="doProblem()">${ret?'Return to kitchen':'Send to office'}</button>`;
+  }
+  o.innerHTML=`<div class="sheet" role="dialog" aria-modal="true"><div class="hdl"></div>${h}</div>`;o.hidden=false;
+  o.onclick=e=>{if(e.target===o)closeSheet()};
+}
+function doCollect(){const s=sheet;if(!(s.amt>0)){toast('Enter the amount',null,true);return}sheet=null;$('#ovl').hidden=true;act('collected',s.id,{am:s.amt,m:s.m});act('delivered',s.id);sel=null;render();toast(`Delivered ✓ · ${inr(s.amt)} by ${s.m}`)}
+function payLater(){const id=sheet.id;sheet=null;$('#ovl').hidden=true;finishDelivered(id)}
+function doProblem(){const s=sheet;const reason=s.r+(s.n&&s.n.trim()?' — '+s.n.trim():'');sheet=null;$('#ovl').hidden=true;
+  if(s.r==='Customer not at home'){act('returned',s.id,{r:reason});toast('Marked as returned. Take the meal back to the kitchen.')}
+  else{act('problem',s.id,{r:reason});toast('The office has been told')}
+  sel=null;render();}
+function toggleTheme(){const r=document.documentElement,dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);const t=dark?'light':'dark';r.setAttribute('data-theme',t);try{localStorage.setItem('nzTheme',t)}catch(e){}render()}
+
+// ---------- toast ----------
+let tT=null;
+function toast(msg,btn,isBad,fn,ms){const t=$('#toast');clearTimeout(tT);t.className=isBad?'bad':'';t.innerHTML=`<span>${esc(msg)}</span>${btn?`<button type="button">${esc(btn)}</button>`:''}`;if(btn)t.querySelector('button').onclick=()=>{t.hidden=true;fn&&fn()};t.hidden=false;tT=setTimeout(()=>{t.hidden=true},ms||3500)}
+
+// ---------- map (loads only when opened) ----------
+function loadLeaflet(){if(window.L)return Promise.resolve();if(leafletP)return leafletP;leafletP=new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';l.integrity='sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';l.crossOrigin='';document.head.appendChild(l);const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.integrity='sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';s.crossOrigin='';s.onload=res;s.onerror=()=>{leafletP=null;rej()};document.head.appendChild(s)});return leafletP}
+async function drawMap(){
+  const el=$('#map');if(!el)return;
+  try{await loadLeaflet()}catch(e){el.innerHTML='<div class="ctr mu">Map could not load. Use Navigate instead.</div>';return}
+  if(!$('#map'))return;
+  if(map){map.remove();map=null}
+  map=L.map('map',{zoomControl:true,attributionControl:true});
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+  const all=stops(),c=cur(),pts=[];
+  all.forEach((s,i)=>{if(s.lat==null||s.lng==null)return;const k=!isOpen(s)?'done':(c&&s.id===c.id?'cur':'');
+    const m=L.marker([s.lat,s.lng],{icon:L.divIcon({className:'',html:`<div class="pin ${k}">${k==='done'?'✓':i+1}</div>`,iconSize:[38,38],iconAnchor:[19,19]}),title:s.customer,keyboard:true}).addTo(map);
+    m.on('click',()=>{if(isOpen(s)){sel=s.id;view='list';render()}});pts.push([s.lat,s.lng])});
+  const p=freshPos();if(p){L.marker([p.la,p.ln],{icon:L.divIcon({className:'',html:'<div class="me"></div>',iconSize:[18,18],iconAnchor:[9,9]}),title:'You'}).addTo(map);pts.push([p.la,p.ln])}
+  if(pts.length)map.fitBounds(pts,{padding:[40,40],maxZoom:16});else map.setView([11.0168,76.9558],12);
+  const missing=all.filter(s=>isOpen(s)&&(s.lat==null||s.lng==null)).length;
+  if(missing)el.insertAdjacentHTML('afterend',`<div class="mu" style="margin-top:8px">${missing} ${missing===1?'stop has':'stops have'} no map pin yet. Use Navigate on the list.</div>`);
+}
+
+// ---------- timers ----------
+setInterval(()=>{if(document.visibilityState!=='visible')return;
+  if(D&&D.rider&&D.rider.on_duty){const p=freshPos();if(p&&Date.now()-lastPing>60000&&!Q.length){lastPing=Date.now();rpc('rider_act',{p_token:T,p_action:'ping',p_lat:p.la,p_lng:p.ln}).catch(()=>{})}}
+  if(!Q.length&&!sheet&&Date.now()-lastLoad>60000)load();
+  flush();
+},15000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){flush();if(Date.now()-lastLoad>15000)load()}});
+window.addEventListener('online',()=>{netErr=false;flush();load()});
+render();load();flush();
+</script>
+</body>
+</html>
