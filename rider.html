@@ -81,6 +81,23 @@ input[type=text],input[type=number]{width:100%;min-height:48px;border-radius:12p
 .sync{font-size:12px;color:var(--mu);text-align:center;margin-top:8px}
 .thb{min-height:44px;width:44px;padding:0;border-radius:22px}
 [hidden]{display:none!important}
+/* narrow phones: nothing may be wider than the screen */
+.who{flex:1;min-width:0}
+.hd .nm,.who .mu{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.duty,.thb{flex:none}.duty{white-space:nowrap}
+.prog{flex-wrap:wrap;column-gap:12px;row-gap:0}
+.next>.row:first-child{flex-wrap:wrap;row-gap:6px}.next>.row:first-child .cname{flex:1 1 auto;overflow-wrap:break-word}
+.acts{grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr)}
+.bot .in{grid-template-columns:repeat(3,minmax(0,1fr))}.bot button{min-width:0;padding:0 8px;white-space:nowrap}
+@media (max-width:380px){
+ .wrap{padding-left:12px;padding-right:12px}
+ .av{display:none}.hd{gap:8px}.hd .nm{font-size:17px}
+ .duty{padding:0 10px;font-size:13px;gap:6px}
+ .card{padding:12px 14px}
+ .bot{padding-left:10px;padding-right:10px}.bot .in{gap:6px}
+ .bot button{flex-direction:column;gap:2px;font-size:13px;min-height:58px;padding:0 4px}
+}
+
 </style>
 </head>
 <body>
@@ -204,14 +221,14 @@ function render(){
   const all=stops(),done=all.filter(s=>!isOpen(s)),toPick=all.filter(waiting),open=openStops(),c=cur();
   const delivered=all.filter(s=>s.status==='Delivered').length;
   const r=D.rider||{},dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
-  let h=`<div class="hd"><div class="av">${esc((r.name||'R').trim().charAt(0).toUpperCase())}</div><div><div class="nm">Hi ${esc(r.name||'')}</div><div class="mu">${esc(dateLabel(D.date))}</div></div>
+  let h=`<div class="hd"><div class="av">${esc((r.name||'R').trim().charAt(0).toUpperCase())}</div><div class="who"><div class="nm">Hi ${esc(r.name||'')}</div><div class="mu">${esc(dateLabel(D.date))}</div></div>
   <button class="duty ${r.on_duty?'on':''}" onclick="toggleDuty()" aria-pressed="${r.on_duty?'true':'false'}"><span class="dot"></span>${r.on_duty?'On duty':'Off duty'}</button>
   <button class="thb" onclick="toggleTheme()" aria-label="${dark?'Switch to day mode':'Switch to night mode'}">${ic(dark?'sun':'moon')}</button></div>`;
   if(!all.length){
     h+=`<div class="card ctr"><h2 style="margin:0 0 6px;font-size:20px">No deliveries for you today</h2><p class="mu">When the office gives you stops, they appear here.</p><button onclick="load(true)">${ic('refresh')}Refresh</button></div>`;
     app.innerHTML=h+syncLine();$('#ovl').hidden=!sheet;return;
   }
-  h+=`<div class="card"><div class="row" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;font-weight:600">${delivered} of ${all.length} delivered</span><span class="mu">${inr(D.cash_with_you)} cash with you</span></div>
+  h+=`<div class="card"><div class="row prog" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;font-weight:600;white-space:nowrap">${delivered} of ${all.length} delivered</span><span class="mu" style="white-space:nowrap">${inr(D.cash_with_you)} cash with you</span></div>
   <div class="bar"><i style="width:${all.length?Math.round(delivered/all.length*100):0}%"></i></div>
   ${all.some(s=>s.picked_up_at)?`<div class="mu">Picked up from the kitchen at ${tm(all.map(s=>s.picked_up_at).filter(Boolean).sort()[0])}</div>`:''}
   ${open.length?`<a class="btn pri" style="width:100%;margin-top:10px" href="${esc(routeUrl(open.slice(0,4)))}" target="_blank" rel="noopener">${ic('route')}Start route · next ${Math.min(4,open.length)} ${open.length===1?'stop':'stops'}</a>`:''}</div>`;
