@@ -288,6 +288,56 @@ a.b2.ok{display:inline-flex;align-items:center;gap:6px;background:var(--pr);colo
 .tl time{color:var(--mu);min-width:74px;flex:none;font-variant-numeric:tabular-nums}
 .dut.move::before,.dut.done::before{background:var(--pr)}.dut.still::before{background:var(--wn)}.dut.lost::before{background:#c0392b}.dut.kit::before{background:#2f6fdb}
 .dut.lost{color:#c0392b;font-weight:600}.dut.still{color:var(--wn);font-weight:600}
+/* ===== Delivery page redesign ===== */
+.k-ok{--k:var(--pr)}.k-ow{--k:#2f6fdb}.k-pb{--k:#c26a06}.k-wt{--k:#8a978f}.k-nr{--k:#a8894f}.k-ret{--k:#c0392b}
+.r-move,.r-done{--k:var(--pr)}.r-kit{--k:#2f6fdb}.r-still{--k:#c26a06}.r-lost{--k:#c0392b}.r-off{--k:#8a978f}
+:root[data-theme="dark"] .k-ow,:root[data-theme="dark"] .r-kit{--k:#7fa8f0}:root[data-theme="dark"] .k-pb,:root[data-theme="dark"] .r-still{--k:#f0a54a}:root[data-theme="dark"] .k-ret,:root[data-theme="dark"] .r-lost{--k:#ef7a6b}:root[data-theme="dark"] .k-nr{--k:#d2b07a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .k-ow,:root:not([data-theme="light"]) .r-kit{--k:#7fa8f0}:root:not([data-theme="light"]) .k-pb,:root:not([data-theme="light"]) .r-still{--k:#f0a54a}:root:not([data-theme="light"]) .k-ret,:root:not([data-theme="light"]) .r-lost{--k:#ef7a6b}:root:not([data-theme="light"]) .k-nr{--k:#d2b07a}}
+.dvw{max-width:720px;margin:0 auto}.dvw.has-map{max-width:none}
+.dvh{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 16px;margin:2px 0 14px}
+.dvh h1{margin:0 0 2px}.dvhr{display:flex;align-items:center;gap:6px}.dvhr .rgb{margin:0}
+.dvp{padding:16px 18px;margin-bottom:6px}
+.dvn{display:flex;align-items:baseline;gap:8px}.dvn b{font-size:34px;line-height:1.1;font-weight:700}.dvn span{color:var(--mu);font-size:15px}
+.dvbar{display:flex;gap:3px;height:10px;margin:12px 0 12px;border-radius:99px;overflow:hidden;background:var(--ac)}.dvbar i{display:block;height:100%;background:var(--k)}
+.dvcs{display:flex;flex-wrap:wrap;gap:6px 16px}.dvc{display:inline-flex;align-items:center;gap:7px;font-size:14px}.dvc i{width:9px;height:9px;border-radius:50%;background:var(--k);flex:none}
+.dvt{display:flex;align-items:center;gap:8px;margin:22px 2px 10px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu)}
+.dvcount{background:#c0392b;color:#fff;border-radius:99px;font-size:11px;line-height:18px;min-width:20px;text-align:center;padding:0 6px;letter-spacing:0}
+.dvw .dvb{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 14px;border:1px solid var(--bd);border-radius:10px;background:var(--cd);color:var(--tx);font:inherit;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;white-space:nowrap}
+.dvw .dvb.pri{background:var(--pr);border-color:var(--pr);color:var(--pt)}
+.dva .lbal{background:var(--cd)}.dva .lbal .sa{align-items:center}.dvw .dva .lbal .ib{min-height:38px;width:38px}
+.dvun{padding:0;margin-top:10px}.dvuh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--bd)}
+.dvsl{display:flex;flex-direction:column}
+.dvs{display:flex;align-items:flex-start;gap:12px;padding:12px 10px 12px 16px;border-top:1px solid var(--bd)}.dvsl>.dvs:first-child{border-top:0}
+.dvsi{width:30px;height:30px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:var(--k);background:var(--ac);background:color-mix(in srgb,var(--k) 15%,transparent);margin-top:1px}
+.dvsb{flex:1;min-width:0}.dvs1{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:0 10px}.dvs1 b{font-size:15px;font-weight:600}
+.dvss{font-size:13px;font-weight:600;color:var(--k);white-space:nowrap}
+.dvs2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.dvsn{display:flex;align-items:center;gap:6px;margin-top:5px;font-size:13px;font-weight:600;color:var(--k)}
+.dvs.k-ok .dvs1 b,.dvs.k-ret .dvs1 b{color:var(--mu)}
+.dvs>.pw{flex:none;align-self:center}.dvw .dvs .ib{height:38px;width:38px}
+.pop .pi.ii{justify-content:flex-start;gap:10px}
+.dvrc{background:var(--cd);border:1px solid var(--bd);border-radius:14px;margin-bottom:12px}
+.dvrc.r-lost{border-color:var(--k);box-shadow:0 0 0 1px var(--k)}.dvrc.r-still{border-color:var(--k)}
+.dvrh{display:flex;align-items:flex-start;gap:12px;padding:14px 8px 12px 16px}
+.dvw button.dvav{width:44px;height:44px;min-height:0;border-radius:50%;border:0;padding:0;flex:none;background:var(--c);color:#fff;font:inherit;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.dvri{flex:1;min-width:0;padding-top:1px}.dvrn{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px}.dvrn b{font-size:16px}
+.dvrs{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--k)}.dvrs::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--k);flex:none}
+.dvpb{height:6px;border-radius:99px;background:var(--ac);overflow:hidden;margin:9px 0 6px}.dvpb i{display:block;height:100%;border-radius:99px}
+.dvra{display:flex;align-items:center;flex:none}
+.dvtabs{display:flex;border-top:1px solid var(--bd)}
+.dvw .dvtabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;background:none;border:0;border-radius:0;color:var(--mu);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.dvw .dvtabs button+button{border-left:1px solid var(--bd)}.dvw .dvtabs button.on{color:var(--tx);background:var(--ac)}
+.dvw .dvrc>.dvtabs:last-child button:first-child{border-bottom-left-radius:13px}.dvw .dvrc>.dvtabs:last-child button:last-child{border-bottom-right-radius:13px}
+.dvrc>.dvsl,.dvrc>.tl{border-top:1px solid var(--bd)}.dvrc>.tl{border-bottom:0}
+.dvmc{padding:12px;margin:22px 0 0}
+.dvml{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 10px}
+.dvlive{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--mu)}.dvlive>i{width:8px;height:8px;border-radius:50%;background:#22a35a;flex:none;animation:lvp 2s infinite}
+@keyframes lvp{0%{box-shadow:0 0 0 0 rgba(34,163,90,.5)}70%{box-shadow:0 0 0 8px rgba(34,163,90,0)}100%{box-shadow:0 0 0 0 rgba(34,163,90,0)}}
+@media (prefers-reduced-motion:reduce){.dvlive>i{animation:none}}
+.dvmap .lbm{height:260px}
+@media (min-width:1100px){.dv2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"att map" "rid map";column-gap:20px;align-items:start}.dv2>.dva{grid-area:att}.dv2>.dvr{grid-area:rid}.dv2>.dvmap{grid-area:map;position:sticky;top:84px;align-self:start}.dvmap .dvmc{margin-top:22px}.dvmap .lbm{height:min(640px,calc(100vh - 210px))}}
+@media (max-width:600px){.dvw .dva .lbal{flex-wrap:nowrap;align-items:flex-start;gap:10px}.dvw .dva .lbal .t{min-width:0}.dvw .dvcall{width:40px;padding:0;justify-content:center}.dvw .dvcall .cl{display:none}.dvw .dva .lbal .sa{flex-wrap:nowrap;gap:2px}.dvn b{font-size:30px}.dvs{padding:12px 6px 12px 12px;gap:10px}.dvrh{padding:12px 4px 10px 12px;gap:10px}.dvp{padding:14px 16px}.dvhr{width:100%;justify-content:space-between}}
+
 button.b2{min-height:34px;padding:0 12px;gap:6px;font-size:13px;background:var(--cd);color:var(--tx);border:1px solid var(--bd)}
 button.b2.ok{background:var(--pr);color:var(--pt);border-color:var(--pr)}
 .pop a.pi{display:flex;justify-content:space-between;align-items:center;width:100%;color:var(--tx);border-radius:8px;padding:9px 12px;min-height:38px;text-decoration:none}
@@ -2648,11 +2698,11 @@ function lbNotify(){
  const nw=A.filter(a=>!LB.shown.has(a.id));if(!nw.length)return;
  const t=$('#ts');if(t&&!t.hidden&&$('#tcn'))return; // an Undo is showing: tell them on the next check
  nw.forEach(a=>LB.shown.add(a.id));
- toastV(nw.length===1?nw[0].t:nw.length+' new alerts on the Delivery page')}
+ toastV(nw.length===1?nw[0].t:nw.length+' new alerts'+(tab!=='delivery'?' on the Delivery page':''))}
 
 /* ---- the board on the Delivery page ---- */
 function lbRiders(){const T=today(),t0=istMid(T);return S.d.filter(d=>S.o.some(o=>o.sid===d.id&&o.date===T)||(d.duty&&msOf(d.seen)>=t0))}
-function lbUpd(){return LB.err?'Live updates paused: '+LB.err:LB.at?'Live · updated '+new Date(LB.at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+' · checks every 30 seconds':'Live · loading…'}
+function lbUpd(){return LB.err?'Live updates paused: '+LB.err:LB.at?'Live · updated '+new Date(LB.at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}):'Live · loading…'}
 function lbHtml(){
  if(CM.mode!=='cloud'||!inR('del',today()))return '';
  const R=lbRiders();if(!R.length)return '';
@@ -2686,7 +2736,7 @@ function lbDraw(){
   const m=Lf.marker([d.lat,d.lng],{icon:Lf.divIcon({className:'',html:`<div class="lbrd ${st.k}" style="--c:${rCol(d.id)}">${esc((d.name||'R').trim().charAt(0).toUpperCase())}</div>`,iconSize:[36,36],iconAnchor:[18,18]}),title:d.name,zIndexOffset:1000})
    .bindPopup(`<b>${esc(d.name)}</b><br>${esc(st.txt)}<br>Last update ${esc(agoS(st.ago))}<br>${st.dn} of ${st.L.length} delivered${st.next?'<br>Next: '+esc(cust(st.next.cid).name):''}${d.phone?`<br><a href="tel:${String(d.phone).replace(/[^\d+]/g,'')}">Call ${esc(d.name)}</a>`:''}`).addTo(LB.ly);
   LB.mk[d.id]=m;pts.push([d.lat,d.lng])});
- if(LB.fit){LB.fit=false;if(pts.length)LB.map.fitBounds(pts,{padding:[30,30],maxZoom:15});else LB.map.setView([11.0168,76.9558],12)}}
+ if(LB.fit||(!LB.hadPts&&pts.length)){LB.fit=false;LB.hadPts=pts.length>0;if(pts.length)LB.map.fitBounds(pts,{padding:[30,30],maxZoom:15});else LB.map.setView([11.0168,76.9558],12)}}
 function lbFit(){LB.fit=true;lbDraw()}
 function lbFocus(id){const d=S.d.find(x=>x.id===id);if(!d)return;const m=LB.mk&&LB.mk[id];
  if(!m||!LB.map){toast('No location from '+d.name+' yet today.');return}
@@ -2733,6 +2783,72 @@ setInterval(()=>{if(CM.mode==='cloud'&&Date.now()-(LB.last||0)>=lbGap()-1000)lbT
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-(LB.last||0)>15000)lbTick()});
 const _renderLB=render;
 render=function(){_renderLB.apply(this,arguments);if(tab==='delivery'){lbMount();if(Date.now()-(LB.last||0)>20000)lbTick()}};
+
+/* ===== Delivery page, redesigned: what needs me → where are my riders → details on demand ===== */
+const DVX={},DVT={};
+const dvTel=p=>String(p||'').replace(/[^\d+]/g,'');
+function dvSt(o){ // one status per stop: key, label, icon
+ if(o.ret)return {k:'ret',t:'Returned',i:'x'};
+ if(o.status==='Delivered')return {k:'ok',t:'Delivered'+(o.dat?' '+tmS(o.dat):o.sat?' '+o.sat:''),i:'check'};
+ if(o.status==='Delayed')return {k:'pb',t:'Problem',i:'alert'};
+ if(!o.sid)return {k:'nr',t:'No rider',i:'users'};
+ if(o.status==='Out for delivery')return {k:'ow',t:o.gate?'At gate '+tmS(o.gate):'On the way',i:'truck'};
+ if(o.status==='Rejected')return {k:'ret',t:'Rejected',i:'x'};
+ return {k:'wt',t:'Waiting for pickup',i:'clock'}}
+const DVO={pb:0,ow:1,wt:2,nr:2,ok:3,ret:4};
+const dvSort=(a,b)=>(DVO[dvSt(a).k]-DVO[dvSt(b).k])||String(cust(a.cid).name).localeCompare(String(cust(b.cid).name));
+function dvMenu(o){
+ const c=cust(o.cid),op=open(o),id='sm-'+o.id;
+ const nav=c.lat!=null?`https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}`:c.addr?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(c.addr):'';
+ return `<div class="pw"><button class="ib" aria-label="More actions for ${esc(c.name)}" onclick="tgp('${id}')">${ic('more',18)}</button><div class="pop pr" id="${id}" hidden>
+ ${c.phone?`<a class="pi ii" href="tel:${dvTel(c.phone)}">${ic('phone',16)}Call ${esc(c.name)}</a>`:''}${nav?`<a class="pi ii" target="_blank" rel="noopener" href="${nav}">${ic('pin',16)}Open in Google Maps</a>`:''}
+ ${op?`<div class="pd">Change status</div>${o.status!=='Out for delivery'&&o.sid?`<button class="pi" onclick="setS('${o.id}','Out for delivery')">Mark out for delivery</button>`:''}${o.sid?`<button class="pi" onclick="setS('${o.id}','Delivered')">Mark delivered</button>`:''}<button class="pi" onclick="openDelay('${o.id}')">Mark as delayed…</button>`:''}
+ ${S.d.length&&op?`<div class="pd">Rider</div>${S.d.map(d=>`<button class="pi ${o.sid===d.id?'on':''}" onclick="assignTo('${o.id}','${d.id}')">${esc(d.name)}${o.sid===d.id?ic('check',16):''}</button>`).join('')}`:''}
+ ${c.phone&&op?`<div class="pd">WhatsApp the customer</div>${wbm(o)}`:''}</div></div>`}
+function dvNote(o){
+ const c=cust(o.cid);let h='';
+ if(o.status==='Delayed'&&o.dlr)h+=`<div class="dvsn k-pb">${ic('alert',14)}${esc(o.dlr)}</div>`;
+ if(o.ret)h+=`<div class="dvsn k-ret">Brought back to the kitchen${o.dlr?': '+esc(o.dlr):''} · not charged${c.pay==='Prepaid'?', +1 plan day':''}</div>`;
+ if(o.status==='Delivered'&&o.ddist>300)h+=`<div class="dvsn k-pb">${ic('alert',14)}Marked delivered ${distS(o.ddist)} from the map pin</div>`;
+ return h}
+function dvStop(o){
+ const c=cust(o.cid),st=dvSt(o),where=[c.area,c.addr].filter(Boolean)[0]||'No address';
+ return `<div class="dvs k-${st.k}"><span class="dvsi" aria-hidden="true">${ic(st.i,15)}</span><div class="dvsb"><div class="dvs1"><b>${esc(c.name)}</b><span class="dvss">${esc(st.t)}</span></div><div class="mu dvs2">${esc(where)} · ${esc(o.items)}</div>${dvNote(o)}</div>
+ ${!o.sid&&open(o)?`<div class="pw"><button class="dvb pri" onclick="tgp('ra-${o.id}')">Assign</button><div class="pop pr" id="ra-${o.id}" hidden>${S.d.map(d=>`<button class="pi" onclick="assignTo('${o.id}','${d.id}')">${esc(d.name)}</button>`).join('')||'<div class="mu" style="padding:8px 12px">Add a rider first (people icon at the top)</div>'}</div></div>`:''}${dvMenu(o)}</div>`}
+function dvRider(d,L,isToday){
+ const st=isToday?rState(d):null,dn=L.filter(o=>o.status==='Delivered').length,pct=L.length?Math.round(dn/L.length*100):0,col=rCol(d.id);
+ const op=L.filter(open),next=op.slice().sort(dvSort)[0],ru=routeU(op.map(o=>cust(o.cid))),x=DVX[d.id],tb=DVT[d.id]||'stops';
+ const sub=[`${dn} of ${L.length} delivered`];if(isToday&&next&&st.live)sub.push('Next: '+cust(next.cid).name);if(isToday&&st.live&&d.seen)sub.push('updated '+agoS(st.ago));
+ const k=st?st.k:'off',txt=st?st.txt:(op.length?op.length+' open':'Done');
+ return `<div class="dvrc r-${k}"><div class="dvrh"><button class="dvav" style="--c:${col}" aria-label="Show ${esc(d.name)} on the map" title="Show on map" onclick="lbFocus('${d.id}')">${esc((d.name||'R').trim().charAt(0).toUpperCase())}</button>
+ <div class="dvri"><div class="dvrn"><b>${esc(d.name)}</b><span class="dvrs">${esc(txt)}</span></div><div class="dvpb"><i style="width:${pct}%;background:${col}"></i></div><div class="mu">${esc(sub.join(' · '))}</div></div>
+ <div class="dvra">${d.phone?`<a class="ib" href="tel:${dvTel(d.phone)}" aria-label="Call ${esc(d.name)}" title="Call ${esc(d.name)}">${ic('phone',18)}</a>`:''}<div class="pw"><button class="ib" aria-label="More for ${esc(d.name)}" onclick="tgp('rm-${d.id}')">${ic('more',18)}</button><div class="pop pr" id="rm-${d.id}" hidden><button class="pi ii" aria-label="Send ${esc(d.name)} the rider page on WhatsApp" onclick="sendRoute('${d.id}')">${ic('chat',16)}Send rider link on WhatsApp</button>${ru?`<a class="pi ii" target="_blank" rel="noopener" href="${ru}">${ic('route',16)}Open route in Google Maps</a>`:''}<button class="pi ii" onclick="openTeam('${d.id}')">${ic('edit',16)}Edit rider</button></div></div></div></div>
+ <div class="dvtabs" role="tablist"><button role="tab" aria-selected="${x&&tb==='stops'}" class="${x&&tb==='stops'?'on':''}" onclick="dvTab('${d.id}','stops')">${L.length} ${L.length===1?'stop':'stops'}${ic(x&&tb==='stops'?'chd':'chev',16)}</button>${isToday?`<button role="tab" aria-selected="${x&&tb==='tl'}" class="${x&&tb==='tl'?'on':''}" aria-label="Today’s timeline for ${esc(d.name)}" onclick="dvTab('${d.id}','tl')">Timeline${ic(x&&tb==='tl'?'chd':'chev',16)}</button>`:''}</div>
+ ${x?(tb==='tl'&&isToday?tlHtml(d):`<div class="dvsl">${L.slice().sort(dvSort).map(dvStop).join('')}</div>`):''}</div>`}
+function dvTab(id,t){if(DVX[id]&&(DVT[id]||'stops')===t)DVX[id]=false;else{DVX[id]=true;DVT[id]=t}render()}
+function dvAlert(a){
+ const rp=a.rp&&S.d.find(d=>d.id===a.rp),call=a.ph&&!/^n:|^m:/.test(a.id)?{n:'Call customer',p:a.ph}:rp&&rp.phone?{n:'Call '+rp.name,p:rp.phone}:a.ph?{n:'Call customer',p:a.ph}:null;
+ return `<div class="lbal ${a.lv}" role="listitem"><span class="ic">${ic('alert',18)}</span><div class="t"><b>${esc(a.t)}</b>${a.s?`<div class="mu">${esc(a.s)}</div>`:''}</div><div class="sa">${call?`<a class="dvb dvcall" href="tel:${dvTel(call.p)}" aria-label="${esc(call.n)}">${ic('phone',16)}<span class="cl">${esc(call.n)}</span></a>`:''}<button class="ib" aria-label="Dismiss this alert" title="Dismiss" data-k="${esc(a.id)}" onclick="ackAlert(this.dataset.k)">${ic('x',18)}</button></div></div>`}
+function delivery(){
+ const sc=dlScope(),T=today(),isToday=inR('del',T)&&R('del').m==='day',late=S.o.filter(o=>open(o)&&o.date<T&&!inR('del',o.date)).length;
+ const by=k=>sc.filter(o=>dvSt(o).k===k).length,dn=by('ok'),ow=by('ow'),pb=by('pb'),wt=by('wt'),nr=by('nr'),rt=by('ret'),tot=sc.length;
+ const un=sc.filter(o=>open(o)&&!o.sid),people=S.d.map(d=>({d,L:sc.filter(o=>o.sid===d.id)})).filter(x=>x.L.length||(isToday&&lbRiders().includes(x.d)));
+ const A=isToday&&CM.mode==='cloud'?lbAlerts():[],showMap=isToday&&CM.mode==='cloud'&&lbRiders().length>0;
+ const seg=(n,k)=>n?`<i class="k-${k}" style="flex:${n}"></i>`:'',chip=(n,k,t)=>n?`<span class="dvc k-${k}"><i></i>${n} ${t}</span>`:'';
+ const head=`<div class="dvh"><div><h1>Delivery</h1><div class="mu">${tot?`${tot} ${tot===1?'stop':'stops'}`:'No stops'}${S.d.length?` · ${S.d.length} ${S.d.length===1?'rider':'riders'}`:''}</div></div><div class="dvhr">${rgUI('del')}<button class="ib" aria-label="Delivery team" title="Delivery team" onclick="openTeam()">${ic('users',20)}</button></div></div>`;
+ const prog=tot?`<div class="card dvp"><div class="dvn"><b>${dn}</b><span>of ${tot} delivered</span></div><div class="dvbar" role="img" aria-label="${dn} delivered, ${ow} on the way, ${pb} with a problem, ${wt+nr} waiting">${seg(dn,'ok')}${seg(ow,'ow')}${seg(pb,'pb')}${seg(wt,'wt')}${seg(nr,'nr')}${seg(rt,'ret')}</div><div class="dvcs">${chip(ow,'ow','on the way')}${chip(pb,'pb',pb===1?'problem':'problems')}${chip(wt,'wt','waiting for pickup')}${chip(nr,'nr','without a rider')}${chip(rt,'ret','returned')}${!ow&&!pb&&!wt&&!nr&&dn?`<span class="dvc k-ok"><i></i>All delivered</span>`:''}</div></div>`:'';
+ const att=(A.length||un.length)?`<section class="dva" aria-label="Needs your attention"><h2 class="dvt">Needs your attention <span class="dvcount">${A.length+(un.length?1:0)}</span></h2>
+  ${A.length?`<div class="lbas" role="list">${A.map(dvAlert).join('')}</div>`:''}
+  ${un.length?`<div class="card dvun"><div class="dvuh"><div><b>${un.length} ${un.length===1?'stop has':'stops have'} no rider</b><div class="mu">Give ${un.length===1?'it':'them'} to a rider so it shows on their phone.</div></div>${S.d.length>0?`<div class="pw"><button class="dvb pri" onclick="tgp('pp-bd')">Assign all to…</button><div class="pop pr" id="pp-bd" hidden>${S.d.map(d=>`<button class="pi" onclick="bulkAssignD('${d.id}')">${esc(d.name)}</button>`).join('')}</div></div>`:''}</div><div class="dvsl">${un.slice().sort(dvSort).map(dvStop).join('')}</div></div>`:''}</section>`:'';
+ const riders=people.length?`<section class="dvrd" aria-label="Riders"><h2 class="dvt">Riders</h2>${people.map(x=>dvRider(x.d,x.L,isToday)).join('')}</section>`:(S.d.length?'':`<div class="card empty">No riders yet. <button class="lnk" onclick="openTeam()">Add your first rider</button></div>`);
+ const map=showMap?`<section class="dvmap" aria-label="Live map"><div class="card dvmc"><div class="dvml"><span class="dvlive"><i></i><span id="lbup">${esc(lbUpd())}</span></span><button class="dvb" onclick="lbFit()">${ic('map',16)}Show all</button></div><div id="lbslot" class="lbmap" role="region" aria-label="Map of riders and stops"></div>${(()=>{const n=sc.filter(o=>open(o)&&cust(o.cid).lat==null).length;return n?`<div class="mu" style="margin-top:6px">${n} ${n===1?'stop has':'stops have'} no map pin, so ${n===1?'it is':'they are'} not on the map.</div>`:''})()}</div></section>`:'';
+ const lateB=late?`<div class="bnr"><span>${ic('alert',18)}<b>${late}</b>&nbsp;undelivered ${late===1?'order':'orders'} from earlier days</span><button class="s" onclick="showLate()">Show them</button></div>`:'';
+ const empty=tot?'':`<div class="empty">No deliveries in this period.<div class="row" style="justify-content:center"><button onclick="openPlan(today())">Plan today’s meal</button></div></div>`;
+ return `<div class="dvw ${showMap?'has-map':''}">${head}${lateB}${prog}${showMap?`<div class="dv2">${att?att:'<div class="dva"></div>'}${map}<div class="dvr">${riders}${empty}</div></div>`:`${att}${riders}${empty}`}</div>`}
+const _renderDV=render;
+render=function(){_renderDV.apply(this,arguments);$('#app').classList.toggle('wide',tab==='home'||(tab==='delivery'&&!!document.querySelector('.dvw.has-map')));if(tab==='delivery'&&LB.map&&LB.el&&LB.el.isConnected)LB.map.invalidateSize()};
+/* close a menu once an item in it is chosen (Delivery page) */
+document.addEventListener('click',e=>{if(tab==='delivery'&&e.target.closest('.dvw .pop .pi'))setTimeout(()=>document.querySelectorAll('.dvw .pop').forEach(p=>{p.hidden=true}),0)});
 
 boot();
 </script></body></html>
