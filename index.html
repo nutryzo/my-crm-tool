@@ -337,6 +337,17 @@ a.b2.ok{display:inline-flex;align-items:center;gap:6px;background:var(--pr);colo
 .dvmap .lbm{height:260px}
 @media (min-width:1100px){.dv2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr;grid-template-areas:"att map" "rid map";column-gap:20px;align-items:start}.dv2>.dva{grid-area:att}.dv2>.dvr{grid-area:rid}.dv2>.dvmap{grid-area:map;position:sticky;top:84px;align-self:start}.dvmap .dvmc{margin-top:22px}.dvmap .lbm{height:min(640px,calc(100vh - 210px))}}
 @media (max-width:600px){.dvw .dva .lbal{flex-wrap:nowrap;align-items:flex-start;gap:10px}.dvw .dva .lbal .t{min-width:0}.dvw .dvcall{width:40px;padding:0;justify-content:center}.dvw .dvcall .cl{display:none}.dvw .dva .lbal .sa{flex-wrap:nowrap;gap:2px}.dvn b{font-size:30px}.dvs{padding:12px 6px 12px 12px;gap:10px}.dvrh{padding:12px 4px 10px 12px;gap:10px}.dvp{padding:14px 16px}.dvhr{width:100%;justify-content:space-between}}
+/* ===== Part 3: payments ===== */
+.dvmoney{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bd);font-size:14px;color:var(--mu)}.dvmoney b{color:var(--tx)}
+.dvcm{color:var(--tx);font-weight:700}
+.dvch{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--bd)}
+.dvbig{font-size:26px;font-weight:700;line-height:1.2}
+.dvcash .dvs .dvb{align-self:center;min-height:34px;padding:0 10px}
+.dvho{display:flex;flex-direction:column;gap:6px;padding:12px 16px;border-top:1px solid var(--bd);font-size:13px;color:var(--mu)}.dvho>div{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.dvcl{border:1px solid var(--bd);border-radius:12px;margin:12px 0;max-height:240px;overflow:auto}
+.dvcr{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-top:1px solid var(--bd);font-size:14px}.dvcr:first-child{border-top:0}.dvcr.tot{background:var(--ac);font-weight:700}
+.dvdiff{margin:8px 0 6px;font-weight:700;color:var(--k)}
+@media (max-width:600px){.dvw .dvtabs button{white-space:nowrap;font-size:13px;gap:3px;padding:0 4px}.dvw .dva .lbal.dvact{flex-wrap:wrap}.dvw .dva .lbal.dvact .sa{width:100%;padding-left:28px;flex-wrap:wrap;gap:6px}}
 
 button.b2{min-height:34px;padding:0 12px;gap:6px;font-size:13px;background:var(--cd);color:var(--tx);border:1px solid var(--bd)}
 button.b2.ok{background:var(--pr);color:var(--pt);border-color:var(--pr)}
@@ -2268,7 +2279,7 @@ async function pull(ok){
  N.o=od.slice().sort((a,b)=>String(b.order_date).localeCompare(String(a.order_date))||String(b.created_at).localeCompare(String(a.created_at))).map(r=>{const o={id:r.id,cid:r.customer_id||'',items:typeof r.items==='string'?r.items:(r.items==null?'':JSON.stringify(r.items)),date:r.order_date||'',amt:Number(r.amount)||0,status:r.status||'New',sid:r.staff_id||'',pl:r.plan_id&&pd[r.plan_id]||''};
   if(r.meal_price!=null)o.mpr=Number(r.meal_price);if(r.drink_price!=null)o.dpr=Number(r.drink_price);if(r.order_number)o.no=r.order_number;if(r.delay_reason)o.dlr=r.delay_reason;if(r.picked_up_at)o.pu=r.picked_up_at;if(r.at_gate_at)o.gate=r.at_gate_at;if(r.delivered_at)o.dat=r.delivered_at;if(r.delivered_distance_m!=null)o.ddist=Number(r.delivered_distance_m);if(r.returned)o.ret=true;if(r.stop_no!=null)o.stop=r.stop_no;if(r.status_updated_at){o.satAt=r.status_updated_at;o.sat=new Date(r.status_updated_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}if(r.legacy_id)o.lid=r.legacy_id;return o});
  N.t=tx.slice().sort((a,b)=>String(b.transaction_date).localeCompare(String(a.transaction_date))||String(b.created_at).localeCompare(String(a.created_at))).map(r=>{const x={id:r.id,type:r.type||'Income',cat:r.category||'',amt:Number(r.amount)||0,date:r.transaction_date||''};
-  if(r.customer_id)x.cid=r.customer_id;if(r.kind!=null)x.k=r.kind;if(r.name!=null)x.n=r.name;if(r.payment_method)x.meth=r.payment_method;if(r.entry_number)x.no=r.entry_number;if(r.legacy_id)x.lid=r.legacy_id;return x});
+  if(r.customer_id)x.cid=r.customer_id;if(r.kind!=null)x.k=r.kind;if(r.name!=null)x.n=r.name;if(r.payment_method)x.meth=r.payment_method;if(r.entry_number)x.no=r.entry_number;if(r.legacy_id)x.lid=r.legacy_id;if(r.collected_by)x.by=r.collected_by;if(r.checked_at)x.chk=r.checked_at;if(r.handover_id!=null)x.ho=r.handover_id;if(r.order_id)x.oid=r.order_id;if(r.created_at)x.at=r.created_at;return x});
  se.forEach(r=>{if(r.key==='business')N.biz=r.value||{};else if(r.key==='templates')N.tpl=r.value||{};else if(r.key==='migration')CM.mig=r.value});
  const mx=(a,re)=>a.reduce((m,s)=>{const n=parseInt(String(s||'').replace(re,''),10);return n>m?n:m},0);
  N.seq=mx(N.c.map(c=>c.num),/^C/);N.oseq=mx(N.o.map(o=>o.no),/^O/);N.mseq=mx(N.t.map(x=>x.no),/^M/);
@@ -2769,6 +2780,8 @@ async function lbTick(){
   if(ev&&ev.length){EV.push(...ev);EVlast=ev[ev.length-1].id;ch=true}
   need=(od||[]).some(r=>{const o=S.o.find(x=>x.id===r.id);if(!o)return true;
    return o.status!==r.status||(o.dlr||null)!==(r.delay_reason||null)||!!o.pu!==!!r.picked_up_at||!!o.gate!==!!r.at_gate_at||!!o.dat!==!!r.delivered_at||!!o.ret!==!!r.returned||Number(o.amt||0)!==Number(r.amount||0)});
+  if(ev&&ev.some(e=>e.kind==='collected'))need=true;
+  try{const h=await sbx(sb.from('cash_handovers').select('id,created_at,staff_id,expected,received,note').gte('created_at',new Date(istMid(T)).toISOString()).order('id'));if(JSON.stringify(h||[])!==JSON.stringify(HO)){HO=h||[];ch=true}}catch(e){}
   LB.at=Date.now();LB.err='';
  }catch(e){LB.err=navigator.onLine===false?'no internet':'could not reach the database'}
  finally{LB.busy=false}
@@ -2836,7 +2849,7 @@ function delivery(){
  const A=isToday&&CM.mode==='cloud'?lbAlerts():[],showMap=isToday&&CM.mode==='cloud'&&lbRiders().length>0;
  const seg=(n,k)=>n?`<i class="k-${k}" style="flex:${n}"></i>`:'',chip=(n,k,t)=>n?`<span class="dvc k-${k}"><i></i>${n} ${t}</span>`:'';
  const head=`<div class="dvh"><div><h1>Delivery</h1><div class="mu">${tot?`${tot} ${tot===1?'stop':'stops'}`:'No stops'}${S.d.length?` · ${S.d.length} ${S.d.length===1?'rider':'riders'}`:''}</div></div><div class="dvhr">${rgUI('del')}<button class="ib" aria-label="Delivery team" title="Delivery team" onclick="openTeam()">${ic('users',20)}</button></div></div>`;
- const prog=tot?`<div class="card dvp"><div class="dvn"><b>${dn}</b><span>of ${tot} delivered</span></div><div class="dvbar" role="img" aria-label="${dn} delivered, ${ow} on the way, ${pb} with a problem, ${wt+nr} waiting">${seg(dn,'ok')}${seg(ow,'ow')}${seg(pb,'pb')}${seg(wt,'wt')}${seg(nr,'nr')}${seg(rt,'ret')}</div><div class="dvcs">${chip(ow,'ow','on the way')}${chip(pb,'pb',pb===1?'problem':'problems')}${chip(wt,'wt','waiting for pickup')}${chip(nr,'nr','without a rider')}${chip(rt,'ret','returned')}${!ow&&!pb&&!wt&&!nr&&dn?`<span class="dvc k-ok"><i></i>All delivered</span>`:''}</div></div>`:'';
+ const prog=tot?`<div class="card dvp"><div class="dvn"><b>${dn}</b><span>of ${tot} delivered</span></div><div class="dvbar" role="img" aria-label="${dn} delivered, ${ow} on the way, ${pb} with a problem, ${wt+nr} waiting">${seg(dn,'ok')}${seg(ow,'ow')}${seg(pb,'pb')}${seg(wt,'wt')}${seg(nr,'nr')}${seg(rt,'ret')}</div><div class="dvcs">${chip(ow,'ow','on the way')}${chip(pb,'pb',pb===1?'problem':'problems')}${chip(wt,'wt','waiting for pickup')}${chip(nr,'nr','without a rider')}${chip(rt,'ret','returned')}${!ow&&!pb&&!wt&&!nr&&dn?`<span class="dvc k-ok"><i></i>All delivered</span>`:''}</div>${isToday&&typeof payLine==='function'?payLine():''}</div>`:'';
  const att=(A.length||un.length)?`<section class="dva" aria-label="Needs your attention"><h2 class="dvt">Needs your attention <span class="dvcount">${A.length+(un.length?1:0)}</span></h2>
   ${A.length?`<div class="lbas" role="list">${A.map(dvAlert).join('')}</div>`:''}
   ${un.length?`<div class="card dvun"><div class="dvuh"><div><b>${un.length} ${un.length===1?'stop has':'stops have'} no rider</b><div class="mu">Give ${un.length===1?'it':'them'} to a rider so it shows on their phone.</div></div>${S.d.length>0?`<div class="pw"><button class="dvb pri" onclick="tgp('pp-bd')">Assign all to…</button><div class="pop pr" id="pp-bd" hidden>${S.d.map(d=>`<button class="pi" onclick="bulkAssignD('${d.id}')">${esc(d.name)}</button>`).join('')}</div></div>`:''}</div><div class="dvsl">${un.slice().sort(dvSort).map(dvStop).join('')}</div></div>`:''}</section>`:'';
@@ -2849,6 +2862,83 @@ const _renderDV=render;
 render=function(){_renderDV.apply(this,arguments);$('#app').classList.toggle('wide',tab==='home'||(tab==='delivery'&&!!document.querySelector('.dvw.has-map')));if(tab==='delivery'&&LB.map&&LB.el&&LB.el.isConnected)LB.map.invalidateSize()};
 /* close a menu once an item in it is chosen (Delivery page) */
 document.addEventListener('click',e=>{if(tab==='delivery'&&e.target.closest('.dvw .pop .pi'))setTimeout(()=>document.querySelectorAll('.dvw .pop').forEach(p=>{p.hidden=true}),0)});
+
+/* ===== Part 3: payments and the cash check ===== */
+let HO=[];
+const cashOpen=id=>S.t.filter(x=>x.by===id&&x.meth==='Cash'&&x.ho==null);
+const sumA=L=>L.reduce((a,x)=>a+(Number(x.amt)||0),0);
+const upiToCheck=()=>S.t.filter(x=>x.by&&x.meth==='UPI'&&!x.chk);
+const payDay=x=>x.date===today()?(x.at?tmS(x.at):'today'):new Date(x.date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+const _lbAlertsP=lbAlerts;
+lbAlerts=function(){
+ const A=_lbAlertsP(),ack=lbAck().ids,T=today(),X=[];
+ upiToCheck().forEach(x=>X.push({id:'u:'+x.id,lv:'mid',t:'Check UPI '+inr(x.amt)+' from '+cust(x.cid).name,s:'Collected by '+rName(x.by)+' · '+payDay(x)+'. Look for it in your bank app.',acts:'upi',x}));
+ S.d.forEach(d=>{const L=cashOpen(d.id);if(!L.length)return;const sum=sumA(L),st=rState(d),old=L.some(x=>x.date<T);
+  if(st.live&&st.op.length&&!old)return; // still on the road: remind at the end
+  X.push({id:'c:'+d.id+':'+sum,lv:'mid',t:d.name+' has '+inr(sum)+' cash to give you',s:L.length+' cash '+(L.length===1?'payment':'payments')+(old?' · some from earlier days':''),acts:'cash',rid:d.id})});
+ return A.concat(X.filter(a=>a.acts==='upi'||!ack.includes(a.id))).sort((x,y)=>(y.lv==='hi')-(x.lv==='hi'))};
+const _dvAlertP=dvAlert;
+dvAlert=function(a){
+ if(!a.acts)return _dvAlertP(a);
+ const b=a.acts==='upi'?`<button class="dvb pri" onclick="upiOk('${a.x.id}')">${ic('check',16)}Received</button><button class="dvb" onclick="upiNo('${a.x.id}')">Not received</button>`
+  :`<button class="dvb pri" onclick="openCash('${a.rid}')">Receive cash</button><button class="ib" aria-label="Dismiss this alert" title="Dismiss" data-k="${esc(a.id)}" onclick="ackAlert(this.dataset.k)">${ic('x',18)}</button>`;
+ return `<div class="lbal ${a.lv} dvact" role="listitem"><span class="ic">${ic(a.acts==='upi'?'phone':'alert',18)}</span><div class="t"><b>${esc(a.t)}</b><div class="mu">${esc(a.s)}</div></div><div class="sa">${b}</div></div>`};
+
+/* UPI: you check your bank app, then tick it */
+async function upiOk(id){
+ const x=S.t.find(t=>t.id===id);if(!x)return;
+ try{const r=await sbx(sb.from('transactions').update({checked_at:new Date().toISOString()}).eq('id',id).select('id'));
+  if(!r||!r.length)throw new Error('This payment was not found. Refresh the page.');
+  x.chk=new Date().toISOString();save();render();toast('UPI '+inr(x.amt)+' from '+cust(x.cid).name+' marked received')}
+ catch(e){toast('Not saved: '+eMsg(e))}}
+function upiNo(id){const x=S.t.find(t=>t.id===id);if(!x)return;const c=cust(x.cid),m=$('#md');
+ m.innerHTML=`<div class="mdc" style="max-width:460px"><h2 id="mdt">UPI ${inr(x.amt)} not received?</h2><div class="mu">This payment is removed, so ${esc(c.name)} owes ${inr(x.amt)} again. Ask ${esc(rName(x.by))} to collect it again.</div><div class="row"><button class="s" onclick="closeMd()">Cancel</button><button onclick="closeMd();act('Payment removed',()=>{S.t=S.t.filter(t=>t.id!=='${x.id}')})">Remove payment</button></div></div>`;m.hidden=false}
+
+/* Cash: the rider hands it over, you count it and confirm */
+function openCash(rid){
+ const d=S.d.find(x=>x.id===rid);if(!d)return;const L=cashOpen(rid).slice().sort((a,b)=>String(a.date+(a.at||'')).localeCompare(String(b.date+(b.at||'')))),sum=sumA(L),m=$('#md');
+ if(!L.length){toast(d.name+' has no cash to hand over.');return}
+ m.innerHTML=`<div class="mdc" style="max-width:480px"><h2 id="mdt">Receive cash from ${esc(d.name)}</h2><div class="mu">Count the cash and enter the amount you got.</div>
+ <div class="dvcl">${L.map(x=>`<div class="dvcr"><span>${esc(cust(x.cid).name)} <span class="mu">· ${esc(payDay(x))}</span></span><b>${inr(x.amt)}</b></div>`).join('')}<div class="dvcr tot"><span>Should be</span><b>${inr(sum)}</b></div></div>
+ <label for="cashin">Cash you received (₹)</label><input id="cashin" inputmode="decimal" autocomplete="off" value="${sum}" oninput="cashDiff(${sum})">
+ <div id="cashdiff" class="dvdiff k-ok" role="status">Matches</div>
+ <label for="cashnote">Note (optional)</label><input id="cashnote" placeholder="For example: will pay the rest tomorrow">
+ <div class="row"><button class="s" onclick="closeMd()">Cancel</button><button id="cashgo" onclick="cashSave('${rid}')">Confirm ${inr(sum)} received</button></div></div>`;
+ m.hidden=false;setTimeout(()=>{const i=$('#cashin');if(i){i.focus();i.select()}},50)}
+function cashDiff(sum){const v=parseFloat(String($('#cashin').value).replace(/[^\d.]/g,'')),el=$('#cashdiff'),b=$('#cashgo');
+ if(!isFinite(v)){el.className='dvdiff k-pb';el.textContent='Enter the amount';b.disabled=true;return}
+ b.disabled=false;b.textContent='Confirm '+inr(v)+' received';const df=Math.round((v-sum)*100)/100;
+ el.className='dvdiff '+(df===0?'k-ok':df<0?'k-ret':'k-pb');el.textContent=df===0?'Matches':df<0?inr(-df)+' short':inr(df)+' extra'}
+async function cashSave(rid){
+ const d=S.d.find(x=>x.id===rid),L=cashOpen(rid),v=parseFloat(String($('#cashin').value).replace(/[^\d.]/g,'')),note=$('#cashnote').value.trim(),b=$('#cashgo');
+ if(!isFinite(v)||v<0){cashDiff(sumA(L));return}
+ b.disabled=true;b.textContent='Saving…';
+ try{const r=await sbx(sb.rpc('cash_handover',{p_staff:rid,p_ids:L.map(x=>x.id),p_received:v,p_note:note||null}));
+  L.forEach(x=>x.ho=r.id);HO.push({id:r.id,created_at:new Date().toISOString(),staff_id:rid,expected:r.expected,received:r.received,note});save();closeMd();render();
+  const df=Number(r.received)-Number(r.expected);toast('Cash from '+d.name+': '+inr(r.received)+' received'+(df<0?' · '+inr(-df)+' short':df>0?' · '+inr(df)+' extra':''))}
+ catch(e){b.disabled=false;b.textContent='Confirm '+inr(v)+' received';toast('Not saved: '+eMsg(e))}}
+
+/* rider card: Cash tab */
+function cashHtml(d){
+ const T=today(),L=cashOpen(d.id),sum=sumA(L),P=S.t.filter(x=>x.by===d.id&&(x.date===T||(x.meth==='Cash'&&x.ho==null)||(x.meth==='UPI'&&!x.chk))).sort((a,b)=>String(b.date+(b.at||'')).localeCompare(String(a.date+(a.at||'')))),H=HO.filter(h=>h.staff_id===d.id);
+ const row=x=>{const st=x.meth==='UPI'?(x.chk?['k-ok','UPI checked']:['k-pb','UPI to check']):(x.ho!=null?['k-ok','Cash handed over']:['k-ow','Cash with rider']);
+  return `<div class="dvs ${st[0]}"><div class="dvsb"><div class="dvs1"><b>${esc(cust(x.cid).name)}</b><span class="dvss">${inr(x.amt)}</span></div><div class="mu dvs2">${esc(st[1])} · ${esc(payDay(x))}</div></div>${x.meth==='UPI'&&!x.chk?`<button class="dvb" onclick="upiOk('${x.id}')">${ic('check',16)}Received</button>`:''}</div>`};
+ return `<div class="dvcash">${sum?`<div class="dvch"><div><div class="mu">Cash with ${esc(d.name)}</div><div class="dvbig">${inr(sum)}</div></div><button class="dvb pri" onclick="openCash('${d.id}')">Receive cash</button></div>`:''}
+ ${P.length?`<div class="dvsl">${P.map(row).join('')}</div>`:`<div class="mu" style="padding:14px 16px">No payments collected today.</div>`}
+ ${H.length?`<div class="dvho">${H.map(h=>{const df=Number(h.received)-Number(h.expected);return `<div>${ic('check',14)}Handed over ${tmS(h.created_at)}: ${inr(h.received)}${df?` of ${inr(h.expected)} · <b class="${df<0?'k-ret':'k-pb'}" style="color:var(--k)">${inr(Math.abs(df))} ${df<0?'short':'extra'}</b>`:''}${h.note?' · '+esc(h.note):''}</div>`}).join('')}</div>`:''}</div>`}
+const _dvRiderP=dvRider;
+dvRider=function(d,L,isToday){
+ let h=_dvRiderP(d,L,isToday);const cs=sumA(cashOpen(d.id)),hasPay=S.t.some(x=>x.by===d.id&&(x.date===today()||x.ho==null&&x.meth==='Cash'))||HO.some(x=>x.staff_id===d.id),x=DVX[d.id],tb=DVT[d.id]||'stops';
+ if(cs)h=h.replace(/(<div class="mu">)([^<]*delivered[^<]*)(<\/div><\/div>\s*<div class="dvra">)/,(m,a,b,c)=>a+b+` · <b class="dvcm">${inr(cs)} cash</b>`+c);
+ if(!hasPay)return h;
+ const tabB=`<button role="tab" aria-selected="${x&&tb==='cash'}" class="${x&&tb==='cash'?'on':''}" onclick="dvTab('${d.id}','cash')">${cs?'Cash '+inr(cs):'Payments'}${ic(x&&tb==='cash'?'chd':'chev',16)}</button></div>`;
+ const i=h.indexOf('<div class="dvtabs"');const j=h.indexOf('</div>',i);h=h.slice(0,j)+tabB+h.slice(j+6);
+ if(x&&tb==='cash'){const k=h.indexOf('</div>',h.indexOf('<div class="dvtabs"'))+6;h=h.slice(0,k)+cashHtml(d)+'</div>';}
+ return h};
+function payLine(){const T=today(),tx=S.t.filter(x=>x.by&&x.date===T),col=sumA(tx),cash=S.d.reduce((a,d)=>a+sumA(cashOpen(d.id)),0),u=upiToCheck().length;
+ if(!col&&!cash&&!u)return '';
+ return `<div class="dvmoney"><span>Collected by riders today <b>${inr(col)}</b></span><span>Cash with riders <b>${inr(cash)}</b></span>${u?`<span class="k-pb" style="color:var(--k);font-weight:600">${u} UPI to check</span>`:''}</div>`}
+const _renderPT=render;render=function(){_renderPT.apply(this,arguments);if(CM.mode==='cloud')lbTitle()};
 
 boot();
 </script></body></html>
