@@ -261,6 +261,33 @@ button.ch2.on{background:var(--tx);color:var(--cd);border-color:var(--tx)}
 .od{font-size:13px;min-width:70px}.od.warn{color:var(--wn);font-weight:500}
 .dut{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}.dut::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--pr);flex:none}.dut.off::before{background:var(--mu);opacity:.5}
 a.b2.ok{display:inline-flex;align-items:center;gap:6px;background:var(--pr);color:var(--pt);font-weight:500}
+.lbh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.lbb{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border:1px solid var(--bd);border-radius:10px;background:var(--cd);color:var(--tx);font:inherit;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;white-space:nowrap}
+.lbas{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.lbal{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;border:1px solid var(--bd);border-left:4px solid #d99a0b;border-radius:12px;padding:10px 12px}
+.lbal.hi{border-left-color:#c0392b;background:rgba(192,57,43,.07)}.lbal .ic{display:flex;color:#b07a00}.lbal.hi .ic{color:#c0392b}
+:root[data-theme="dark"] .lbal .ic{color:#f0b43a}:root[data-theme="dark"] .lbal.hi .ic{color:#ef7a6b}:root[data-theme="dark"] .lbal.hi{background:rgba(239,122,107,.1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lbal .ic{color:#f0b43a}:root:not([data-theme="light"]) .lbal.hi .ic{color:#ef7a6b}:root:not([data-theme="light"]) .lbal.hi{background:rgba(239,122,107,.1)}}
+.lbal .t{flex:1;min-width:170px}.lbal .t b{display:block}.lbal .sa{display:flex;flex-wrap:wrap;gap:6px}
+.lbok{display:flex;align-items:center;gap:8px;color:var(--pr);font-weight:600;margin-bottom:12px}
+.lbmap{border:1px solid var(--bd);border-radius:12px;overflow:hidden;position:relative;z-index:0}
+.lbm{height:340px;background:var(--ac)}@media (max-width:600px){.lbm{height:280px}}
+.lbrs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.lbr{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 12px 6px 10px;border:1px solid var(--bd);border-radius:12px;background:var(--cd);color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.lbr i{width:12px;height:12px;border-radius:50%;flex:none}.lbr b{display:block;font-size:14px}.lbr .mu{font-size:12px}
+.lbr.lost{border-color:#c0392b}.lbr.still{border-color:var(--wn)}
+.lbrd{width:36px;height:36px;border-radius:50%;background:var(--c);color:#fff;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;font:700 14px system-ui,sans-serif}
+.lbrd.lost,.lbrd.off{filter:grayscale(1);opacity:.75}
+.lbp{width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--c);color:var(--c);display:flex;align-items:center;justify-content:center;font:700 12px system-ui,sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.lbp.done{background:var(--c);color:#fff;opacity:.55}.lbp.ret{border-color:#c0392b;color:#c0392b}.lbp.del{background:#fde7d9;border-color:#b4561b;color:#b4561b}
+:root[data-theme="dark"] .lbm .leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.9)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lbm .leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.9)}}
+.lbm .leaflet-popup-content{font:14px/1.45 system-ui,sans-serif;color:#14261c}
+.tl{padding:10px 14px;border-bottom:1px solid var(--bd);max-height:280px;overflow:auto}
+.tl ol{list-style:none;margin:0;padding:0}.tl li{display:flex;gap:12px;padding:5px 0;font-size:14px}
+.tl time{color:var(--mu);min-width:74px;flex:none;font-variant-numeric:tabular-nums}
+.dut.move::before,.dut.done::before{background:var(--pr)}.dut.still::before{background:var(--wn)}.dut.lost::before{background:#c0392b}.dut.kit::before{background:#2f6fdb}
+.dut.lost{color:#c0392b;font-weight:600}.dut.still{color:var(--wn);font-weight:600}
 button.b2{min-height:34px;padding:0 12px;gap:6px;font-size:13px;background:var(--cd);color:var(--tx);border:1px solid var(--bd)}
 button.b2.ok{background:var(--pr);color:var(--pt);border-color:var(--pr)}
 .pop a.pi{display:flex;justify-content:space-between;align-items:center;width:100%;color:var(--tx);border-radius:8px;padding:9px 12px;min-height:38px;text-decoration:none}
@@ -1630,12 +1657,12 @@ function delivery(){
  const sc=dlScope(),T=today(),dn=sc.filter(o=>o.status==='Delivered').length,un=sc.filter(o=>open(o)&&!o.sid),late=S.o.filter(o=>open(o)&&o.date<T&&!inR('del',o.date)).length;
  const people=S.d.map(d=>({d,L:sc.filter(o=>o.sid===d.id).sort((a,b)=>(+open(b)-+open(a))||String(cust(a.cid).name).localeCompare(String(cust(b.cid).name)))})).filter(x=>x.L.length);
  const psec=x=>{const d=x.d,L=x.L,dd=L.filter(o=>o.status==='Delivered').length,pct=Math.round(dd/L.length*100),col=dcl[d.id],ru=routeU(L.filter(open).map(o=>cust(o.cid)));
-  return `<div class="dsec"><div class="dh"><button class="ib" aria-label="Show or hide stops" onclick="dcl['${d.id}']=!dcl['${d.id}'];render()">${ic(col?'chev':'chd',18)}</button><div class="nm"><b>${esc(d.name)}</b><div class="mu">${dd} of ${L.length} delivered${dutyTxt(d)}</div><div class="prg"><i style="width:${pct}%"></i></div></div><div class="sa">${d.phone?`<a class="ib" aria-label="Call ${esc(d.name)}" title="Call" href="tel:${String(d.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a><button class="ib" aria-label="Send ${esc(d.name)} the rider page on WhatsApp" title="Send rider page on WhatsApp" onclick="sendRoute('${d.id}')">${ic('chat',18)}</button>`:''}${ru?`<a class="ib" aria-label="Open route in Google Maps" title="Open route in Google Maps" target="_blank" rel="noopener" href="${ru}">${ic('route',18)}</a>`:''}</div></div>${col?'':L.map((o,i)=>stopRow(o,i+1)).join('')}</div>`};
+  return `<div class="dsec"><div class="dh"><button class="ib" aria-label="Show or hide stops" onclick="dcl['${d.id}']=!dcl['${d.id}'];render()">${ic(col?'chev':'chd',18)}</button><div class="nm"><b>${esc(d.name)}</b><div class="mu">${dd} of ${L.length} delivered${dutyTxt(d)}</div><div class="prg"><i style="width:${pct}%"></i></div></div><div class="sa">${tlBtn(d)}${d.phone?`<a class="ib" aria-label="Call ${esc(d.name)}" title="Call" href="tel:${String(d.phone).replace(/[^\d+]/g,'')}">${ic('phone',18)}</a><button class="ib" aria-label="Send ${esc(d.name)} the rider page on WhatsApp" title="Send rider page on WhatsApp" onclick="sendRoute('${d.id}')">${ic('chat',18)}</button>`:''}${ru?`<a class="ib" aria-label="Open route in Google Maps" title="Open route in Google Maps" target="_blank" rel="noopener" href="${ru}">${ic('route',18)}</a>`:''}</div></div>${TL[d.id]?tlHtml(d):''}${col?'':L.map((o,i)=>stopRow(o,i+1)).join('')}</div>`};
  return `<div class="top" style="align-items:flex-start"><div><h1 style="margin-bottom:4px">Delivery Management</h1><div class="mu">Assign stops, track progress and send routes to your team.</div></div><button class="ib" aria-label="Delivery team" title="Delivery team" onclick="openTeam()">${ic('users',20)}</button></div>
  <div class="otb" style="margin-top:14px">${rgUI('del')}</div>
  ${late?`<div class="bnr" style="margin-top:12px"><span>${ic('alert',18)}<b>${late}</b>&nbsp;undelivered ${late===1?'order':'orders'} from earlier days</span><button class="s" onclick="showLate()">Show them</button></div>`:''}
  <div class="card" style="margin-top:12px;padding:4px 16px 14px"><div class="kvs" style="border-top:0"><div><span>Stops</span><b>${sc.length}</b></div><div><span>Delivered</span><b>${dn}</b></div><div><span>Remaining</span><b>${sc.filter(open).length}</b></div></div></div>
- <div style="margin-top:16px">${un.length?`<div class="dsec"><div class="dh" style="background:var(--p2)"><div class="nm"><b>Unassigned</b><div class="mu">${un.length} ${un.length===1?'stop needs':'stops need'} a delivery person</div></div><div class="pw"><button onclick="tgp('pp-bd')">Assign all to…</button><div class="pop pr" id="pp-bd" hidden>${S.d.map(d=>`<button class="pi" onclick="bulkAssignD('${d.id}')">${esc(d.name)}</button>`).join('')||noP}</div></div></div>${un.map((o,i)=>stopRow(o,i+1)).join('')}</div>`:''}
+ ${lbHtml()}<div style="margin-top:16px">${un.length?`<div class="dsec"><div class="dh" style="background:var(--p2)"><div class="nm"><b>Unassigned</b><div class="mu">${un.length} ${un.length===1?'stop needs':'stops need'} a delivery person</div></div><div class="pw"><button onclick="tgp('pp-bd')">Assign all to…</button><div class="pop pr" id="pp-bd" hidden>${S.d.map(d=>`<button class="pi" onclick="bulkAssignD('${d.id}')">${esc(d.name)}</button>`).join('')||noP}</div></div></div>${un.map((o,i)=>stopRow(o,i+1)).join('')}</div>`:''}
  ${people.map(psec).join('')}
  ${sc.length?'':`<div class="empty">No deliveries in this period.<div class="row" style="justify-content:center"><button onclick="openPlan(today())">Plan today’s meal</button></div></div>`}</div>`;
 }
@@ -2560,6 +2587,152 @@ function waBox(d,u){const m=$('#md');
 function rstL(d){return `<div class="mu" style="padding:2px 0 10px">Phone lost, or link shared by mistake? <button class="lnk" onclick="askReset('${d.id}')">Make a new link</button></div>`}
 function askReset(id){const d=S.d.find(x=>x.id===id);if(!d)return;const m=$('#md');
  m.innerHTML=`<div class="mdc" style="max-width:460px"><h2 id="mdt">Make a new link for ${esc(d.name)}?</h2><div class="mu">The old link stops working straight away. Then WhatsApp opens so you can send the new link to ${esc(d.name)}.</div><div class="row"><button class="s" onclick="openTeam('${d.id}')">Cancel</button><button onclick="closeMd();sendRoute('${d.id}',true)">${ic('check',18)}Make new link</button></div></div>`;m.hidden=false}
+
+/* ===== Part 2: live board (map, alerts, timeline) ===== */
+P.clock='<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>';
+let EV=[],EVlast=0,EVday='';const TL={};
+const LB={map:null,el:null,ly:null,fit:true,shown:null,busy:false,at:0,err:'',still:{},title:document.title};
+const RCOL=['#1f7a4d','#2f6fdb','#c2571a','#8a4fd3','#0f8f8f','#b83280'];
+const rCol=id=>{const i=S.d.findIndex(d=>d.id===id);return RCOL[(i<0?0:i)%RCOL.length]};
+const istMid=d=>new Date(d+'T00:00:00+05:30').getTime();
+const msOf=x=>x?new Date(x).getTime():0;
+const havM=(a,b,c,d)=>{const r=Math.PI/180,x=Math.sin((c-a)*r/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin((d-b)*r/2)**2;return 12742000*Math.asin(Math.sqrt(x))};
+const rName=id=>(S.d.find(d=>d.id===id)||{}).name||'Rider';
+const evToday=()=>{const t0=istMid(today());return EV.filter(e=>msOf(e.created_at)>=t0)};
+/* how long the rider has stayed within 150 m (from the location pings) */
+function stillFor(id){
+ const P2=evToday().filter(e=>e.staff_id===id&&e.lat!=null&&e.lng!=null);if(P2.length<3)return {ms:0,since:0};
+ const last=P2[P2.length-1];let since=msOf(last.created_at);
+ for(let i=P2.length-1;i>=0;i--){if(havM(P2[i].lat,P2[i].lng,last.lat,last.lng)>150)break;since=msOf(P2[i].created_at)}
+ return {ms:Date.now()-since,since}}
+function rState(d){
+ const T=today(),L=S.o.filter(o=>o.sid===d.id&&o.date===T),op=L.filter(open),dn=L.filter(o=>o.status==='Delivered').length;
+ const seen=msOf(d.seen),ago=seen?Date.now()-seen:Infinity,live=d.duty&&seen>=istMid(T),picked=L.some(o=>o.pu);
+ const next=op.find(o=>o.status==='Out for delivery'||o.status==='Delayed')||op[0];let k,txt;
+ if(!live){k='off';txt=!L.length?'No stops today':!op.length?'Finished':picked?'Off duty':'Not started yet'}
+ else if(ago>10*60e3){k='lost';txt='No signal for '+agoS(ago).replace(' ago','')}
+ else if(!op.length){k='done';txt='All delivered'}
+ else if(!picked){k='kit';txt='At the kitchen'}
+ else{const s=stillFor(d.id);if(s.ms>15*60e3){k='still';txt='Not moving for '+Math.round(s.ms/60e3)+' min';LB.still[d.id]=s.since}else{k='move';txt='On the way'}}
+ return {L,op,dn,k,txt,ago,live,next}}
+/* the line under a rider's name (Delivery page and team window) */
+function dutyTxt(d){
+ const st=rState(d);
+ if(!st.live){if(!d.seen)return '';const ms=Math.max(0,Date.now()-msOf(d.seen));return ` · <span class="dut off">${st.L.length?esc(st.txt):'Last seen '+agoS(ms)}</span>`}
+ return ` · <span class="dut ${st.k}">${esc(st.k==='move'||st.k==='kit'||st.k==='done'?'On duty · '+st.txt.toLowerCase():st.txt)}</span>`}
+
+/* ---- alerts ---- */
+function lbAck(){try{const a=JSON.parse(localStorage.getItem('nzAck')||'{}');if(a&&a.d===today()&&Array.isArray(a.ids))return a}catch(e){}return {d:today(),ids:[]}}
+function ackAlert(id){const a=lbAck();if(!a.ids.includes(id))a.ids.push(id);try{localStorage.setItem('nzAck',JSON.stringify(a))}catch(e){}lbTitle();render()}
+function lbAlerts(){
+ const T=today(),A=[],ack=lbAck().ids;
+ S.o.filter(o=>o.date===T).forEach(o=>{const c=cust(o.cid),who=o.sid?rName(o.sid):'';
+  if(o.status==='Delayed'&&!o.ret)A.push({id:'p:'+o.id+':'+(o.dlr||''),lv:'hi',t:'Problem at '+c.name,s:(o.dlr||'Reported by the rider')+(who?' · '+who:''),ph:c.phone,rp:o.sid});
+  if(o.ret)A.push({id:'r:'+o.id,lv:'mid',t:'Meal brought back from '+c.name,s:(o.dlr?o.dlr+' · ':'')+'Not charged'+(c.pay==='Prepaid'?', +1 plan day':''),ph:c.phone});
+  if(o.status==='Delivered'&&o.ddist>300)A.push({id:'f:'+o.id,lv:'mid',t:c.name+': delivered '+distS(o.ddist)+' from the map pin',s:(who?'Marked by '+who+'. ':'')+'Check the meal reached the customer.',ph:c.phone});
+ });
+ S.d.forEach(d=>{const st=rState(d);
+  if(st.k==='lost'&&st.op.length)A.push({id:'n:'+d.id+':'+d.seen,lv:'hi',t:'No update from '+d.name+' for '+agoS(st.ago).replace(' ago',''),s:'Phone may be off or without internet · '+st.op.length+' '+(st.op.length===1?'stop':'stops')+' left',rp:d.id});
+  if(st.k==='still')A.push({id:'m:'+d.id+':'+LB.still[d.id],lv:'mid',t:d.name+' hasn’t moved for '+Math.round((Date.now()-LB.still[d.id])/60e3)+' min',s:st.next?'Next stop: '+cust(st.next.cid).name:'',rp:d.id});
+ });
+ return A.filter(a=>!ack.includes(a.id)).sort((x,y)=>(y.lv==='hi')-(x.lv==='hi'))}
+function alertRow(a){
+ const rp=a.rp&&S.d.find(d=>d.id===a.rp),tel=p=>String(p).replace(/[^\d+]/g,'');
+ return `<div class="lbal ${a.lv}" role="listitem"><span class="ic">${ic('alert',18)}</span><div class="t"><b>${esc(a.t)}</b>${a.s?`<div class="mu">${esc(a.s)}</div>`:''}</div><div class="sa">${a.ph?`<a class="lbb" href="tel:${tel(a.ph)}">${ic('phone',16)}Customer</a>`:''}${rp&&rp.phone?`<a class="lbb" href="tel:${tel(rp.phone)}">${ic('phone',16)}${esc(rp.name)}</a>`:''}<button class="lbb" data-k="${esc(a.id)}" onclick="ackAlert(this.dataset.k)">Got it</button></div></div>`}
+function lbTitle(){const n=CM.mode==='cloud'?lbAlerts().length:0;document.title=(n?'('+n+') ':'')+LB.title}
+function toastV(m){const t=$('#ts');if(!t)return;clearTimeout(tmr);clearInterval(tcd);
+ t.innerHTML='<span>'+esc(m)+'</span>'+(tab!=='delivery'?'<button onclick="$(\'#ts\').hidden=true;go(\'delivery\')">View</button>':'');t.hidden=false;tmr=setTimeout(()=>{t.hidden=true},8000)}
+function lbNotify(){
+ const A=lbAlerts();lbTitle();
+ if(!LB.shown){LB.shown=new Set(A.map(a=>a.id));return}
+ const nw=A.filter(a=>!LB.shown.has(a.id));if(!nw.length)return;
+ const t=$('#ts');if(t&&!t.hidden&&$('#tcn'))return; // an Undo is showing: tell them on the next check
+ nw.forEach(a=>LB.shown.add(a.id));
+ toastV(nw.length===1?nw[0].t:nw.length+' new alerts on the Delivery page')}
+
+/* ---- the board on the Delivery page ---- */
+function lbRiders(){const T=today(),t0=istMid(T);return S.d.filter(d=>S.o.some(o=>o.sid===d.id&&o.date===T)||(d.duty&&msOf(d.seen)>=t0))}
+function lbUpd(){return LB.err?'Live updates paused: '+LB.err:LB.at?'Live · updated '+new Date(LB.at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+' · checks every 30 seconds':'Live · loading…'}
+function lbHtml(){
+ if(CM.mode!=='cloud'||!inR('del',today()))return '';
+ const R=lbRiders();if(!R.length)return '';
+ const A=lbAlerts(),T=today(),nopin=S.o.filter(o=>o.date===T&&open(o)&&cust(o.cid).lat==null).length;
+ const chip=d=>{const st=rState(d);return `<button class="lbr ${st.k}" onclick="lbFocus('${d.id}')" aria-label="Show ${esc(d.name)} on the map"><i style="background:${rCol(d.id)}"></i><span><b>${esc(d.name)}</b><span class="mu">${esc(st.txt)} · ${st.dn}/${st.L.length} delivered</span></span></button>`};
+ return `<div class="card lb" style="margin-top:12px"><div class="lbh"><div><h2 style="margin:0">Live board</h2><div class="mu" id="lbup">${esc(lbUpd())}</div></div><button class="lbb" onclick="lbFit()">${ic('map',16)}Show all</button></div>
+ ${A.length?`<div class="lbas" role="list" aria-label="Alerts">${A.map(alertRow).join('')}</div>`:`<div class="lbok">${ic('check',16)}All good. No problems right now.</div>`}
+ <div id="lbslot" class="lbmap" role="region" aria-label="Map of riders and stops"></div>
+ ${nopin?`<div class="mu" style="margin-top:6px">${nopin} ${nopin===1?'stop has':'stops have'} no map pin, so ${nopin===1?'it is':'they are'} not on the map.</div>`:''}
+ <div class="lbrs">${R.map(chip).join('')}</div></div>`}
+let leafC=null;
+function loadLeafletC(){if(window.L&&window.L.map)return Promise.resolve();if(leafC)return leafC;leafC=new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';l.integrity='sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';l.crossOrigin='';document.head.appendChild(l);const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.integrity='sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';s.crossOrigin='';s.onload=res;s.onerror=()=>{leafC=null;rej()};document.head.appendChild(s)});return leafC}
+function lbMount(){
+ const slot=$('#lbslot');if(!slot)return;
+ if(!LB.el){LB.el=document.createElement('div');LB.el.className='lbm'}
+ slot.appendChild(LB.el);
+ loadLeafletC().then(()=>{if(!LB.el.isConnected)return;const Lf=window.L;
+  if(!LB.map){LB.map=Lf.map(LB.el,{scrollWheelZoom:false});Lf.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(LB.map);LB.ly=Lf.layerGroup().addTo(LB.map);LB.fit=true}
+  LB.map.invalidateSize();lbDraw()}).catch(()=>{LB.el.innerHTML='<div class="mu" style="padding:24px;text-align:center">The map could not load right now. Alerts and rider status still update.</div>'})}
+function lbDraw(){
+ const Lf=window.L;if(!LB.map||!Lf||!LB.el.isConnected)return;LB.ly.clearLayers();LB.mk={};
+ const T=today(),t0=istMid(T),pts=[],ev=evToday();
+ lbRiders().forEach(d=>{const col=rCol(d.id),tr=ev.filter(e=>e.staff_id===d.id&&e.lat!=null&&msOf(e.created_at)>Date.now()-3*3600e3).map(e=>[e.lat,e.lng]);
+  if(tr.length>1)Lf.polyline(tr,{color:col,weight:3,opacity:.45}).addTo(LB.ly)});
+ S.o.filter(o=>o.date===T).forEach(o=>{const c=cust(o.cid);if(c.lat==null||c.lng==null)return;
+  const k=o.ret?'ret':o.status==='Delivered'?'done':o.status==='Delayed'?'del':!o.sid?'un':'';
+  const col=o.sid?rCol(o.sid):'#8a9a90',sym=k==='ret'?'✕':k==='done'?'✓':k==='del'?'!':'';
+  Lf.marker([c.lat,c.lng],{icon:Lf.divIcon({className:'',html:`<div class="lbp ${k}" style="--c:${col}">${sym}</div>`,iconSize:[24,24],iconAnchor:[12,12]}),title:c.name,keyboard:false})
+   .bindPopup(`<b>${esc(c.name)}</b><br>${esc(o.ret?'Brought back · not charged':o.status)}${o.sid?'<br>'+esc(rName(o.sid)):'<br>Not assigned'}${o.dat?'<br>Delivered '+tmS(o.dat):''}`).addTo(LB.ly);pts.push([c.lat,c.lng])});
+ lbRiders().forEach(d=>{if(d.lat==null||d.lng==null||msOf(d.seen)<t0)return;const st=rState(d);
+  const m=Lf.marker([d.lat,d.lng],{icon:Lf.divIcon({className:'',html:`<div class="lbrd ${st.k}" style="--c:${rCol(d.id)}">${esc((d.name||'R').trim().charAt(0).toUpperCase())}</div>`,iconSize:[36,36],iconAnchor:[18,18]}),title:d.name,zIndexOffset:1000})
+   .bindPopup(`<b>${esc(d.name)}</b><br>${esc(st.txt)}<br>Last update ${esc(agoS(st.ago))}<br>${st.dn} of ${st.L.length} delivered${st.next?'<br>Next: '+esc(cust(st.next.cid).name):''}${d.phone?`<br><a href="tel:${String(d.phone).replace(/[^\d+]/g,'')}">Call ${esc(d.name)}</a>`:''}`).addTo(LB.ly);
+  LB.mk[d.id]=m;pts.push([d.lat,d.lng])});
+ if(LB.fit){LB.fit=false;if(pts.length)LB.map.fitBounds(pts,{padding:[30,30],maxZoom:15});else LB.map.setView([11.0168,76.9558],12)}}
+function lbFit(){LB.fit=true;lbDraw()}
+function lbFocus(id){const d=S.d.find(x=>x.id===id);if(!d)return;const m=LB.mk&&LB.mk[id];
+ if(!m||!LB.map){toast('No location from '+d.name+' yet today.');return}
+ LB.el.scrollIntoView({behavior:'smooth',block:'center'});LB.map.setView(m.getLatLng(),15);m.openPopup()}
+
+/* ---- timeline under each rider ---- */
+function tlBtn(d){return `<button class="ib" aria-label="Today’s timeline for ${esc(d.name)}" title="Today’s timeline" aria-pressed="${TL[d.id]?'true':'false'}" onclick="TL['${d.id}']=!TL['${d.id}'];render()">${ic('clock',18)}</button>`}
+function tlHtml(d){
+ const E=evToday().filter(e=>e.staff_id===d.id&&e.kind!=='ping'),nm=e=>{const o=e.order_id&&S.o.find(x=>x.id===e.order_id);return o?cust(o.cid).name:'a customer'};
+ const row=e=>{const n=nm(e),note=e.note||'',m=note.match(/(Cash|UPI) ([\d.]+)/),k=note.match(/(\d+) orders/),why=note.replace(/(Cash|UPI) [\d.]+/,'').replace(/\d+ orders/,'').trim();
+  const t={duty_on:'Started duty',duty_off:'Went off duty',picked_up:'Picked up from the kitchen'+(k?' · '+k[1]+' '+(k[1]==='1'?'meal':'meals'):''),on_way:'Sent “5 min away” to '+n,at_gate:'At the gate · '+n,delivered:'Delivered · '+n,problem:'Problem · '+n+(why?': '+why:''),returned:'Brought back to the kitchen · '+n+(why?': '+why:''),collected:'Collected '+(m?inr(+m[2])+(m[1]==='UPI'?' by UPI':' cash'):'payment')+' · '+n}[e.kind]||e.kind;
+  return `<li><time>${tmS(e.created_at)}</time><span>${esc(t)}</span></li>`};
+ return `<div class="tl" aria-label="Today’s timeline for ${esc(d.name)}">${E.length?`<ol>${E.map(row).join('')}</ol>`:`<div class="mu">Nothing yet today.</div>`}</div>`}
+
+/* ---- live checks: small and cheap, every 30 s on this page, slower elsewhere ---- */
+async function lbTick(){
+ if(CM.mode!=='cloud'||!sb||LB.busy||document.visibilityState!=='visible')return;
+ const T=today();LB.busy=true;LB.last=Date.now();let ch=false,need=false;
+ try{
+  if(EVday!==T){EV=[];EVlast=0;EVday=T;LB.shown=null}
+  const evq=sb.from('rider_events').select('id,created_at,staff_id,order_id,kind,lat,lng,note');
+  const [st,od,ev]=await Promise.all([
+   sbx(sb.from('delivery_staff').select('id,on_duty,last_seen_at,last_lat,last_lng')),
+   sbx(sb.from('orders').select('id,status,delay_reason,picked_up_at,at_gate_at,delivered_at,returned,amount').eq('order_date',T)),
+   sbx(EVlast?evq.gt('id',EVlast).order('id').limit(2000):evq.gte('created_at',new Date(istMid(T)).toISOString()).order('id').limit(5000))]);
+  (st||[]).forEach(r=>{const d=S.d.find(x=>x.id===r.id);if(!d)return;
+   const nv={duty:!!r.on_duty,seen:r.last_seen_at||null,lat:r.last_lat!=null?Number(r.last_lat):null,lng:r.last_lng!=null?Number(r.last_lng):null};
+   if(!!d.duty!==nv.duty){ch=true;if(nv.duty)d.duty=true;else delete d.duty}
+   ['seen','lat','lng'].forEach(k=>{if((d[k]??null)!==nv[k]){ch=true;if(nv[k]==null)delete d[k];else d[k]=nv[k]}})});
+  if(ev&&ev.length){EV.push(...ev);EVlast=ev[ev.length-1].id;ch=true}
+  need=(od||[]).some(r=>{const o=S.o.find(x=>x.id===r.id);if(!o)return true;
+   return o.status!==r.status||(o.dlr||null)!==(r.delay_reason||null)||!!o.pu!==!!r.picked_up_at||!!o.gate!==!!r.at_gate_at||!!o.dat!==!!r.delivered_at||!!o.ret!==!!r.returned||Number(o.amt||0)!==Number(r.amount||0)});
+  LB.at=Date.now();LB.err='';
+ }catch(e){LB.err=navigator.onLine===false?'no internet':'could not reach the database'}
+ finally{LB.busy=false}
+ if(need){CM.pulled=0;try{await autoPull()}catch(e){}}
+ lbNotify();
+ if(tab==='delivery'){if((ch||need)&&lbSafe())render();else{lbDraw();const u=$('#lbup');if(u)u.textContent=lbUpd()}}}
+function lbSafe(){const md=$('#md'),a=document.activeElement;
+ return !(md&&!md.hidden)&&!document.querySelector('#app .pop:not([hidden])')&&!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))}
+function lbGap(){const T=today(),t0=istMid(T),act=S.d.some(d=>d.duty&&msOf(d.seen)>Date.now()-30*60e3)||S.o.some(o=>o.date===T&&o.sid&&open(o));
+ return !act?300e3:tab==='delivery'?30e3:60e3}
+setInterval(()=>{if(CM.mode==='cloud'&&Date.now()-(LB.last||0)>=lbGap()-1000)lbTick()},5000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-(LB.last||0)>15000)lbTick()});
+const _renderLB=render;
+render=function(){_renderLB.apply(this,arguments);if(tab==='delivery'){lbMount();if(Date.now()-(LB.last||0)>20000)lbTick()}};
 
 boot();
 </script></body></html>
